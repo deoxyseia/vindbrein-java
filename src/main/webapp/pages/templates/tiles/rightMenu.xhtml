@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:body>
+	<ui:composition>
+		<c:if test="#{request.getUserPrincipal() != null}">
+
+			<h:form>
+				<p:commandButton value="Cambiar contraseña" immediate="true" 
+					oncomplete="cambiarContraseniaDialog.show()" icon="ui-icon-locked">
+				</p:commandButton>
+			</h:form>
+			
+			<!-- Dialog de cambio de contraseña -->
+
+			<p:dialog id="cambiarContraseniaDlg" header="Cambio de contraseña"
+				hideEffect="explode" widgetVar="cambiarContraseniaDialog"
+				resizable="false" modal="true" appendToBody="true">
+
+				<p:messages showDetail="true" autoUpdate="true" closable="true" />
+
+				<h:form id="formCambiarContrasenia">
+					<h:panelGrid columns="2">
+
+						<h:outputText value="Contraseña actual :"></h:outputText>
+						<p:password value="#{usuarioManagedBean.oldPassword}"
+							required="true"
+							requiredMessage="Ingrese la clave actual de este usuario" />							
+
+						<p:separator></p:separator>
+						<p:separator></p:separator>					
+
+						<h:outputText value="Contraseña nueva :"></h:outputText>
+						<p:password value="#{usuarioManagedBean.newPassword}"
+							required="true" requiredMessage="Ingrese la nueva contraseña" />
+
+						<h:outputText value="Vuelve a escribir la contraseña nueva :"></h:outputText>
+						<p:password value="#{usuarioManagedBean.newPasswordReload}"
+							required="true" requiredMessage="Ingrese la nueva contraseña" />
+					</h:panelGrid>	
+					<h:panelGrid columns="4" cellpadding="2" style="margin:0 auto;">
+						<f:facet name="footer">
+							<p:commandButton value="Cambiar"
+								oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){confirmCambioContraseniaDialog.show()}"
+								actionListener="#{usuarioManagedBean.verificarCambioContrasenia()}"
+								icon="ui-icon-check" />
+							<p:commandButton value="Cancelar"
+								actionListener="#{usuarioManagedBean.cancelarCambioContrasenia()}"
+								oncomplete="cambiarContraseniaDialog.hide()"
+								icon="ui-icon-close" />
+						</f:facet>
+					</h:panelGrid>	
+					
+				</h:form>
+			</p:dialog>
+			<!-- Fin Dialog de cambio de contraseña -->
+
+			<!-- Dialog de confirmación de eliminado de factura -->
+
+			<p:dialog id="confirmCambioContraseniaDlg" header="Confirmación"
+				hideEffect="explode" widgetVar="confirmCambioContraseniaDialog"
+				resizable="false" modal="true" appendToBody="true">
+				<h:form>
+					<p:panelGrid columns="1">
+						<h:outputText
+							value="¿Está seguro que desea cambiar la contraseña?" />
+						<f:facet name="footer">
+							<p:commandButton value="Sí"
+								oncomplete="confirmCambioContraseniaDialog.hide(); cambiarContraseniaDialog.hide();"
+								actionListener="#{usuarioManagedBean.cambiarContrasenia()}"
+								icon="ui-icon-check" />
+							<p:commandButton value="No"
+								onclick="confirmCambioContraseniaDialog.hide()" type="button"
+								icon="ui-icon-close" />
+						</f:facet>
+					</p:panelGrid>
+				</h:form>
+			</p:dialog>
+			<!-- Fin Dialog de confirmado de eliminado de factura -->
+
+		</c:if>
+	</ui:composition>
+</h:body>
+</html>

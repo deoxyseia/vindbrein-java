@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xmlns="http://java.sun.com/xml/ns/javaee" 
+		 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+		 id="WebApp_ID" 
+		 version="2.5">
+		 
+	  <display-name>VindBrein</display-name>
+	   
+	  <!-- Spring Context Configuration' s Path definition -->
+      <context-param>
+	     <param-name>contextConfigLocation</param-name>
+	     <param-value>
+		    /WEB-INF/application*.xml
+	     </param-value>
+	  </context-param>
+	  
+	  
+	  <!-- The Bootstrap listener to start up and shut down Spring's root WebApplicationContext. It is registered to Servlet Container -->
+	  <listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	  </listener>
+	  
+	  <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+      </listener>
+	  
+	  <context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.properties</param-value>
+	  </context-param>
+	
+	  <listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	  </listener>	
+	
+	  <context-param>
+		<param-name>log4jExposeWebAppRoot</param-name>
+		<param-value>false</param-value>
+	  </context-param>   
+	  
+	  <!-- Welcome Page -->
+	  <welcome-file-list>
+	    <welcome-file>/pages/secured/principal/adminHome.jsf</welcome-file>
+	  </welcome-file-list>
+	  
+	  <!-- JSF Servlet is defined to container -->
+	  <servlet>
+	    <servlet-name>Faces Servlet</servlet-name>
+	    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+	    <load-on-startup>1</load-on-startup>
+	  </servlet>
+	  
+	  <!-- Mapping with servlet and url for the http requests. -->
+	  <servlet-mapping>
+	    <servlet-name>Faces Servlet</servlet-name>
+	    <url-pattern>*.jsf</url-pattern>
+	  </servlet-mapping>
+	 	  	  
+	  <!-- Filtro para delegar seguridad -->
+	  <filter>
+	  	<filter-name>springSecurityFilterChain</filter-name>
+	  	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	  </filter>
+	  
+	  <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    
+    <session-config>    
+    	<session-timeout>600</session-timeout>
+	</session-config>
+	
+	<!-- Optimization -->
+	 	<!-- Project Stage Level -->
+	 <context-param>
+	 	<param-name>javax.faces.PROJECT_STAGE</param-name>
+	    <param-value>Production</param-value>
+	 </context-param>
+	   
+	 <context-param>
+	 	<param-name>facelets.SKIP_COMMENTS</param-name>
+	 	<param-value>true</param-value>
+     </context-param>
+     
+     <context-param>
+     	<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    	<param-value>client</param-value>
+     </context-param>
+		
+</web-app>
