@@ -30,10 +30,10 @@
         		 users-by-username-query="SELECT user_name AS username, 
         		 								 user_password AS password,
         		 								 true AS enabled
-                                          FROM vindbrein.Usuario u
+                                          FROM vindbrein.usuario u
                                           WHERE user_name =  ?"
                  authorities-by-username-query="SELECT u.user_name AS username, 'ROLE_ESTUDIANTE' AS authority
-												FROM vindbrein.Usuario u
+												FROM vindbrein.usuario u
 											    WHERE u.user_name = ?"                          
         		/>
         		

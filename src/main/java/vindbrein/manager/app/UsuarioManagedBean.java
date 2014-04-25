@@ -82,7 +82,7 @@ public class UsuarioManagedBean implements Serializable {
 		logger.info("Cambiando contraseña");
 		
 		Usuario usuario = getUsuarioService().getUsuarioByUsername(getUsername());
-		usuario.setUsuaPassword(getNewPassword());
+		usuario.setUsuaContrasenia(getNewPassword());
 		
 		getUsuarioService().updateUsuario(usuario);
 		

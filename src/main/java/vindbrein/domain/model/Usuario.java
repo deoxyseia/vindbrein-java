@@ -1,14 +1,7 @@
 package vindbrein.domain.model;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
@@ -16,14 +9,16 @@ import javax.persistence.Table;
  * 
  */
 @Entity
-@Table(name="Usuario")
+@Table(name="usuario")
 @NamedQuery(name="Usuario.findAll", query="SELECT u FROM Usuario u")
 public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int usuaId;
-	private String usuaEstado;
-	private String usuaPassword;
-	private String usuaUser;
+	private String usuaContrasenia;
+	private String usuaFlagActivo;
+	private String usuaNombre;
+	private Postulante postulante;
+	private RespRrhh respRrhh;
 
 	public Usuario() {
 	}
@@ -31,7 +26,7 @@ public class Usuario implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="idUsuario")
+	@Column(name="usua_id")
 	public int getUsuaId() {
 		return this.usuaId;
 	}
@@ -41,32 +36,57 @@ public class Usuario implements Serializable {
 	}
 
 
-	@Column(name="flag_activo")
-	public String getUsuaEstado() {
-		return this.usuaEstado;
+	@Column(name="usua_contrasenia")
+	public String getUsuaContrasenia() {
+		return this.usuaContrasenia;
 	}
 
-	public void setUsuaEstado(String usuaEstado) {
-		this.usuaEstado = usuaEstado;
-	}
-
-
-	@Column(name="user_password")
-	public String getUsuaPassword() {
-		return this.usuaPassword;
-	}
-
-	public void setUsuaPassword(String usuaPassword) {
-		this.usuaPassword = usuaPassword;
+	public void setUsuaContrasenia(String usuaContrasenia) {
+		this.usuaContrasenia = usuaContrasenia;
 	}
 
 
-	@Column(name="user_name")
-	public String getUsuaUser() {
-		return this.usuaUser;
+	@Column(name="usua_flag_activo")
+	public String getUsuaFlagActivo() {
+		return this.usuaFlagActivo;
 	}
 
-	public void setUsuaUser(String usuaUser) {
-		this.usuaUser = usuaUser;
+	public void setUsuaFlagActivo(String usuaFlagActivo) {
+		this.usuaFlagActivo = usuaFlagActivo;
 	}
+
+
+	@Column(name="usua_nombre")
+	public String getUsuaNombre() {
+		return this.usuaNombre;
+	}
+
+	public void setUsuaNombre(String usuaNombre) {
+		this.usuaNombre = usuaNombre;
+	}
+
+
+	//bi-directional many-to-one association to Postulante
+	@ManyToOne
+	@JoinColumn(name="fk_post_id")
+	public Postulante getPostulante() {
+		return this.postulante;
+	}
+
+	public void setPostulante(Postulante postulante) {
+		this.postulante = postulante;
+	}
+
+
+	//bi-directional many-to-one association to RespRrhh
+	@ManyToOne
+	@JoinColumn(name="fk_rerr_id")
+	public RespRrhh getRespRrhh() {
+		return this.respRrhh;
+	}
+
+	public void setRespRrhh(RespRrhh respRrhh) {
+		this.respRrhh = respRrhh;
+	}
+
 }
