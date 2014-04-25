@@ -46,7 +46,7 @@ public class UsuarioDAO implements Serializable {
 
 	public Usuario getUsuarioById(int id) {
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from Usuario where idUsuario=?")
+				.createQuery("from Usuario where usuaId=?")
 		        .setParameter(0, id).list();
 		return (Usuario)list.get(0);
 	}
@@ -58,7 +58,7 @@ public class UsuarioDAO implements Serializable {
 	
 	public Usuario getUsuarioByUsername(String user){
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from Usuario where usuaUser=?")
+				.createQuery("from Usuario where usuaNombre=?")
 		        .setParameter(0, user).list();
 		return (Usuario)list.get(0);
 	}
