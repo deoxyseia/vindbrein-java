@@ -34,7 +34,11 @@
 						     <p:commandButton id="login" value="Iniciar sesión" ajax="false"
 								actionListener="#{usuarioManagedBean.login()}"
 								type="submit" icon="ui-icon-check" style="margin:0">
-							</p:commandButton>							
+							</p:commandButton>	
+							  <p:commandButton value="Registrar nuevo" ajax="false" immediate="true"
+								action="/pages/registrarUsuarioPostulante.xhtml?faces-redirect=true"
+								type="submit" icon="ui-icon-check">
+							</p:commandButton>								
 						  </center>
 							
 						</f:facet>

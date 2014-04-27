@@ -8,7 +8,7 @@ import vindbrein.domain.model.Usuario;
 
 public interface UsuarioService {
 	
-public void addUsuario(Usuario usuario);
+	public void addUsuario(Usuario usuario);
 	
 	public void updateUsuario(Usuario usuario);
 
@@ -19,5 +19,7 @@ public void addUsuario(Usuario usuario);
 	public List<Usuario> getUsuarios();
 	
 	public Usuario getUsuarioByUsername(String user);
+	
+	public void addUsuarioPostulante(Usuario usuario);
 
 }

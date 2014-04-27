@@ -3,6 +3,7 @@ package vindbrein.manager.app;
 import java.io.IOException;
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.RequestDispatcher;
@@ -18,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 
+import vindbrein.domain.model.Postulante;
+import vindbrein.domain.model.RespRrhh;
 import vindbrein.domain.model.Usuario;
 import vindbrein.service.UsuarioService;
 import vindbrein.util.Util;
@@ -34,13 +37,51 @@ public class UsuarioManagedBean implements Serializable {
 	private String oldPassword;
 	private String newPassword;
 	private String newPasswordReload;
-
+	
+	private Usuario usuarioRespRrhh;
+	private RespRrhh respRrhh;	
+		
+	private Usuario usuarioPostulante;
+	private Postulante postulante;
+	
 	@Autowired
 	@Qualifier("usuarioServiceImpl")
 	UsuarioService usuarioService;
-
-	private String username;
-	private String password;
+	
+	@PostConstruct
+	public void init() {
+		iniciarUsuarios();
+	}
+	
+	public void iniciarUsuarios(){
+		usuarioPostulante = new Usuario();
+		usuarioPostulante.setPostulante(new Postulante());
+		
+		usuarioRespRrhh = new Usuario();
+		usuarioRespRrhh.setRespRrhh(new RespRrhh());		
+	}
+	
+	
+	public void verifiedSaveUsuarioPostulante(){
+		boolean verificado = false;
+		
+		if(getNewPassword().equals(getNewPasswordReload())){
+			getUsuarioPostulante().setUsuaContrasenia(getNewPassword());
+			verificado = true;
+		}else{
+			Util.lanzarMensaje("ERROR", "GLOBAL", "Las contraseñas no coinciden, vuelva a probar");
+		}
+		
+		Util.lanzarVariableAInterfaz("verificado", verificado);
+	}
+	
+	public void saveUsuarioPostulante(){
+		logger.info("Agregando nuevo usuario de postulante");				
+		
+		getUsuarioService().addUsuarioPostulante(usuarioPostulante);
+				
+		Util.lanzarMensaje("INFO", "GLOBAL","Se ha creado un nuevo usuario");	
+	}
 
 	public void login() throws IOException, ServletException {
 		ExternalContext context = FacesContext.getCurrentInstance()
@@ -58,10 +99,10 @@ public class UsuarioManagedBean implements Serializable {
 		
 		boolean verificado = false;
 		
-		String o = getOldPassword();
-		String p = getPassword();
-		
-		if(getOldPassword().equals(getPassword())){
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+				
+		if(getOldPassword().equals(user.getPassword())){
 			if(getNewPassword().equals(getNewPasswordReload())){
 				if(getNewPassword().equals(getOldPassword())){
 					Util.lanzarMensaje("ERROR", "LOCAL", "la nueva contraseña no puede ser igual a la actual");
@@ -81,7 +122,10 @@ public class UsuarioManagedBean implements Serializable {
 	public void cambiarContrasenia(){
 		logger.info("Cambiando contraseña");
 		
-		Usuario usuario = getUsuarioService().getUsuarioByUsername(getUsername());
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		
+		Usuario usuario = getUsuarioService().getUsuarioByUsername(user.getUsername());
 		usuario.setUsuaContrasenia(getNewPassword());
 		
 		getUsuarioService().updateUsuario(usuario);
@@ -96,38 +140,48 @@ public class UsuarioManagedBean implements Serializable {
 		newPassword = "";
 		newPasswordReload = "";
 	}
-
 	
+	//getters and setters		
 	public UsuarioService getUsuarioService() {
 		return usuarioService;
 	}
 
+	public Usuario getUsuarioRespRrhh() {
+		return usuarioRespRrhh;
+	}
+
+	public void setUsuarioRespRrhh(Usuario usuarioRespRrhh) {
+		this.usuarioRespRrhh = usuarioRespRrhh;
+	}
+
+	public RespRrhh getRespRrhh() {
+		return respRrhh;
+	}
+
+	public void setRespRrhh(RespRrhh respRrhh) {
+		this.respRrhh = respRrhh;
+	}
+
+	public Usuario getUsuarioPostulante() {
+		return usuarioPostulante;
+	}
+
+	public void setUsuarioPostulante(Usuario usuarioPostulante) {
+		this.usuarioPostulante = usuarioPostulante;
+	}
+
+	public Postulante getPostulante() {
+		return postulante;
+	}
+
+	public void setPostulante(Postulante postulante) {
+		this.postulante = postulante;
+	}
+
 	public void setUsuarioService(UsuarioService usuarioService) {
 		this.usuarioService = usuarioService;
-	}
-
-	public String getUsername() {
-		User user = (User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		
-		return user.getUsername();
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		User user = (User) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		
-		return user.getPassword();
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+	}	
+	
 	public String getOldPassword() {
 		return oldPassword;
 	}

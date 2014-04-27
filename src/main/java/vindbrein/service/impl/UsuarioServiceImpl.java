@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.UsuarioDAO;
 import vindbrein.domain.model.Usuario;
 import vindbrein.service.UsuarioService;
@@ -21,6 +22,9 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	UsuarioDAO usuarioDAO;
+	
+	@Autowired
+	PostulanteDAO postulanteDAO;
 	
 	@Transactional(readOnly = false)
 	public void addUsuario(Usuario usuario) {
@@ -52,6 +56,12 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 		return getUsuarioDAO().getUsuarioByUsername(user.trim());
 	}	
 	
+	@Transactional(readOnly = false)
+	public void addUsuarioPostulante(Usuario usuario){
+		getPostulanteDAO().addPostulante(usuario.getPostulante());
+		getUsuarioDAO().addUsuario(usuario);
+	}
+	
 	//getters and setters
 
 	public UsuarioDAO getUsuarioDAO() {
@@ -61,7 +71,12 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
 		this.usuarioDAO = usuarioDAO;
 	}
-	
 
+	public PostulanteDAO getPostulanteDAO() {
+		return postulanteDAO;
+	}
 
+	public void setPostulanteDAO(PostulanteDAO postulanteDAO) {
+		this.postulanteDAO = postulanteDAO;
+	}		
 }

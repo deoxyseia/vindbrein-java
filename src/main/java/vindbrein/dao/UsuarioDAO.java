@@ -30,8 +30,7 @@ public class UsuarioDAO implements Serializable {
     }
 
 	public void addUsuario(Usuario usuario) {
-		getSessionFactory().getCurrentSession().save(usuario);
-		
+		getSessionFactory().getCurrentSession().save(usuario);		
 	}
 
 	public void updateUsuario(Usuario usuario) {

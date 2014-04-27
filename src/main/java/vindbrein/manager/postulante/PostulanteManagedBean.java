@@ -23,4 +23,6 @@ public class PostulanteManagedBean implements Serializable{
 	@Qualifier("postulanteService")
 	private PostulanteService postulanteService;
 	
+	
+	
 }

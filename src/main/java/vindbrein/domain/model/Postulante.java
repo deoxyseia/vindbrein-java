@@ -26,8 +26,7 @@ public class Postulante implements Serializable {
 	private int postIdProfS;
 	private String postNombres;
 	private String postSexo;
-	private List<ActividadAcademica> actividadAcademicas;
-	private List<Correo> correos;
+	private List<ActividadAcademica> actividadAcademicas;	
 	private List<ExperienciaLaboral> experienciaLaborals;
 	private List<MatchResult> matchResults;
 	private EstadoCivil estadoCivil;
@@ -179,33 +178,7 @@ public class Postulante implements Serializable {
 
 		return actividadAcademica;
 	}
-
-
-	//bi-directional many-to-one association to Correo
-	@OneToMany(mappedBy="postulante")
-	public List<Correo> getCorreos() {
-		return this.correos;
-	}
-
-	public void setCorreos(List<Correo> correos) {
-		this.correos = correos;
-	}
-
-	public Correo addCorreo(Correo correo) {
-		getCorreos().add(correo);
-		correo.setPostulante(this);
-
-		return correo;
-	}
-
-	public Correo removeCorreo(Correo correo) {
-		getCorreos().remove(correo);
-		correo.setPostulante(null);
-
-		return correo;
-	}
-
-
+	
 	//bi-directional many-to-one association to ExperienciaLaboral
 	@OneToMany(mappedBy="postulante")
 	public List<ExperienciaLaboral> getExperienciaLaborals() {
