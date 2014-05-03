@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vindbrein.dao.OrganizacionDAO;
 import vindbrein.dao.PostulanteDAO;
+import vindbrein.dao.RespRrhhDAO;
+import vindbrein.dao.SucursalDAO;
 import vindbrein.dao.UsuarioDAO;
 import vindbrein.domain.model.Usuario;
 import vindbrein.service.UsuarioService;
@@ -25,6 +28,16 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	
 	@Autowired
 	PostulanteDAO postulanteDAO;
+	
+	@Autowired
+	OrganizacionDAO organizacionDAO;
+	
+	@Autowired
+	SucursalDAO sucursalDAO;
+	
+	@Autowired
+	RespRrhhDAO respRrhhDAO;
+	
 	
 	@Transactional(readOnly = false)
 	public void addUsuario(Usuario usuario) {
@@ -62,6 +75,14 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 		getUsuarioDAO().addUsuario(usuario);
 	}
 	
+	@Transactional(readOnly = false)
+	public void addUsuarioOrganizacion(Usuario usuario){
+		getOrganizacionDAO().addOrganizacion(usuario.getRespRrhh().getSucursal().getOrganizacion());
+		getSucursalDAO().addSucursal(usuario.getRespRrhh().getSucursal());
+		getRespRrhhDAO().addRespRrhh(usuario.getRespRrhh());
+		getUsuarioDAO().addUsuario(usuario);
+	}
+	
 	//getters and setters
 
 	public UsuarioDAO getUsuarioDAO() {
@@ -78,5 +99,29 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 
 	public void setPostulanteDAO(PostulanteDAO postulanteDAO) {
 		this.postulanteDAO = postulanteDAO;
-	}		
+	}
+
+	public OrganizacionDAO getOrganizacionDAO() {
+		return organizacionDAO;
+	}
+
+	public void setOrganizacionDAO(OrganizacionDAO organizacionDAO) {
+		this.organizacionDAO = organizacionDAO;
+	}
+
+	public SucursalDAO getSucursalDAO() {
+		return sucursalDAO;
+	}
+
+	public void setSucursalDAO(SucursalDAO sucursalDAO) {
+		this.sucursalDAO = sucursalDAO;
+	}
+
+	public RespRrhhDAO getRespRrhhDAO() {
+		return respRrhhDAO;
+	}
+
+	public void setRespRrhhDAO(RespRrhhDAO respRrhhDAO) {
+		this.respRrhhDAO = respRrhhDAO;
+	}	
 }

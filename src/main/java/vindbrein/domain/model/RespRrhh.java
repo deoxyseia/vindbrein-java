@@ -16,8 +16,7 @@ public class RespRrhh implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int rerrId;
 	private String rerrApellidoMaterno;
-	private String rerrApellidoPaterno;
-	private String rerrMail;
+	private String rerrApellidoPaterno;	
 	private String rerrNombres;
 	private String rerrTelefono;
 	private Sucursal sucursal;
@@ -57,17 +56,6 @@ public class RespRrhh implements Serializable {
 	public void setRerrApellidoPaterno(String rerrApellidoPaterno) {
 		this.rerrApellidoPaterno = rerrApellidoPaterno;
 	}
-
-
-	@Column(name="rerr_mail")
-	public String getRerrMail() {
-		return this.rerrMail;
-	}
-
-	public void setRerrMail(String rerrMail) {
-		this.rerrMail = rerrMail;
-	}
-
 
 	@Column(name="rerr_nombres")
 	public String getRerrNombres() {

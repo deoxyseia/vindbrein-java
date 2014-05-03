@@ -13,9 +13,6 @@ import vindbrein.domain.model.Usuario;
 @Repository
 public class UsuarioDAO implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	@Qualifier("sessionFactory")

@@ -1,0 +1,112 @@
+<ui:composition template="./templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<ui:define name="title">Registro de Postulante</ui:define>
+
+	<ui:define name="content">
+		<center>
+			<p:messages autoUpdate="true"
+				closable="true" />
+				
+			<h:form id="formUsuarioPostulante">		
+				<p:panel header="Registro de Postulante" style="width:400px">
+					<h:panelGrid columns="2">
+						<h:outputText value="Nombres :"></h:outputText>
+						<p:inputText value="#{usuarioManagedBean.usuarioPostulante.postulante.postNombres}"
+								required="true"
+								requiredMessage="Su nombre(s) es necesario" />
+								
+						<h:outputText value="Apellido paterno :"></h:outputText>
+						<p:inputText value="#{usuarioManagedBean.usuarioPostulante.postulante.postApellidoPaterno}"
+								required="true"
+								requiredMessage="Su apellido paterno es necesario" />
+								
+						<h:outputText value="Apellido materno :"></h:outputText>
+						<p:inputText value="#{usuarioManagedBean.usuarioPostulante.postulante.postApellidoMaterno}"
+								required="true"
+								requiredMessage="Su apellido materno es necesario" />				
+		
+						<h:outputText value="Sexo :" />
+						<p:selectOneMenu
+							value="#{usuarioManagedBean.usuarioPostulante.postulante.postSexo}"
+							required="true" requiredMessage="Elija un sexo">
+							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+							<f:selectItem itemLabel="Masculino" itemValue="M" />
+							<f:selectItem itemLabel="Femenino" itemValue="F" />
+						</p:selectOneMenu>
+						
+						<h:outputText value="Fecha de nacimiento :" />
+						<p:calendar
+								value="#{usuarioManagedBean.usuarioPostulante.postulante.postFecNacimiento}"
+								showOn="button" />
+					</h:panelGrid>	
+					<p:fieldset legend="Datos de de autenticación">
+						<h:panelGrid columns="2">
+							<h:outputText value="E-mail :"></h:outputText>
+							<p:inputText
+								value="#{usuarioManagedBean.usuarioPostulante.usuaCorreo}"
+								converterMessage="Ingrese un valor válido" required="true"
+								requiredMessage="Su e-mail es necesario" />
+	
+							<h:outputText value="Usuario :"></h:outputText>
+							<p:inputText
+								value="#{usuarioManagedBean.usuarioPostulante.usuaNombre}"
+								converterMessage="Ingrese un valor válido" required="true"
+								requiredMessage="Su e-mail es necesario" />
+	
+							<h:outputText value="Contraseña :"></h:outputText>
+							<p:inputText value="#{usuarioManagedBean.newPassword}"
+								converterMessage="Ingrese un valor válido" required="true"
+								requiredMessage="La contraseña es necesaria" />
+	
+							<h:outputText value="Repita contraseña :"></h:outputText>
+							<p:inputText value="#{usuarioManagedBean.newPasswordReload}"
+								converterMessage="Ingrese un valor válido" required="true"
+								requiredMessage="Repita la contraseña" />
+						</h:panelGrid>			
+					</p:fieldset>
+						
+						<f:facet name="footer">
+							<center>
+								<p:commandButton value="Guardar"
+									actionListener="#{usuarioManagedBean.verifiedSaveUsuarioPostulante()}" 
+									oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){confirmSaveUsuarioPostulanteDialog.show()}"
+									icon="ui-icon-check" style="margin:0">
+								</p:commandButton>
+								<p:commandButton value="Cancelar" ajax="false"
+									immediate="true"
+									action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"
+									type="submit" icon="ui-icon-close">
+								</p:commandButton>
+							</center>	
+						</f:facet>					
+				</p:panel>			
+			</h:form>
+		</center>
+<!-- Dialog de confirmación de guardado de usuario postulante -->
+
+		<p:dialog id="confirmSaveUsuarioPostulanteDlg" header="Confirmación"
+			hideEffect="explode" widgetVar="confirmSaveUsuarioPostulanteDialog" resizable="false"
+			modal="true" appendToBody="true">
+			<h:form>
+				<p:panelGrid columns="1">
+					<h:outputText
+						value="¿Está seguro que desea guardar la información?" />
+					<f:facet name="footer">
+						<p:commandButton value="Sí"						
+							actionListener="#{usuarioManagedBean.saveUsuarioPostulante()}"
+							action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"						
+							oncomplete="confirmSaveUsuarioPostulanteDialog.hide()" icon="ui-icon-check"/>
+						<p:commandButton value="No" onclick="confirmSaveUsuarioPostulanteDialog.hide()"
+							type="button" icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>	
+<!-- Fin Dialog de confirmación de guardado de usuario postulante -->
+	</ui:define>
+</ui:composition>

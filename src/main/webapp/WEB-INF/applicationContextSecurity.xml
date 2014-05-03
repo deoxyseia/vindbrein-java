@@ -19,7 +19,7 @@
         				login-page="/pages/login.jsf"         				
         				authentication-failure-url="/pages/login.jsf"/>
         	<intercept-url pattern="/pages/login.jsf*" access="ROLE_ANONYMOUS"/>   		
-        	<intercept-url pattern="/pages/secured/**" access="ROLE_ESTUDIANTE"/>      	
+        	<intercept-url pattern="/pages/secured/**" access="ROLE_ESTUDIANTE"/>        	    	
         
         	<logout logout-success-url="/pages/login.jsf"/>        	
         </http>

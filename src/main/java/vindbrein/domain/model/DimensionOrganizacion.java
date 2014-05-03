@@ -16,7 +16,7 @@ public class DimensionOrganizacion implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int diorId;
 	private String diorCode;
-	private String diorDescripcion;
+	private String diorNombre;
 	private List<Organizacion> organizacions;
 
 	public DimensionOrganizacion() {
@@ -45,13 +45,13 @@ public class DimensionOrganizacion implements Serializable {
 	}
 
 
-	@Column(name="dior_descripcion")
-	public String getDiorDescripcion() {
-		return this.diorDescripcion;
+	@Column(name="dior_nombre")
+	public String getDiorNombre() {
+		return this.diorNombre;
 	}
 
-	public void setDiorDescripcion(String diorDescripcion) {
-		this.diorDescripcion = diorDescripcion;
+	public void setDiorNombre(String diorNombre) {
+		this.diorNombre = diorNombre;
 	}
 
 
