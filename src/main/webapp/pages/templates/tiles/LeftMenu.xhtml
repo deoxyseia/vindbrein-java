@@ -17,6 +17,12 @@
                        <p:submenu label="Inicio">
                            <p:menuitem value="Principal" action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
                       </p:submenu>                                       
+                    </c:if>
+                    
+                    <c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
+                       <p:submenu label="Inicio">
+                           <p:menuitem value="Perfil de Postulante" action="/pages/secured/postulante/postulante.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
+                      </p:submenu>                                       
                     </c:if>                   
             </p:menu>
         </h:form>
