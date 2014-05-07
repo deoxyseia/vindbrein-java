@@ -35,10 +35,15 @@
 								actionListener="#{usuarioManagedBean.login()}"
 								type="submit" icon="ui-icon-check" style="margin:0">
 							</p:commandButton>	
-							  <p:commandButton value="Registrar nuevo" ajax="false" immediate="true"
-								action="/pages/registrarUsuarioPostulante.xhtml?faces-redirect=true"
+							  <p:commandButton value="Registrar nuevo postulante" ajax="false" immediate="true"
+								action="/pages/usuarioPostulante.xhtml?faces-redirect=true"
 								type="submit" icon="ui-icon-check">
-							</p:commandButton>								
+							  </p:commandButton>
+							  
+							  <p:commandButton value="Registrar nueva organización" ajax="false" immediate="true"
+								action="/pages/usuarioOrganizacion.xhtml?faces-redirect=true"
+								type="submit" icon="ui-icon-check">
+							  </p:commandButton>									
 						  </center>
 							
 						</f:facet>

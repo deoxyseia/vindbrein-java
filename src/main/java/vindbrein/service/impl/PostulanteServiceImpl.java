@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import vindbrein.dao.CorreoDAO;
 import vindbrein.dao.PostulanteDAO;
 import vindbrein.domain.model.Postulante;
 import vindbrein.service.PostulanteService;
@@ -20,8 +19,6 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	@Autowired	
 	PostulanteDAO postulanteDAO;
 	
-	@Autowired	
-	CorreoDAO correoDAO;
 
 	public void addPostulante(Postulante postulante) {
 		getPostulanteDAO().addPostulante(postulante);		
@@ -51,13 +48,5 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 
 	public void setPostulanteDAO(PostulanteDAO postulanteDAO) {
 		this.postulanteDAO = postulanteDAO;
-	}
-
-	public CorreoDAO getCorreoDAO() {
-		return correoDAO;
-	}
-
-	public void setCorreoDAO(CorreoDAO correoDAO) {
-		this.correoDAO = correoDAO;
-	}
+	}	
 }

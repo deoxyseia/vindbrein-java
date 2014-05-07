@@ -21,5 +21,7 @@ public interface UsuarioService {
 	public Usuario getUsuarioByUsername(String user);
 	
 	public void addUsuarioPostulante(Usuario usuario);
+	
+	public void addUsuarioOrganizacion(Usuario usuario);
 
 }

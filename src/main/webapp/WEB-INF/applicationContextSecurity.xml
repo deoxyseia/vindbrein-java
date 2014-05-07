@@ -18,8 +18,10 @@
         	<form-login login-processing-url="/j_spring_security_check"
         				login-page="/pages/login.jsf"         				
         				authentication-failure-url="/pages/login.jsf"/>
-        	<intercept-url pattern="/pages/login.jsf*" access="ROLE_ANONYMOUS"/>   		
-        	<intercept-url pattern="/pages/secured/**" access="ROLE_ESTUDIANTE"/>      	
+        	<intercept-url pattern="/pages/login.jsf*" access="ROLE_ANONYMOUS"/> 
+        	<intercept-url pattern="/pages/secured/principal/**" access="ROLE_ESTUDIANTE, ROLE_ORGANIZACION"/>  		
+        	<intercept-url pattern="/pages/secured/postulante/**" access="ROLE_ESTUDIANTE"/>
+        	<intercept-url pattern="/pages/secured/reclutador/**" access="ROLE_ORGANIZACION"/>        	    	
         
         	<logout logout-success-url="/pages/login.jsf"/>        	
         </http>
@@ -27,16 +29,19 @@
         <authentication-manager alias="authenticationManager" erase-credentials="false">
         	<authentication-provider >        		
         		<jdbc-user-service data-source-ref="dataSource"
-        		 users-by-username-query="SELECT usua_nombre AS username, 
+	users-by-username-query="SELECT usua_nombre AS username, 
         		 								 usua_contrasenia AS password,
         		 								 true AS enabled
                                           FROM vindbrein.usuario
                                           WHERE usua_nombre =  ?"
-                 authorities-by-username-query="SELECT u.usua_nombre AS username, 'ROLE_ESTUDIANTE' AS authority
-												FROM vindbrein.usuario u
-											    WHERE u.usua_nombre = ?"                          
-        		/>
-        		
+	authorities-by-username-query="SELECT 
+									u.usua_nombre AS username, 
+									CASE 
+									WHEN u.fk_post_id is not null THEN 'ROLE_ESTUDIANTE' 
+									WHEN u.fk_rerr_id is not null THEN 'ROLE_ORGANIZACION'
+									END  AS authority 
+									FROM vindbrein.usuario u
+									WHERE u.usua_nombre = ?" />        		
         	</authentication-provider>
         </authentication-manager>  
 </beans:beans>
