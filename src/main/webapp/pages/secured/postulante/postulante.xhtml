@@ -1,466 +1,144 @@
 <ui:composition template="/pages/templates/layout.xhtml"
-     xmlns="http://www.w3.org/1999/xhtml"
-     xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:h="http://java.sun.com/jsf/html"
-     xmlns:ui="http://java.sun.com/jsf/facelets"
-     xmlns:p="http://primefaces.org/ui"
-     xmlns:c="http://java.sun.com/jsp/jstl/core">
-     
-     <ui:define name="title"> Registro de Postulante </ui:define>
-     
-     <ui:define name="content">	
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-		<!--Postulante -->		
+	<ui:define name="title"> Información personal </ui:define>
 
-		<h:form id="formFactura">
-			<p:dataTable id="dataTableFactura" var="factura" emptyMessage="No hay facturas" 
-				rowKey="#{factura.factId}"
-				value="#{facturaManagedBean.facturas}" 
-				selection="#{facturaManagedBean.selectedFactura}"
-				filteredValue="#{facturaManagedBean.filteredFacturas}"	
-				paginator="true" rows="10"							
-				rowsPerPageTemplate="10,15,50"
-				selectionMode="single"
-				paginatorPosition="top">
-				
-				<p:ajax event="rowDblselect" 
-					listener="#{facturaManagedBean.loadFactura()}"			    
-                    update=":saveFacturaForm" 
-                    oncomplete="saveFacturaDialog.show()" />  
-              
-				<f:facet name="header">
-                    Lista de facturas
-                </f:facet>			
+	<ui:define name="content">
 
-				<p:column>
-					<f:facet name="header">
-						<h:panelGrid columns="1">
-							<h:outputText value="Intervalo de fecha" />
-							<h:panelGrid columns="2">
-								<h:outputLabel value="De:" />
-								<p:calendar id="filterTripDateFrom"
-									readonlyInput="true"
-									value="#{facturaManagedBean.startDate}" maxdate="#{facturaManagedBean.endDate}"
-									mode="popup" showOn="button" navigator="true" effect="fadeIn" pattern="dd/MM/yyyy" size="8">
-									<p:ajax event="dateSelect"
-										listener="#{facturaManagedBean.reiniciarFacturas}"
-										update=":formFactura:dataTableFactura" />
-								</p:calendar>
-								<h:outputLabel value="A:" />
-								<p:calendar id="filterTripDateTo"
-									readonlyInput="true"
-									value="#{facturaManagedBean.endDate}" mindate="#{facturaManagedBean.startDate}"
-									mode="popup" showOn="button" navigator="true" effect="fadeIn" pattern="dd/MM/yyyy" size="8">
-									<p:ajax event="dateSelect"
-										listener="#{facturaManagedBean.reiniciarFacturas}"
-										update=":formFactura:dataTableFactura" />
-								</p:calendar>
-							</h:panelGrid>
-						</h:panelGrid>
-					 </f:facet>
-					 <h:outputText value="#{factura.fechaEmisionTexto}"  />					
-				</p:column>			
+		<!--Postulante -->
 
-				<p:column sortBy="#{factura.factNumeracion}"
-					filterBy="#{factura.factNumeracion}">
-					<f:facet name="header">
-						<h:outputText value="Numeración" />
-					</f:facet>
-					<h:outputText value="#{factura.factNumeracion}" />
-				</p:column>			
-
-				<p:column filterBy="#{factura.cliente.clienRazonSocial}">
-					<f:facet name="header">
-						<h:outputText value="Cliente" />
-					</f:facet>
-					<h:outputText value="#{factura.cliente.clienRazonSocial}" />					 			          				 
-		        </p:column>
-		        
-		        <p:column>
-		        	<f:facet name="header">
-						<h:outputText value="Monto IGV" />
-					</f:facet>
-					<h:outputText value="#{factura.factMontoIgv}" />					 			          				 
-		        </p:column>
-		        
-		        <p:column>
-					<f:facet name="header">
-						<h:outputText value="Total" />
-					</f:facet>
-					<h:outputText value="#{factura.factMontoTotal}" />					 			          				 
-		        </p:column>	
-		        
-		        <p:column sortBy="#{factura.estado}" filterBy="#{factura.estado}" >
-		            <f:facet name="header">
-						<h:outputText value="Estado" />
-					</f:facet>
-					<h:outputText value="#{factura.estado}" />					 			          				 
-		        </p:column>	
-		        
-		        <p:column sortBy="#{factura.cobrado}" filterBy="#{factura.cobrado}" >
-		            <f:facet name="header">
-						<h:outputText value="Cobrado" />
-					</f:facet>
-					<h:outputText value="#{factura.cobrado}" />					 			          				 
-		        </p:column>	 	       			
-
-				<f:facet name="footer">
-					<p:commandButton value="Nueva factura"
-						actionListener="#{facturaManagedBean.reiniciarNewFactura()}"
-						update=":saveFacturaForm, :formFactura:dataTableFactura" 
-						oncomplete="saveFacturaDialog.show()" icon="ui-icon-star" />
-					<p:commandButton value="Eliminar factura"
-						actionListener="#{facturaManagedBean.verifyDeleteSelectedFactura()}"
-						oncomplete="if (args.verificado){confirmDeleteFacturaDialog.show()}"					
-						icon="ui-icon-trash" />
-				</f:facet>
-			</p:dataTable>
+		<h:form id="formPostulante">
 			
-			<!-- Datos para exportar -->
-			<h:panelGrid columns="2">
-				<p:panel header="Exportar tabla">
-					<h:commandLink>
-						<p:graphicImage value="/resources/img/icon_xls.png" />
-						<p:dataExporter type="xls" target="dataTableFactura"
-							postProcessor="#{facturaManagedBean.postProcessXLS}"
-							fileName="facturas" />
-					</h:commandLink>									
-				</p:panel>
-			</h:panelGrid>
-			<!-- fin de Datos para exportar -->
-		</h:form>	
- <!-- Fin Factura -->
- 
- <!-- Dialog de confirmación de eliminado de factura -->
-
-		<p:dialog id="confirmDeleteFacturaDlg" header="Confirmación"
-			hideEffect="explode" widgetVar="confirmDeleteFacturaDialog" resizable="false"
-			modal="true" appendToBody="true">
-			<h:form>
-				<p:panelGrid columns="1">
-					<h:outputText
-						value="¿Está seguro que desea eliminar esta factura?" />
-					<f:facet name="footer">
-						<p:commandButton value="Sí"
-							update=":formFactura:dataTableFactura"											
-							oncomplete="confirmDeleteFacturaDialog.hide()"
-							actionListener="#{facturaManagedBean.deleteFactura()}"											
-							icon="ui-icon-check"/>
-						<p:commandButton value="No" onclick="confirmDeleteFacturaDialog.hide()"
-							type="button" icon="ui-icon-close" />
-					</f:facet>
-				</p:panelGrid>
-			</h:form>
-		</p:dialog>	
-<!-- Fin Dialog de confirmado de eliminado de factura -->	
-
-
-		<!-- Dialog de Nueva factura -->
-		
-		<p:dialog id="saveFacturaDlg" header="Factura" closable="false" 
-			widgetVar="saveFacturaDialog" modal="true"
-			appendToBody="true">
-			
-			<p:messages showDetail="true" autoUpdate="true"
-				closable="true" />			
-				
-			<h:form id="saveFacturaForm">			
-			    <h:panelGrid columns="2">					
-					<h:outputText value="Serie :"></h:outputText>
-					<p:inputText value="#{facturaManagedBean.newFactura.factSerie}"
-						converterMessage="Introduzca un número de serie válido"
-						required="true" requiredMessage="El número de serie es necesario"
-						disabled="#{facturaManagedBean.estadoOficial}" />
-
-					<h:outputText value="Numeración :"></h:outputText>
-					<p:inputText
-						value="#{facturaManagedBean.newFactura.factNumeracion}"
-						disabled="#{facturaManagedBean.estadoOficial}" required="true"
-						requiredMessage="La numeración es necesaria" />
-					<p:separator />
-				</h:panelGrid>
-					
-				<h:panelGrid columns="4" cellpadding="2" style="margin:0 auto;">
-
-					<h:outputText value="Cliente: " />
-					<p:selectOneMenu
-						disabled="#{facturaManagedBean.estadoOficial}"
-						value="#{facturaManagedBean.newFactura.cliente.clienId}"
-						effect="fade" required="true" requiredMessage="Elija un cliente">	
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />					
-						<f:selectItems value="#{clienteManagedBean.clientes}"
-							var="cliente" itemValue="#{cliente.clienId}"
-							itemLabel="#{cliente.clienRazonSocial}" />
-					</p:selectOneMenu>
-
-					<h:outputText value="Fecha de emisión :"></h:outputText>
-					<p:calendar
-						value="#{facturaManagedBean.newFactura.factFechaEmision}"
-						showOn="button" disabled="#{facturaManagedBean.estadoOficial}" />
-
-					<h:outputText value="Cond. de pago :"></h:outputText>
-					<p:inputText
-						value="#{facturaManagedBean.newFactura.factCondicionPago}"
-						disabled="#{facturaManagedBean.estadoOficial}" />
-
-					<h:outputText value="Guía de remisión Nro :"></h:outputText>
-					<p:inputText
-						value="#{facturaManagedBean.newFactura.factGuiaRemisionNro}"
-						disabled="#{facturaManagedBean.estadoOficial}" />
-				</h:panelGrid>					
-				<h:outputText value="&#160;" />
-				
-				<!-- datatable para el detalle de la factura -->
-
-				<p:dataTable id="saveDataTableDetalleFactura" var="detalleFactura" rowKey="#{detalleFactura.defaId}"
-					value="#{facturaManagedBean.newFactura.detalleFacturas}"
-					selection="#{facturaManagedBean.newDetalleFactura}"
-					emptyMessage="No hay ítems"
-					selectionMode="single">
-					
-					<p:ajax event="rowDblselect" 			    
-                    update=":updateDetalleFacturaForm" 
-                    oncomplete="updateDetalleFacturaDialog.show()" 
-                    disabled="#{facturaManagedBean.estadoOficial}" /> 
-					
-					<p:column headerText="CANT.">						
-						<h:outputText value="#{detalleFactura.defacCantidad}" />
-					</p:column>
-					<p:column headerText="DESCRIPCIÓN">						
-						<h:outputText value="#{detalleFactura.defacDescripcion}" />
-					</p:column>
-					<p:column headerText="P. UNITARIO">						
-						<h:outputText value="#{detalleFactura.defacPrecioUnitario}" />
-					</p:column>						
-					<p:column headerText="IMPORTE">
-						<h:outputText value="#{facturaManagedBean.calcularImporte(detalleFactura.defacCantidad, detalleFactura.defacPrecioUnitario)}" />						
-					</p:column>							
-
-					<f:facet name="footer">
-						<p:commandButton value="Nuevo ítem"
-							actionListener="#{facturaManagedBean.reiniciarNewDetalleFactura}"
-							oncomplete="saveDetalleFacturaDialog.show()" icon="ui-icon-star"
-							update=":saveDetalleFacturaForm" immediate="true"
-							title="Crear nuevo servicio"
-							disabled="#{facturaManagedBean.estadoOficial}" />
-						<p:commandButton value="Eliminar ítem"
-							actionListener="#{facturaManagedBean.deleteDetalleFactura()}"
-							update=":saveFacturaForm:saveDataTableDetalleFactura" icon="ui-icon-trash"
-							disabled="#{facturaManagedBean.estadoOficial}" />
-					</f:facet>
-				</p:dataTable>				
-				
-			
-				<!-- fin de datatable para el detalle de la factura -->
-				
-				<p:separator />
-				
-				<h:outputText value="SON :"></h:outputText>				
-				<h:outputText value="#{facturaManagedBean.newFactura.factMontoTexto}"></h:outputText>
-				
-				<h:outputText value="&#160;" />				
-				
-				<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;">
-				    <h:outputText value=""></h:outputText>
-				    <h:outputText value=""></h:outputText>
-				    <h:outputText value="Venta: "></h:outputText>
-				    <h:outputText value="#{facturaManagedBean.calcularPrecioVenta()}"></h:outputText>
-				</h:panelGrid>
-				
-				<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;">
-				    <h:outputText value=""></h:outputText>
-				    <h:outputText value=""></h:outputText>
-				    <h:outputText value="IGV: "></h:outputText>
-				    <h:outputText value="#{facturaManagedBean.newFactura.factMontoIgv}"></h:outputText>
-				</h:panelGrid>
-				
-				<h:panelGrid columns="4" cellpadding="4" style="margin:0 auto;">
-				    <h:outputText value=""></h:outputText>
-				    <h:outputText value=""></h:outputText>
-				    <h:outputText value="Total: "></h:outputText>
-				    <h:outputText value="#{facturaManagedBean.newFactura.factMontoTotal}"></h:outputText>
-				</h:panelGrid>				
-				
-				<h:outputText value="&#160;" />	
-				
-                <h:panelGrid columns="4" cellpadding="2" style="margin:0 auto;">
-					<f:facet name="footer">								
-						<p:commandButton value="Guardar"
-						    actionListener="#{facturaManagedBean.verifySaveFactura()}"													
-							oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){confirmSaveFacturaDialog.show()}"
-							disabled="#{facturaManagedBean.estadoAnulado}"							
-							icon="ui-icon-disk"/>										
-						<p:commandButton value="Cancelar" immediate="true"	
-							actionListener="#{facturaManagedBean.reiniciarFacturas()}"
-							oncomplete="saveFacturaDialog.hide()"						   																
-							icon="ui-icon-close" />
-						<h:commandLink title="Imprimir factura"
-							action="#{facturaManagedBean.facturaPdf}" target="_blank"
-							disabled="#{facturaManagedBean.estadoBorrador or facturaManagedBean.estadoAnulado}">
-							<p:graphicImage value="/resources/img/icon_pdf_mini.png" />
-						</h:commandLink>
-					</f:facet>
-				</h:panelGrid>
-
 				<h:panelGrid columns="2">
-					<h:outputText value="Estado: " />
-					<p:selectBooleanButton value="#{facturaManagedBean.estadoOficial}" 
-						onLabel="válido" offLabel="Borrador"						
-						disabled="#{facturaManagedBean.estadoOficial}">
-						<p:ajax listener="#{facturaManagedBean.estadoValidoMensaje}"/> 
-					</p:selectBooleanButton>
-					<h:outputText value="Cobrado: " />
-					<p:selectBooleanButton
-						value="#{facturaManagedBean.estadoCancelado}" 
-						onLabel="Sí" offLabel="No" 
-						disabled="#{facturaManagedBean.estadoCancelado or facturaManagedBean.estadoAnulado}">
-						<p:ajax listener="#{facturaManagedBean.estadoCanceladoMensaje}"/> 
-					</p:selectBooleanButton>
-					<p:separator id="customSeparator" style="height:8px" />
-					<h:outputText value="&#160;" />						
-					<h:outputText value="Anulado: " />
-					<p:selectBooleanButton
-						value="#{facturaManagedBean.estadoAnulado}" 
-						onLabel="Sí" offLabel="No" 
-						disabled="#{facturaManagedBean.estadoBorrador or facturaManagedBean.estadoAnulado}">
-						<p:ajax listener="#{facturaManagedBean.estadoAnuladoMensaje}"/> 
-					</p:selectBooleanButton>										
-				</h:panelGrid>
-			</h:form>
-		</p:dialog>
-<!-- Fin de Dialog de Nueva factura -->	
-		
-<!-- Dialog de confirmación de guardado de factura -->
+					<h:outputText value="Nombres :"></h:outputText>
+					<p:inputText
+						value="#{postulanteManagedBean.postulante.postNombres}"
+						required="true" requiredMessage="Su nombre(s) es necesario" />
 
-		<p:dialog id="confirmSaveFacturaDlg" header="Confirmación"
-			hideEffect="explode" widgetVar="confirmSaveFacturaDialog" resizable="false"
-			modal="true" appendToBody="true">
-			<h:form>
-				<p:panelGrid columns="1">
-					<h:outputText
-						value="¿Está seguro que desea guardar la factura?" />
+					<h:outputText value="Apellido paterno :"></h:outputText>
+					<p:inputText
+						value="#{postulanteManagedBean.postulante.postApellidoPaterno}"
+						required="true" requiredMessage="Su apellido paterno es necesario" />
+
+					<h:outputText value="Apellido materno :"></h:outputText>
+					<p:inputText
+						value="#{postulanteManagedBean.postulante.postApellidoMaterno}"
+						required="true" requiredMessage="Su apellido materno es necesario" />
+
+					<h:outputText value="Sexo :" />
+					<p:selectOneMenu
+						value="#{postulanteManagedBean.postulante.postSexo}"
+						required="true" requiredMessage="Elija un sexo">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItem itemLabel="Masculino" itemValue="M" />
+						<f:selectItem itemLabel="Femenino" itemValue="F" />
+					</p:selectOneMenu>
+
+					<h:outputText value="Fecha de nacimiento :" />
+					<p:calendar
+						value="#{postulanteManagedBean.postulante.postFecNacimiento}"
+						showOn="button" />
+
+					<h:outputText value="E-mail :"></h:outputText>
+					<p:inputText
+						value="#{postulanteManagedBean.postulante.usuario.usuaCorreo}"
+						converterMessage="Ingrese un valor válido" required="true"
+						requiredMessage="Su e-mail es necesario" />
+				</h:panelGrid>
+
+				<p:dataTable id="dataTableTelefono" rowKey="#{telefono.teleId}" 
+					var="telefono"
+					emptyMessage="No tiene registrado telefonos"
+					editable="true" editMode="row"
+					value="#{postulanteManagedBean.postulante.telefonos}"
+					selection="#{postulanteManagedBean.selectedTelefono}"
+					selectionMode="single">					
+					
+					<p:ajax event="rowEdit"
+						listener="#{postulanteManagedBean.updateTelefono}"
+						update=":formPostulante:dataTableTelefono" />
+					<p:ajax event="rowEditCancel" update=":formPostulante:dataTableTelefono" />
+
+					<f:facet name="header">
+                    Lista de teléfonos
+                    </f:facet>					
+
+					<p:column headerText="Descripción">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{telefono.teleDescripcion}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{telefono.teleDescripcion}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Número" >
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{telefono.teleNum}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{telefono.teleNum}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+<!-- 					<p:column > -->
+<!-- 						<p:rowEditor /> -->
+<!-- 					</p:column> -->
+					
 					<f:facet name="footer">
-						<p:commandButton value="Sí"
-							update=":formFactura:dataTableFactura, :saveFacturaForm"
-							actionListener="#{facturaManagedBean.saveFactura()}"							
-							oncomplete="confirmSaveFacturaDialog.hide()" icon="ui-icon-check"/>
-						<p:commandButton value="No" onclick="confirmSaveFacturaDialog.hide()"
-							type="button" icon="ui-icon-close" />
+					<center>
+						<p:commandButton value="Eliminar"
+							actionListener="#{postulanteManagedBean.deleteTelefono()}"							
+							icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Nuevo"	
+							actionListener="#{postulanteManagedBean.reiniciarNewTelefono()}"						
+							oncomplete="saveTelefonoDialog.show()"
+							icon="ui-icon-check">
+						</p:commandButton>
+					</center>
+				</f:facet>
+				</p:dataTable>
+				
+				
+			
+		</h:form>
+		<!--Postulante -->
+		
+		<!-- Dialog nuevo telefono -->
+		<p:dialog id="saveTelefonoDlg" header="Nuevo teléfono"
+			hideEffect="explode" widgetVar="saveTelefonoDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+			<h:form>
+				<p:panelGrid columns="2">
+					<h:outputText value="Descripción: " />
+					<p:inputText value="#{postulanteManagedBean.newTelefono.teleDescripcion}" />
+					<h:outputText value="Número: " />
+					<p:inputText value="#{postulanteManagedBean.newTelefono.teleNum}" />
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{postulanteManagedBean.saveTelefono()}"							
+							oncomplete="saveTelefonoDialog.hide()"
+							update=":formPostulante:dataTableTelefono"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveTelefonoDialog.hide()" type="button"
+							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
 			</h:form>
-		</p:dialog>	
-<!-- Fin Dialog de confirmación de guardado de factura -->
-	
-
-  <!-- Dialog de nuevo detalle de factura -->
-
-		<p:dialog id="saveDetalleFacturaDlg" header="Crear nuevo servicio"
-			widgetVar="saveDetalleFacturaDialog" modal="true"
-			appendToBody="true">
-			
-			<p:messages  autoUpdate="true"
-				closable="true" />
-						
-			<h:form id="saveDetalleFacturaForm">
-				<h:panelGrid id="grid" columns="2" cellpadding="4" style="margin:0 auto;">
-					<h:outputText  value="Cantidad :"></h:outputText>
-					<p:inputText
-						value="#{facturaManagedBean.newDetalleFactura.defacCantidad}"
-						converterMessage="Ingrese una cantidad válida" required="true"
-						requiredMessage="Ingrese una cantidad" />					 	
-
-					<h:outputText value="Descripción :"></h:outputText>
-					<p:inputTextarea maxlength="200"
-						value="#{facturaManagedBean.newDetalleFactura.defacDescripcion}"
-						required="true" requiredMessage="Ingrese una descripción" />						
-
-					<h:outputText value="P. Unitario :"></h:outputText>
-					<p:inputText id="precioDetalle"
-						title="Ingrese un precio similar a: 220.30"
-						value="#{facturaManagedBean.newDetalleFactura.defacPrecioUnitario}"
-						converterMessage="Ingrese un precio válido" required="true"
-						requiredMessage="Ingrese el precio unitario">
-						<p:tooltip for="precioDetalle" showEvent="focus" hideEvent="blur" /> 
-					</p:inputText>					 
-					
-					<h:outputText value="Servicio: " />
-					<p:selectOneMenu
-						value="#{facturaManagedBean.newDetalleFactura.servicio.servId}"
-						effect="fade" required="true" requiredMessage="Elija un servicio">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems value="#{servicioManagedBean.servicios}"
-							var="servicio" itemLabel="#{servicio.servNombre}"
-							itemValue="#{servicio.servId}" />
-					</p:selectOneMenu>
-
-					<f:facet name="footer">
-						<p:commandButton value="Guardar"
-							update=":saveDetalleFacturaForm, :saveFacturaForm:saveDataTableDetalleFactura"
-							oncomplete="if (!args.validationFailed){saveDetalleFacturaDialog.hide()}"							
-							actionListener="#{facturaManagedBean.saveDetalleFactura()}" />
-						<p:commandButton value="Cancelar" onclick="saveDetalleFacturaDialog.hide()"
-							type="button" icon="ui-icon-close" />
-					</f:facet>
-				</h:panelGrid>
-			</h:form>
-		</p:dialog>	
-		
-	<!-- fin Dialog de nuevo detalle de factura -->
-	
-	<!-- Dialog update factura -->
-
-		<p:dialog id="updateDetalleFacturaDlg" header="Modificar servicio"
-			widgetVar="updateDetalleFacturaDialog" modal="true"
-			appendToBody="true">
-			
-			<p:messages  autoUpdate="true"
-				closable="true" />
-						
-			<h:form id="updateDetalleFacturaForm">
-				<h:panelGrid id="grid" columns="2" cellpadding="4" style="margin:0 auto;">
-					<h:outputText  value="Cantidad :"></h:outputText>
-					<p:inputText
-						value="#{facturaManagedBean.newDetalleFactura.defacCantidad}"
-						converterMessage="Ingrese una cantidad válida" required="true"
-						requiredMessage="Ingrese una cantidad" />					 	
-
-					<h:outputText value="Descripción :"></h:outputText>
-					<p:inputTextarea maxlength="200"
-						value="#{facturaManagedBean.newDetalleFactura.defacDescripcion}"
-						required="true" requiredMessage="Ingrese una descripción" />						
-
-					<h:outputText value="P. Unitario :"></h:outputText>
-					<p:inputText id="precioDetalle"
-						title="Ingrese un precio similar a: 220.30"
-						value="#{facturaManagedBean.newDetalleFactura.defacPrecioUnitario}"
-						converterMessage="Ingrese un precio válido" required="true"
-						requiredMessage="Ingrese el precio unitario">
-						<p:tooltip for="precioDetalle" showEvent="focus" hideEvent="blur" /> 
-					</p:inputText>					 
-					
-					<h:outputText value="Servicio: " />
-					<p:selectOneMenu
-						value="#{facturaManagedBean.newDetalleFactura.servicio.servId}"
-						effect="fade" required="true" requiredMessage="Elija un servicio">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems value="#{servicioManagedBean.servicios}"
-							var="servicio" itemLabel="#{servicio.servNombre}"
-							itemValue="#{servicio.servId}" />
-					</p:selectOneMenu>
-
-					<f:facet name="footer">
-						<p:commandButton value="Modificar"
-							update=":updateDetalleFacturaForm, :saveFacturaForm:saveDataTableDetalleFactura"
-							oncomplete="if (!args.validationFailed){updateDetalleFacturaDialog.hide()}"							
-							actionListener="#{facturaManagedBean.updateDetalleFactura()}" />
-						<p:commandButton value="Cancelar" onclick="updateDetalleFacturaDialog.hide()"
-							type="button" icon="ui-icon-close" />
-					</f:facet>
-				</h:panelGrid>
-			</h:form>
 		</p:dialog>
-		
-<!-- Fin Dialog update factura -->				
-     </ui:define>
+		<!-- Fin Dialog nuevo telefono -->
+
+	</ui:define>
 </ui:composition>

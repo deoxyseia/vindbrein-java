@@ -17,8 +17,8 @@ public class EstadoCivil implements Serializable {
 	private int esciId;
 	private String esciCode;
 	private String esciDescripcion;
-	private List<PuestoLaboral> puestoLaborals;
 	private List<Postulante> postulantes;
+	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
 
 	public EstadoCivil() {
 	}
@@ -56,31 +56,6 @@ public class EstadoCivil implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoLaboral
-	@OneToMany(mappedBy="estadoCivil")
-	public List<PuestoLaboral> getPuestoLaborals() {
-		return this.puestoLaborals;
-	}
-
-	public void setPuestoLaborals(List<PuestoLaboral> puestoLaborals) {
-		this.puestoLaborals = puestoLaborals;
-	}
-
-	public PuestoLaboral addPuestoLaboral(PuestoLaboral puestoLaboral) {
-		getPuestoLaborals().add(puestoLaboral);
-		puestoLaboral.setEstadoCivil(this);
-
-		return puestoLaboral;
-	}
-
-	public PuestoLaboral removePuestoLaboral(PuestoLaboral puestoLaboral) {
-		getPuestoLaborals().remove(puestoLaboral);
-		puestoLaboral.setEstadoCivil(null);
-
-		return puestoLaboral;
-	}
-
-
 	//bi-directional many-to-one association to Postulante
 	@OneToMany(mappedBy="estadoCivil")
 	public List<Postulante> getPostulantes() {
@@ -103,6 +78,31 @@ public class EstadoCivil implements Serializable {
 		postulante.setEstadoCivil(null);
 
 		return postulante;
+	}
+
+
+	//bi-directional many-to-one association to PreferenciaPuestoLaboral
+	@OneToMany(mappedBy="estadoCivil")
+	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
+		return this.preferenciaPuestoLaborals;
+	}
+
+	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
+		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
+	}
+
+	public PreferenciaPuestoLaboral addPreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
+		getPreferenciaPuestoLaborals().add(preferenciaPuestoLaboral);
+		preferenciaPuestoLaboral.setEstadoCivil(this);
+
+		return preferenciaPuestoLaboral;
+	}
+
+	public PreferenciaPuestoLaboral removePreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
+		getPreferenciaPuestoLaborals().remove(preferenciaPuestoLaboral);
+		preferenciaPuestoLaboral.setEstadoCivil(null);
+
+		return preferenciaPuestoLaboral;
 	}
 
 }

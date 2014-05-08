@@ -18,9 +18,9 @@ public class Distrito implements Serializable {
 	private String distCode;
 	private String distNombre;
 	private Provincia provincia;
+	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
 	private List<Residencia> residencias;
 	private List<Sucursal> sucursals;
-	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
 
 	public Distrito() {
 	}
@@ -67,6 +67,31 @@ public class Distrito implements Serializable {
 
 	public void setProvincia(Provincia provincia) {
 		this.provincia = provincia;
+	}
+
+
+	//bi-directional many-to-one association to PreferenciaPuestoLaboral
+	@OneToMany(mappedBy="distrito")
+	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
+		return this.preferenciaPuestoLaborals;
+	}
+
+	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
+		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
+	}
+
+	public PreferenciaPuestoLaboral addPreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
+		getPreferenciaPuestoLaborals().add(preferenciaPuestoLaboral);
+		preferenciaPuestoLaboral.setDistrito(this);
+
+		return preferenciaPuestoLaboral;
+	}
+
+	public PreferenciaPuestoLaboral removePreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
+		getPreferenciaPuestoLaborals().remove(preferenciaPuestoLaboral);
+		preferenciaPuestoLaboral.setDistrito(null);
+
+		return preferenciaPuestoLaboral;
 	}
 
 
@@ -117,31 +142,6 @@ public class Distrito implements Serializable {
 		sucursal.setDistrito(null);
 
 		return sucursal;
-	}
-
-
-	//bi-directional many-to-one association to PreferenciaPuestoLaboral
-	@OneToMany(mappedBy="distrito")
-	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
-		return this.preferenciaPuestoLaborals;
-	}
-
-	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
-		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
-	}
-
-	public PreferenciaPuestoLaboral addPreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
-		getPreferenciaPuestoLaborals().add(preferenciaPuestoLaboral);
-		preferenciaPuestoLaboral.setDistrito(this);
-
-		return preferenciaPuestoLaboral;
-	}
-
-	public PreferenciaPuestoLaboral removePreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
-		getPreferenciaPuestoLaborals().remove(preferenciaPuestoLaboral);
-		preferenciaPuestoLaboral.setDistrito(null);
-
-		return preferenciaPuestoLaboral;
 	}
 
 }

@@ -17,12 +17,11 @@ public class Organizacion implements Serializable {
 	private int orgaId;
 	private String orgaRazonSocial;
 	private String orgaWeb;
-	private DimensionOrganizacion dimensionOrganizacion;
 	private Organizacion organizacion;
 	private List<Organizacion> organizacions;
+	private DimensionOrganizacion dimensionOrganizacion;
 	private Sector sector;
 	private List<Sucursal> sucursals;
-	private List<RespOrganizacion> respOrganizacions;
 
 	public Organizacion() {
 	}
@@ -57,18 +56,6 @@ public class Organizacion implements Serializable {
 
 	public void setOrgaWeb(String orgaWeb) {
 		this.orgaWeb = orgaWeb;
-	}
-
-
-	//bi-directional many-to-one association to DimensionOrganizacion
-	@ManyToOne
-	@JoinColumn(name="fk_dior_id")
-	public DimensionOrganizacion getDimensionOrganizacion() {
-		return this.dimensionOrganizacion;
-	}
-
-	public void setDimensionOrganizacion(DimensionOrganizacion dimensionOrganizacion) {
-		this.dimensionOrganizacion = dimensionOrganizacion;
 	}
 
 
@@ -109,6 +96,18 @@ public class Organizacion implements Serializable {
 	}
 
 
+	//bi-directional many-to-one association to DimensionOrganizacion
+	@ManyToOne
+	@JoinColumn(name="fk_dior_id")
+	public DimensionOrganizacion getDimensionOrganizacion() {
+		return this.dimensionOrganizacion;
+	}
+
+	public void setDimensionOrganizacion(DimensionOrganizacion dimensionOrganizacion) {
+		this.dimensionOrganizacion = dimensionOrganizacion;
+	}
+
+
 	//bi-directional many-to-one association to Sector
 	@ManyToOne
 	@JoinColumn(name="fk_sect_id")
@@ -143,31 +142,6 @@ public class Organizacion implements Serializable {
 		sucursal.setOrganizacion(null);
 
 		return sucursal;
-	}
-
-
-	//bi-directional many-to-one association to RespOrganizacion
-	@OneToMany(mappedBy="organizacion")
-	public List<RespOrganizacion> getRespOrganizacions() {
-		return this.respOrganizacions;
-	}
-
-	public void setRespOrganizacions(List<RespOrganizacion> respOrganizacions) {
-		this.respOrganizacions = respOrganizacions;
-	}
-
-	public RespOrganizacion addRespOrganizacion(RespOrganizacion respOrganizacion) {
-		getRespOrganizacions().add(respOrganizacion);
-		respOrganizacion.setOrganizacion(this);
-
-		return respOrganizacion;
-	}
-
-	public RespOrganizacion removeRespOrganizacion(RespOrganizacion respOrganizacion) {
-		getRespOrganizacions().remove(respOrganizacion);
-		respOrganizacion.setOrganizacion(null);
-
-		return respOrganizacion;
 	}
 
 }

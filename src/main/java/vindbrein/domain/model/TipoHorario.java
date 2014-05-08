@@ -18,8 +18,8 @@ public class TipoHorario implements Serializable {
 	private String tihoCode;
 	private String tihoDescripcion;
 	private String tihoName;
-	private List<PuestoLaboral> puestoLaborals;
 	private List<PreferenciaPostulante> preferenciaPostulantes;
+	private List<PuestoLaboral> puestoLaborals;
 
 	public TipoHorario() {
 	}
@@ -67,31 +67,6 @@ public class TipoHorario implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoLaboral
-	@OneToMany(mappedBy="tipoHorario")
-	public List<PuestoLaboral> getPuestoLaborals() {
-		return this.puestoLaborals;
-	}
-
-	public void setPuestoLaborals(List<PuestoLaboral> puestoLaborals) {
-		this.puestoLaborals = puestoLaborals;
-	}
-
-	public PuestoLaboral addPuestoLaboral(PuestoLaboral puestoLaboral) {
-		getPuestoLaborals().add(puestoLaboral);
-		puestoLaboral.setTipoHorario(this);
-
-		return puestoLaboral;
-	}
-
-	public PuestoLaboral removePuestoLaboral(PuestoLaboral puestoLaboral) {
-		getPuestoLaborals().remove(puestoLaboral);
-		puestoLaboral.setTipoHorario(null);
-
-		return puestoLaboral;
-	}
-
-
 	//bi-directional many-to-one association to PreferenciaPostulante
 	@OneToMany(mappedBy="tipoHorario")
 	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
@@ -114,6 +89,31 @@ public class TipoHorario implements Serializable {
 		preferenciaPostulante.setTipoHorario(null);
 
 		return preferenciaPostulante;
+	}
+
+
+	//bi-directional many-to-one association to PuestoLaboral
+	@OneToMany(mappedBy="tipoHorario")
+	public List<PuestoLaboral> getPuestoLaborals() {
+		return this.puestoLaborals;
+	}
+
+	public void setPuestoLaborals(List<PuestoLaboral> puestoLaborals) {
+		this.puestoLaborals = puestoLaborals;
+	}
+
+	public PuestoLaboral addPuestoLaboral(PuestoLaboral puestoLaboral) {
+		getPuestoLaborals().add(puestoLaboral);
+		puestoLaboral.setTipoHorario(this);
+
+		return puestoLaboral;
+	}
+
+	public PuestoLaboral removePuestoLaboral(PuestoLaboral puestoLaboral) {
+		getPuestoLaborals().remove(puestoLaboral);
+		puestoLaboral.setTipoHorario(null);
+
+		return puestoLaboral;
 	}
 
 }

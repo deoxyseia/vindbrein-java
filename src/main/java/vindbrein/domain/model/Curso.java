@@ -15,6 +15,9 @@ import java.util.List;
 public class Curso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int cursId;
+	private String cursDescripcion;
+	private String cursNombre;
+	private int cursNumCiclo;
 	private Estudio estudio;
 	private List<PostulanteCurso> postulanteCursos;
 	private List<PuestoPrefCurso> puestoPrefCursos;
@@ -32,6 +35,36 @@ public class Curso implements Serializable {
 
 	public void setCursId(int cursId) {
 		this.cursId = cursId;
+	}
+
+
+	@Column(name="curs_descripcion")
+	public String getCursDescripcion() {
+		return this.cursDescripcion;
+	}
+
+	public void setCursDescripcion(String cursDescripcion) {
+		this.cursDescripcion = cursDescripcion;
+	}
+
+
+	@Column(name="curs_nombre")
+	public String getCursNombre() {
+		return this.cursNombre;
+	}
+
+	public void setCursNombre(String cursNombre) {
+		this.cursNombre = cursNombre;
+	}
+
+
+	@Column(name="curs_num_ciclo")
+	public int getCursNumCiclo() {
+		return this.cursNumCiclo;
+	}
+
+	public void setCursNumCiclo(int cursNumCiclo) {
+		this.cursNumCiclo = cursNumCiclo;
 	}
 
 

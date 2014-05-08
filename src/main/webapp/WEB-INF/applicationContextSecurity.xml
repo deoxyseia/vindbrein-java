@@ -20,7 +20,7 @@
         				authentication-failure-url="/pages/login.jsf"/>
         	<intercept-url pattern="/pages/login.jsf*" access="ROLE_ANONYMOUS"/> 
         	<intercept-url pattern="/pages/secured/principal/**" access="ROLE_ESTUDIANTE, ROLE_ORGANIZACION"/>  		
-        	<intercept-url pattern="/pages/secured/postulante/**" access="ROLE_ESTUDIANTE"/>
+        	<intercept-url pattern="/pages/secured/postulante/**" access="ROLE_ESTUDIANTE, ROLE_ORGANIZACION"/>
         	<intercept-url pattern="/pages/secured/reclutador/**" access="ROLE_ORGANIZACION"/>        	    	
         
         	<logout logout-success-url="/pages/login.jsf"/>        	

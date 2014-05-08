@@ -55,7 +55,7 @@ public class MatchResult implements Serializable {
 
 	//bi-directional many-to-one association to PuestoLaboral
 	@ManyToOne
-	@JoinColumn(name="fk_pula_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_pula_id",insertable=false, updatable=false)
 	public PuestoLaboral getPuestoLaboral() {
 		return this.puestoLaboral;
 	}
@@ -67,7 +67,7 @@ public class MatchResult implements Serializable {
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_post_id",insertable=false, updatable=false)
 	public Postulante getPostulante() {
 		return this.postulante;
 	}

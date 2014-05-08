@@ -26,17 +26,18 @@ public class Postulante implements Serializable {
 	private int postIdProfS;
 	private String postNombres;
 	private String postSexo;
-	private List<ActividadAcademica> actividadAcademicas;	
+	private List<ActividadAcademica> actividadAcademicas;
 	private List<ExperienciaLaboral> experienciaLaborals;
 	private List<MatchResult> matchResults;
 	private EstadoCivil estadoCivil;
 	private List<PostulanteConocimiento> postulanteConocimientos;
 	private List<PostulanteCurso> postulanteCursos;
 	private List<PostulanteIdioma> postulanteIdiomas;
+	private List<PostulantePrefBenef> postulantePrefBenefs;
 	private List<PreferenciaPostulante> preferenciaPostulantes;
 	private List<Residencia> residencias;
 	private List<Telefono> telefonos;
-	private List<Usuario> usuarios;
+	private Usuario usuario;
 
 	public Postulante() {
 	}
@@ -178,7 +179,8 @@ public class Postulante implements Serializable {
 
 		return actividadAcademica;
 	}
-	
+
+
 	//bi-directional many-to-one association to ExperienciaLaboral
 	@OneToMany(mappedBy="postulante")
 	public List<ExperienciaLaboral> getExperienciaLaborals() {
@@ -316,6 +318,31 @@ public class Postulante implements Serializable {
 	}
 
 
+	//bi-directional many-to-one association to PostulantePrefBenef
+	@OneToMany(mappedBy="postulante")
+	public List<PostulantePrefBenef> getPostulantePrefBenefs() {
+		return this.postulantePrefBenefs;
+	}
+
+	public void setPostulantePrefBenefs(List<PostulantePrefBenef> postulantePrefBenefs) {
+		this.postulantePrefBenefs = postulantePrefBenefs;
+	}
+
+	public PostulantePrefBenef addPostulantePrefBenef(PostulantePrefBenef postulantePrefBenef) {
+		getPostulantePrefBenefs().add(postulantePrefBenef);
+		postulantePrefBenef.setPostulante(this);
+
+		return postulantePrefBenef;
+	}
+
+	public PostulantePrefBenef removePostulantePrefBenef(PostulantePrefBenef postulantePrefBenef) {
+		getPostulantePrefBenefs().remove(postulantePrefBenef);
+		postulantePrefBenef.setPostulante(null);
+
+		return postulantePrefBenef;
+	}
+
+
 	//bi-directional many-to-one association to PreferenciaPostulante
 	@OneToMany(mappedBy="postulante")
 	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
@@ -392,27 +419,12 @@ public class Postulante implements Serializable {
 
 
 	//bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy="postulante")
-	public List<Usuario> getUsuarios() {
-		return this.usuarios;
+	@OneToOne(mappedBy="postulante")
+	public Usuario getUsuario() {
+		return this.usuario;
 	}
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
-	}
-
-	public Usuario addUsuario(Usuario usuario) {
-		getUsuarios().add(usuario);
-		usuario.setPostulante(this);
-
-		return usuario;
-	}
-
-	public Usuario removeUsuario(Usuario usuario) {
-		getUsuarios().remove(usuario);
-		usuario.setPostulante(null);
-
-		return usuario;
-	}
-
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}	
 }

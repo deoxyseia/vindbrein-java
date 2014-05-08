@@ -15,5 +15,9 @@ public interface PostulanteService {
 	public Postulante getPostulanteById(int id);
 
 	public ArrayList<Postulante> getPostulantes();
+	
+	public Postulante getPostulanteByUsername(String username);
+	
+	public Postulante getPostulanteCompletoByPostulante(Postulante postulante);
 
 }

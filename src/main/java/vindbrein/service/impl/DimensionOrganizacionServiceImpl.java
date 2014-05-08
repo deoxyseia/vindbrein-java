@@ -20,24 +20,29 @@ public class DimensionOrganizacionServiceImpl implements DimensionOrganizacionSe
 	@Autowired	
 	DimensionOrganizacionDAO dimensionOrganizacionDAO;	
 	
+	@Transactional(readOnly = false)
 	public void addDimensionOrganizacion(
 			DimensionOrganizacion dimensionOrganizacion) {
-		getDimensionOrganizacionDAO().addDimensionOrganizacion(dimensionOrganizacion);
-		
+		getDimensionOrganizacionDAO().addDimensionOrganizacion(dimensionOrganizacion);		
 	}
+	
+	@Transactional(readOnly = false)
 	public void updateDimensionOrganizacion(
 			DimensionOrganizacion dimensionOrganizacion) {
-		getDimensionOrganizacionDAO().updateDimensionOrganizacion(dimensionOrganizacion);
-		
+		getDimensionOrganizacionDAO().updateDimensionOrganizacion(dimensionOrganizacion);		
 	}
+	
+	@Transactional(readOnly = false)
 	public void deleteDimensionOrganizacion(
 			DimensionOrganizacion dimensionOrganizacion) {
 		getDimensionOrganizacionDAO().deleteDimensionOrganizacion(dimensionOrganizacion);
 		
 	}
+	
 	public DimensionOrganizacion getDimensionOrganizacionById(int id) {
 		return getDimensionOrganizacionDAO().getDimensionOrganizacionById(id);
 	}
+	
 	public ArrayList<DimensionOrganizacion> getDimensionesOrganizacion() {
 		return getDimensionOrganizacionDAO().getDimensionesOrganizacion();
 	}	

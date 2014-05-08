@@ -20,15 +20,17 @@ public class DistritoServiceImpl implements DistritoService, Serializable {
 	@Autowired	
 	DistritoDAO distritoDAO;
 	
-
+	@Transactional(readOnly = false)
 	public void addDistrito(Distrito distrito) {
 		getDistritoDAO().addDistrito(distrito);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void updateDistrito(Distrito distrito) {
 		getDistritoDAO().updateDistrito(distrito);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void deleteDistrito(Distrito distrito) {
 		getDistritoDAO().deleteDistrito(distrito);		
 	}

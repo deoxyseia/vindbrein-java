@@ -22,18 +22,21 @@ public class SectorServiceImpl implements SectorService, Serializable {
 	@Autowired	
 	SectorDAO sectorDAO;	
 	
+	@Transactional(readOnly = false)
 	public void addSector(Sector sector) {
-		getSectorDAO().addSector(sector);
-		
+		getSectorDAO().addSector(sector);		
 	}
+	
+	@Transactional(readOnly = false)
 	public void updateSector(Sector sector) {
-		getSectorDAO().updateSector(sector);
-		
+		getSectorDAO().updateSector(sector);		
 	}
+	
+	@Transactional(readOnly = false)
 	public void deleteSector(Sector sector) {
-		getSectorDAO().deleteSector(sector);
-		
+		getSectorDAO().deleteSector(sector);		
 	}
+	
 	public Sector getSectorById(int id) {
 		return getSectorDAO().getSectorById(id);
 	}

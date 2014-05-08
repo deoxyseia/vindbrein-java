@@ -17,9 +17,9 @@ public class Sucursal implements Serializable {
 	private int sucuId;
 	private String sucuDireccion;
 	private String sucuTelefono;
-	private Distrito distrito;
-	private Organizacion organizacion;
 	private List<RespRrhh> respRrhhs;
+	private Organizacion organizacion;
+	private Distrito distrito;
 	private List<Puesto> puestos;
 
 	public Sucursal() {
@@ -58,30 +58,6 @@ public class Sucursal implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Distrito
-	@ManyToOne
-	@JoinColumn(name="fk_dist_id")
-	public Distrito getDistrito() {
-		return this.distrito;
-	}
-
-	public void setDistrito(Distrito distrito) {
-		this.distrito = distrito;
-	}
-
-
-	//bi-directional many-to-one association to Organizacion
-	@ManyToOne
-	@JoinColumn(name="fk_org_id")
-	public Organizacion getOrganizacion() {
-		return this.organizacion;
-	}
-
-	public void setOrganizacion(Organizacion organizacion) {
-		this.organizacion = organizacion;
-	}
-
-
 	//bi-directional many-to-one association to RespRrhh
 	@OneToMany(mappedBy="sucursal")
 	public List<RespRrhh> getRespRrhhs() {
@@ -104,6 +80,30 @@ public class Sucursal implements Serializable {
 		respRrhh.setSucursal(null);
 
 		return respRrhh;
+	}
+
+
+	//bi-directional many-to-one association to Organizacion
+	@ManyToOne
+	@JoinColumn(name="fk_org_id")
+	public Organizacion getOrganizacion() {
+		return this.organizacion;
+	}
+
+	public void setOrganizacion(Organizacion organizacion) {
+		this.organizacion = organizacion;
+	}
+
+
+	//bi-directional many-to-one association to Distrito
+	@ManyToOne
+	@JoinColumn(name="fk_dist_id")
+	public Distrito getDistrito() {
+		return this.distrito;
+	}
+
+	public void setDistrito(Distrito distrito) {
+		this.distrito = distrito;
 	}
 
 

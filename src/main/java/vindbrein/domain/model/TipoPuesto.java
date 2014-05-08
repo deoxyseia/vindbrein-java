@@ -19,9 +19,9 @@ public class TipoPuesto implements Serializable {
 	private String tipuDescripcion;
 	private String tipuNombre;
 	private List<ExperienciaLaboral> experienciaLaborals;
-	private List<Puesto> puestos;
 	private List<PreferenciaPostulante> preferenciaPostulantes;
 	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
+	private List<Puesto> puestos;
 
 	public TipoPuesto() {
 	}
@@ -94,31 +94,6 @@ public class TipoPuesto implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Puesto
-	@OneToMany(mappedBy="tipoPuesto")
-	public List<Puesto> getPuestos() {
-		return this.puestos;
-	}
-
-	public void setPuestos(List<Puesto> puestos) {
-		this.puestos = puestos;
-	}
-
-	public Puesto addPuesto(Puesto puesto) {
-		getPuestos().add(puesto);
-		puesto.setTipoPuesto(this);
-
-		return puesto;
-	}
-
-	public Puesto removePuesto(Puesto puesto) {
-		getPuestos().remove(puesto);
-		puesto.setTipoPuesto(null);
-
-		return puesto;
-	}
-
-
 	//bi-directional many-to-one association to PreferenciaPostulante
 	@OneToMany(mappedBy="tipoPuesto")
 	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
@@ -166,6 +141,31 @@ public class TipoPuesto implements Serializable {
 		preferenciaPuestoLaboral.setTipoPuesto(null);
 
 		return preferenciaPuestoLaboral;
+	}
+
+
+	//bi-directional many-to-one association to Puesto
+	@OneToMany(mappedBy="tipoPuesto")
+	public List<Puesto> getPuestos() {
+		return this.puestos;
+	}
+
+	public void setPuestos(List<Puesto> puestos) {
+		this.puestos = puestos;
+	}
+
+	public Puesto addPuesto(Puesto puesto) {
+		getPuestos().add(puesto);
+		puesto.setTipoPuesto(this);
+
+		return puesto;
+	}
+
+	public Puesto removePuesto(Puesto puesto) {
+		getPuestos().remove(puesto);
+		puesto.setTipoPuesto(null);
+
+		return puesto;
 	}
 
 }

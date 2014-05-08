@@ -15,9 +15,9 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int usuaId;
 	private String usuaContrasenia;
+	private String usuaCorreo;
 	private String usuaFlagActivo;
 	private String usuaNombre;
-	private String usuaCorreo;
 	private Postulante postulante;
 	private RespRrhh respRrhh;
 
@@ -47,6 +47,16 @@ public class Usuario implements Serializable {
 	}
 
 
+	@Column(name="usua_correo")
+	public String getUsuaCorreo() {
+		return this.usuaCorreo;
+	}
+
+	public void setUsuaCorreo(String usuaCorreo) {
+		this.usuaCorreo = usuaCorreo;
+	}
+
+
 	@Column(name="usua_flag_activo")
 	public String getUsuaFlagActivo() {
 		return this.usuaFlagActivo;
@@ -66,14 +76,6 @@ public class Usuario implements Serializable {
 		this.usuaNombre = usuaNombre;
 	}
 
-	@Column(name="usua_correo")
-	public String getUsuaCorreo() {
-		return usuaCorreo;
-	}
-
-	public void setUsuaCorreo(String usuaCorreo) {
-		this.usuaCorreo = usuaCorreo;
-	}
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne

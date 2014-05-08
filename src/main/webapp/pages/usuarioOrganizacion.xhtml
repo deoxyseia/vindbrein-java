@@ -9,7 +9,7 @@
 
 	<ui:define name="content">
 		<h:form id="formUsuarioOrganizacion">		
-			<p:panel header="Registro de Organización" style="width:400px">
+			<p:panel header="Registro de Organización">
 				<p:fieldset legend="Organización">
 					<h:panelGrid columns="2">
 						<h:outputText value="Razón social :"></h:outputText>
@@ -173,7 +173,7 @@
 
 		<p:dialog id="confirmSaveUsuarioOrganizacionDlg" header="Confirmación"
 			hideEffect="explode" widgetVar="confirmSaveUsuarioOrganizacionDialog" resizable="false"
-			modal="true" appendToBody="true">
+			modal="true" appendTo="@(body)">
 			<h:form>
 				<p:panelGrid columns="1">
 					<h:outputText

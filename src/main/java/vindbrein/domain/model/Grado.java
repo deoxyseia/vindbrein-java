@@ -17,7 +17,7 @@ public class Grado implements Serializable {
 	private int gradId;
 	private String gradCode;
 	private String gradDescripcion;
-	private List<Estudio> estudios;
+	private List<EstudioGenerico> estudioGenericos;
 
 	public Grado() {
 	}
@@ -55,28 +55,28 @@ public class Grado implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Estudio
+	//bi-directional many-to-one association to EstudioGenerico
 	@OneToMany(mappedBy="grado")
-	public List<Estudio> getEstudios() {
-		return this.estudios;
+	public List<EstudioGenerico> getEstudioGenericos() {
+		return this.estudioGenericos;
 	}
 
-	public void setEstudios(List<Estudio> estudios) {
-		this.estudios = estudios;
+	public void setEstudioGenericos(List<EstudioGenerico> estudioGenericos) {
+		this.estudioGenericos = estudioGenericos;
 	}
 
-	public Estudio addEstudio(Estudio estudio) {
-		getEstudios().add(estudio);
-		estudio.setGrado(this);
+	public EstudioGenerico addEstudioGenerico(EstudioGenerico estudioGenerico) {
+		getEstudioGenericos().add(estudioGenerico);
+		estudioGenerico.setGrado(this);
 
-		return estudio;
+		return estudioGenerico;
 	}
 
-	public Estudio removeEstudio(Estudio estudio) {
-		getEstudios().remove(estudio);
-		estudio.setGrado(null);
+	public EstudioGenerico removeEstudioGenerico(EstudioGenerico estudioGenerico) {
+		getEstudioGenericos().remove(estudioGenerico);
+		estudioGenerico.setGrado(null);
 
-		return estudio;
+		return estudioGenerico;
 	}
 
 }

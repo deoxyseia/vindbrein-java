@@ -80,7 +80,7 @@ public class Residencia implements Serializable {
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_estu_id")
+	@JoinColumn(name="fk_post_id")
 	public Postulante getPostulante() {
 		return this.postulante;
 	}

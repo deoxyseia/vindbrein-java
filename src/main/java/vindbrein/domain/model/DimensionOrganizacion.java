@@ -18,6 +18,7 @@ public class DimensionOrganizacion implements Serializable {
 	private String diorCode;
 	private String diorNombre;
 	private List<Organizacion> organizacions;
+	private List<PreferenciaPostulante> preferenciaPostulantes;
 
 	public DimensionOrganizacion() {
 	}
@@ -77,6 +78,31 @@ public class DimensionOrganizacion implements Serializable {
 		organizacion.setDimensionOrganizacion(null);
 
 		return organizacion;
+	}
+
+
+	//bi-directional many-to-one association to PreferenciaPostulante
+	@OneToMany(mappedBy="dimensionOrganizacion")
+	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
+		return this.preferenciaPostulantes;
+	}
+
+	public void setPreferenciaPostulantes(List<PreferenciaPostulante> preferenciaPostulantes) {
+		this.preferenciaPostulantes = preferenciaPostulantes;
+	}
+
+	public PreferenciaPostulante addPreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
+		getPreferenciaPostulantes().add(preferenciaPostulante);
+		preferenciaPostulante.setDimensionOrganizacion(this);
+
+		return preferenciaPostulante;
+	}
+
+	public PreferenciaPostulante removePreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
+		getPreferenciaPostulantes().remove(preferenciaPostulante);
+		preferenciaPostulante.setDimensionOrganizacion(null);
+
+		return preferenciaPostulante;
 	}
 
 }

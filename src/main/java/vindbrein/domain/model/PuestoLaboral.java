@@ -20,12 +20,11 @@ public class PuestoLaboral implements Serializable {
 	private int pulaIdPuestoP;
 	private int pulaIdPuestoS;
 	private String pulaNombre;
-	private String pulaSalario;
-	private List<MatchResult> matchResults;
-	private EstadoCivil estadoCivil;
-	private TipoHorario tipoHorario;
+	private int pulaSalario;
 	private List<BeneficioLaboral> beneficioLaborals;
+	private List<MatchResult> matchResults;
 	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
+	private TipoHorario tipoHorario;
 	private SucursalPuesto sucursalPuesto;
 
 	public PuestoLaboral() {
@@ -95,12 +94,23 @@ public class PuestoLaboral implements Serializable {
 
 
 	@Column(name="pula_salario")
-	public String getPulaSalario() {
+	public int getPulaSalario() {
 		return this.pulaSalario;
 	}
 
-	public void setPulaSalario(String pulaSalario) {
+	public void setPulaSalario(int pulaSalario) {
 		this.pulaSalario = pulaSalario;
+	}
+
+
+	//bi-directional many-to-many association to BeneficioLaboral
+	@ManyToMany(mappedBy="puestoLaborals")
+	public List<BeneficioLaboral> getBeneficioLaborals() {
+		return this.beneficioLaborals;
+	}
+
+	public void setBeneficioLaborals(List<BeneficioLaboral> beneficioLaborals) {
+		this.beneficioLaborals = beneficioLaborals;
 	}
 
 
@@ -129,50 +139,6 @@ public class PuestoLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to EstadoCivil
-	@ManyToOne
-	@JoinColumn(name="fk_esci_id")
-	public EstadoCivil getEstadoCivil() {
-		return this.estadoCivil;
-	}
-
-	public void setEstadoCivil(EstadoCivil estadoCivil) {
-		this.estadoCivil = estadoCivil;
-	}
-
-
-	//bi-directional many-to-one association to TipoHorario
-	@ManyToOne
-	@JoinColumn(name="fk_tiho_id")
-	public TipoHorario getTipoHorario() {
-		return this.tipoHorario;
-	}
-
-	public void setTipoHorario(TipoHorario tipoHorario) {
-		this.tipoHorario = tipoHorario;
-	}
-
-
-	//bi-directional many-to-many association to BeneficioLaboral
-	@ManyToMany
-	@JoinTable(
-		name="beneficio_puesto"
-		, joinColumns={
-			@JoinColumn(name="fk_bene_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="fk_pula_id")
-			}
-		)
-	public List<BeneficioLaboral> getBeneficioLaborals() {
-		return this.beneficioLaborals;
-	}
-
-	public void setBeneficioLaborals(List<BeneficioLaboral> beneficioLaborals) {
-		this.beneficioLaborals = beneficioLaborals;
-	}
-
-
 	//bi-directional many-to-one association to PreferenciaPuestoLaboral
 	@OneToMany(mappedBy="puestoLaboral")
 	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
@@ -195,6 +161,18 @@ public class PuestoLaboral implements Serializable {
 		preferenciaPuestoLaboral.setPuestoLaboral(null);
 
 		return preferenciaPuestoLaboral;
+	}
+
+
+	//bi-directional many-to-one association to TipoHorario
+	@ManyToOne
+	@JoinColumn(name="fk_tiho_id")
+	public TipoHorario getTipoHorario() {
+		return this.tipoHorario;
+	}
+
+	public void setTipoHorario(TipoHorario tipoHorario) {
+		this.tipoHorario = tipoHorario;
 	}
 
 

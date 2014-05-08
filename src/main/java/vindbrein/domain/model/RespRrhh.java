@@ -1,8 +1,17 @@
 package vindbrein.domain.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 
 /**
@@ -16,11 +25,12 @@ public class RespRrhh implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int rerrId;
 	private String rerrApellidoMaterno;
-	private String rerrApellidoPaterno;	
+	private String rerrApellidoPaterno;
+	private String rerrFlagRespMaestro;
 	private String rerrNombres;
 	private String rerrTelefono;
 	private Sucursal sucursal;
-	private List<Usuario> usuarios;
+	private Usuario usuario;
 
 	public RespRrhh() {
 	}
@@ -57,6 +67,17 @@ public class RespRrhh implements Serializable {
 		this.rerrApellidoPaterno = rerrApellidoPaterno;
 	}
 
+
+	@Column(name="rerr_flag_resp_maestro")
+	public String getRerrFlagRespMaestro() {
+		return this.rerrFlagRespMaestro;
+	}
+
+	public void setRerrFlagRespMaestro(String rerrFlagRespMaestro) {
+		this.rerrFlagRespMaestro = rerrFlagRespMaestro;
+	}
+
+
 	@Column(name="rerr_nombres")
 	public String getRerrNombres() {
 		return this.rerrNombres;
@@ -90,27 +111,12 @@ public class RespRrhh implements Serializable {
 
 
 	//bi-directional many-to-one association to Usuario
-	@OneToMany(mappedBy="respRrhh")
-	public List<Usuario> getUsuarios() {
-		return this.usuarios;
+	@OneToOne(mappedBy="respRrhh")
+	public Usuario getUsuario() {
+		return this.usuario;
 	}
 
-	public void setUsuarios(List<Usuario> usuarios) {
-		this.usuarios = usuarios;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
-
-	public Usuario addUsuario(Usuario usuario) {
-		getUsuarios().add(usuario);
-		usuario.setRespRrhh(this);
-
-		return usuario;
-	}
-
-	public Usuario removeUsuario(Usuario usuario) {
-		getUsuarios().remove(usuario);
-		usuario.setRespRrhh(null);
-
-		return usuario;
-	}
-
 }

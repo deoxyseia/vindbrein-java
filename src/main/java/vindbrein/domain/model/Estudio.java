@@ -19,8 +19,7 @@ public class Estudio implements Serializable {
 	private List<ActividadAcademica> actividadAcademicas;
 	private List<Curso> cursos;
 	private CentroEstudio centroEstudio;
-	private Grado grado;
-	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
+	private EstudioGenerico estudioGenerico;
 
 	public Estudio() {
 	}
@@ -110,26 +109,15 @@ public class Estudio implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Grado
+	//bi-directional many-to-one association to EstudioGenerico
 	@ManyToOne
-	@JoinColumn(name="fk_grad_id")
-	public Grado getGrado() {
-		return this.grado;
+	@JoinColumn(name="fk_esge_id")
+	public EstudioGenerico getEstudioGenerico() {
+		return this.estudioGenerico;
 	}
 
-	public void setGrado(Grado grado) {
-		this.grado = grado;
-	}
-
-
-	//bi-directional many-to-many association to PreferenciaPuestoLaboral
-	@ManyToMany(mappedBy="estudios")
-	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
-		return this.preferenciaPuestoLaborals;
-	}
-
-	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
-		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
+	public void setEstudioGenerico(EstudioGenerico estudioGenerico) {
+		this.estudioGenerico = estudioGenerico;
 	}
 
 }

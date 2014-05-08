@@ -15,8 +15,8 @@ public class PuestoPrefCurso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private PuestoPrefCursoPK id;
 	private int notaMinima;
-	private Curso curso;
 	private PreferenciaPuestoLaboral preferenciaPuestoLaboral;
+	private Curso curso;
 
 	public PuestoPrefCurso() {
 	}
@@ -42,27 +42,27 @@ public class PuestoPrefCurso implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Curso
-	@ManyToOne
-	@JoinColumn(name="fk_curs_id", insertable=false, updatable=false)
-	public Curso getCurso() {
-		return this.curso;
-	}
-
-	public void setCurso(Curso curso) {
-		this.curso = curso;
-	}
-
-
 	//bi-directional many-to-one association to PreferenciaPuestoLaboral
 	@ManyToOne
-	@JoinColumn(name="fk_prpu_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_prpu_id",insertable=false, updatable=false)
 	public PreferenciaPuestoLaboral getPreferenciaPuestoLaboral() {
 		return this.preferenciaPuestoLaboral;
 	}
 
 	public void setPreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
 		this.preferenciaPuestoLaboral = preferenciaPuestoLaboral;
+	}
+
+
+	//bi-directional many-to-one association to Curso
+	@ManyToOne
+	@JoinColumn(name="fk_curs_id",insertable=false, updatable=false)
+	public Curso getCurso() {
+		return this.curso;
+	}
+
+	public void setCurso(Curso curso) {
+		this.curso = curso;
 	}
 
 }

@@ -47,7 +47,20 @@ public class PostulanteDAO {
 				.createQuery("from Postulante order by postulanteNombre asc")
 				.list();
 		return list;
-	}	
+	}
+	
+	public Postulante getPostulanteByUsername(String username) {
+		List list = getSessionFactory().getCurrentSession()
+				.createQuery("from Postulante p where p.usuario.usuaNombre=?")
+				.setParameter(0, username).list();
+
+		if (list.size() != 0) {
+			return (Postulante) list.get(0);
+			
+		} else {
+			return null;
+		}
+	}
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;

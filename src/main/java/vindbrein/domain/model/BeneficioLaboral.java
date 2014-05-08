@@ -19,7 +19,7 @@ public class BeneficioLaboral implements Serializable {
 	private String beneDescripcion;
 	private String beneName;
 	private List<PuestoLaboral> puestoLaborals;
-	private List<PreferenciaPostulante> preferenciaPostulantes;
+	private PostulantePrefBenef postulantePrefBenef;
 
 	public BeneficioLaboral() {
 	}
@@ -68,7 +68,16 @@ public class BeneficioLaboral implements Serializable {
 
 
 	//bi-directional many-to-many association to PuestoLaboral
-	@ManyToMany(mappedBy="beneficioLaborals")
+	@ManyToMany
+	@JoinTable(
+		name="beneficio_puesto"
+		, joinColumns={
+			@JoinColumn(name="fk_pula_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="fk_bene_id")
+			}
+		)
 	public List<PuestoLaboral> getPuestoLaborals() {
 		return this.puestoLaborals;
 	}
@@ -78,14 +87,14 @@ public class BeneficioLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to PreferenciaPostulante
-	@ManyToMany(mappedBy="beneficioLaborals")
-	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
-		return this.preferenciaPostulantes;
+	//bi-directional one-to-one association to PostulantePrefBenef
+	@OneToOne(mappedBy="beneficioLaboral")
+	public PostulantePrefBenef getPostulantePrefBenef() {
+		return this.postulantePrefBenef;
 	}
 
-	public void setPreferenciaPostulantes(List<PreferenciaPostulante> preferenciaPostulantes) {
-		this.preferenciaPostulantes = preferenciaPostulantes;
+	public void setPostulantePrefBenef(PostulantePrefBenef postulantePrefBenef) {
+		this.postulantePrefBenef = postulantePrefBenef;
 	}
 
 }

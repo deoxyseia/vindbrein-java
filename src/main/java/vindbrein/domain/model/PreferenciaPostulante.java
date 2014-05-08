@@ -2,7 +2,6 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -16,10 +15,11 @@ public class PreferenciaPostulante implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int prpoId;
 	private int prpoSalario;
-	private List<BeneficioLaboral> beneficioLaborals;
-	private Postulante postulante;
-	private TipoHorario tipoHorario;
 	private TipoPuesto tipoPuesto;
+	private TipoHorario tipoHorario;
+	private Postulante postulante;
+	private Sector sector;
+	private DimensionOrganizacion dimensionOrganizacion;
 
 	public PreferenciaPostulante() {
 	}
@@ -47,35 +47,15 @@ public class PreferenciaPostulante implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to BeneficioLaboral
-	@ManyToMany
-	@JoinTable(
-		name="postulante_pref_benef"
-		, joinColumns={
-			@JoinColumn(name="fk_pres_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="fk_bene_id")
-			}
-		)
-	public List<BeneficioLaboral> getBeneficioLaborals() {
-		return this.beneficioLaborals;
-	}
-
-	public void setBeneficioLaborals(List<BeneficioLaboral> beneficioLaborals) {
-		this.beneficioLaborals = beneficioLaborals;
-	}
-
-
-	//bi-directional many-to-one association to Postulante
+	//bi-directional many-to-one association to TipoPuesto
 	@ManyToOne
-	@JoinColumn(name="fk_post_id")
-	public Postulante getPostulante() {
-		return this.postulante;
+	@JoinColumn(name="fk_tipu_id")
+	public TipoPuesto getTipoPuesto() {
+		return this.tipoPuesto;
 	}
 
-	public void setPostulante(Postulante postulante) {
-		this.postulante = postulante;
+	public void setTipoPuesto(TipoPuesto tipoPuesto) {
+		this.tipoPuesto = tipoPuesto;
 	}
 
 
@@ -91,15 +71,39 @@ public class PreferenciaPostulante implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to TipoPuesto
+	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_tipu_id")
-	public TipoPuesto getTipoPuesto() {
-		return this.tipoPuesto;
+	@JoinColumn(name="fk_post_id")
+	public Postulante getPostulante() {
+		return this.postulante;
 	}
 
-	public void setTipoPuesto(TipoPuesto tipoPuesto) {
-		this.tipoPuesto = tipoPuesto;
+	public void setPostulante(Postulante postulante) {
+		this.postulante = postulante;
+	}
+
+
+	//bi-directional many-to-one association to Sector
+	@ManyToOne
+	@JoinColumn(name="fk_sect_id")
+	public Sector getSector() {
+		return this.sector;
+	}
+
+	public void setSector(Sector sector) {
+		this.sector = sector;
+	}
+
+
+	//bi-directional many-to-one association to DimensionOrganizacion
+	@ManyToOne
+	@JoinColumn(name="fk_dior_id")
+	public DimensionOrganizacion getDimensionOrganizacion() {
+		return this.dimensionOrganizacion;
+	}
+
+	public void setDimensionOrganizacion(DimensionOrganizacion dimensionOrganizacion) {
+		this.dimensionOrganizacion = dimensionOrganizacion;
 	}
 
 }

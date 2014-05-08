@@ -7,7 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vindbrein.dao.ActividadAcademicaDAO;
+import vindbrein.dao.ExperienciaLaboralDAO;
+import vindbrein.dao.PostulanteConocimientoDAO;
 import vindbrein.dao.PostulanteDAO;
+import vindbrein.dao.PostulanteIdiomaDAO;
+import vindbrein.dao.ResidenciaDAO;
+import vindbrein.dao.TelefonoDAO;
 import vindbrein.domain.model.Postulante;
 import vindbrein.service.PostulanteService;
 
@@ -19,19 +25,39 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	@Autowired	
 	PostulanteDAO postulanteDAO;
 	
-
+	@Autowired	
+	TelefonoDAO telefonoDAO;
+	
+	@Autowired	
+	PostulanteConocimientoDAO postulanteConocimientoDAO;
+	
+	@Autowired	
+	ResidenciaDAO residenciaDAO;
+	
+	@Autowired	
+	ActividadAcademicaDAO actividadAcademicaDAO;
+	
+	@Autowired	
+	ExperienciaLaboralDAO experienciaLaboralDAO;
+	
+	@Autowired	
+	PostulanteIdiomaDAO postulanteIdiomaDAO;
+	
+	@Transactional(readOnly = false)
 	public void addPostulante(Postulante postulante) {
 		getPostulanteDAO().addPostulante(postulante);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void updatePostulante(Postulante postulante) {
 		getPostulanteDAO().updatePostulante(postulante);		
 	}
 
+	@Transactional(readOnly = false)
 	public void deletePostulante(Postulante postulante) {
 		getPostulanteDAO().deletePostulante(postulante);		
 	}
-
+	
 	public Postulante getPostulanteById(int id) {
 		return getPostulanteDAO().getPostulanteById(id);
 	}
@@ -39,6 +65,24 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	public ArrayList<Postulante> getPostulantes() {
 		return getPostulanteDAO().getPostulantes();
 	}	
+	
+	public Postulante getPostulanteByUsername(String username){
+		Postulante postulante = getPostulanteDAO().getPostulanteByUsername(username);
+				
+		return postulante;
+	}
+	
+	public Postulante getPostulanteCompletoByPostulante(Postulante postulante){
+		
+		postulante.setTelefonos(getTelefonoDAO().getTelefonosByPostulante(postulante));
+		postulante.setPostulanteConocimientos(getPostulanteConocimientoDAO().getPostulanteConocimientoByPostulante(postulante));
+		postulante.setResidencias(getResidenciaDAO().getResidenciasByPostulante(postulante));
+		postulante.setActividadAcademicas(getActividadAcademicaDAO().getActividadesAcademicasByPostulante(postulante));
+		postulante.setExperienciaLaborals(getExperienciaLaboralDAO().getExperienciasLaboralesByPostulante(postulante));
+		postulante.setPostulanteIdiomas(getPostulanteIdiomaDAO().getPostulanteIdiomasByPostulante(postulante));
+		
+		return postulante;
+	}
 	
 	//getters and setters
 	
@@ -48,5 +92,54 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 
 	public void setPostulanteDAO(PostulanteDAO postulanteDAO) {
 		this.postulanteDAO = postulanteDAO;
+	}
+
+	public TelefonoDAO getTelefonoDAO() {
+		return telefonoDAO;
+	}
+
+	public void setTelefonoDAO(TelefonoDAO telefonoDAO) {
+		this.telefonoDAO = telefonoDAO;
+	}
+
+	public PostulanteConocimientoDAO getPostulanteConocimientoDAO() {
+		return postulanteConocimientoDAO;
+	}
+
+	public void setPostulanteConocimientoDAO(
+			PostulanteConocimientoDAO postulanteConocimientoDAO) {
+		this.postulanteConocimientoDAO = postulanteConocimientoDAO;
+	}
+
+	public ResidenciaDAO getResidenciaDAO() {
+		return residenciaDAO;
+	}
+
+	public void setResidenciaDAO(ResidenciaDAO residenciaDAO) {
+		this.residenciaDAO = residenciaDAO;
+	}
+
+	public ActividadAcademicaDAO getActividadAcademicaDAO() {
+		return actividadAcademicaDAO;
+	}
+
+	public void setActividadAcademicaDAO(ActividadAcademicaDAO actividadAcademicaDAO) {
+		this.actividadAcademicaDAO = actividadAcademicaDAO;
+	}
+
+	public ExperienciaLaboralDAO getExperienciaLaboralDAO() {
+		return experienciaLaboralDAO;
+	}
+
+	public void setExperienciaLaboralDAO(ExperienciaLaboralDAO experienciaLaboralDAO) {
+		this.experienciaLaboralDAO = experienciaLaboralDAO;
+	}
+
+	public PostulanteIdiomaDAO getPostulanteIdiomaDAO() {
+		return postulanteIdiomaDAO;
+	}
+
+	public void setPostulanteIdiomaDAO(PostulanteIdiomaDAO postulanteIdiomaDAO) {
+		this.postulanteIdiomaDAO = postulanteIdiomaDAO;
 	}	
 }

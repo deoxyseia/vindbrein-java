@@ -14,8 +14,8 @@ import javax.persistence.*;
 public class PostulanteIdioma implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private PostulanteIdiomaPK id;
-	private Postulante postulante;
 	private Idioma idioma;
+	private Postulante postulante;
 	private NivelIdioma nivelIdioma;
 
 	public PostulanteIdioma() {
@@ -32,21 +32,9 @@ public class PostulanteIdioma implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Postulante
-	@ManyToOne
-	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
-	public Postulante getPostulante() {
-		return this.postulante;
-	}
-
-	public void setPostulante(Postulante postulante) {
-		this.postulante = postulante;
-	}
-
-
 	//bi-directional many-to-one association to Idioma
 	@ManyToOne
-	@JoinColumn(name="fk_idio_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_idio_id",insertable=false, updatable=false)
 	public Idioma getIdioma() {
 		return this.idioma;
 	}
@@ -56,9 +44,21 @@ public class PostulanteIdioma implements Serializable {
 	}
 
 
+	//bi-directional many-to-one association to Postulante
+	@ManyToOne
+	@JoinColumn(name="fk_post_id",insertable=false, updatable=false)
+	public Postulante getPostulante() {
+		return this.postulante;
+	}
+
+	public void setPostulante(Postulante postulante) {
+		this.postulante = postulante;
+	}
+
+
 	//bi-directional many-to-one association to NivelIdioma
 	@ManyToOne
-	@JoinColumn(name="fk_niid_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_niid_id",insertable=false, updatable=false)
 	public NivelIdioma getNivelIdioma() {
 		return this.nivelIdioma;
 	}

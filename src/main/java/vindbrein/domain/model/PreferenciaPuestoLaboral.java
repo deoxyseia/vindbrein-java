@@ -15,16 +15,18 @@ import java.util.List;
 public class PreferenciaPuestoLaboral implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int prpuId;
-	private String prpuEdadMaxima;
-	private String prpuEdadMinima;
+	private int prpuEdadMaxima;
+	private int prpuEdadMinima;
 	private String prpuSexo;
 	private int prpuTiempoExperiencia;
-	private Distrito distrito;
 	private PuestoLaboral puestoLaboral;
 	private TipoPuesto tipoPuesto;
+	private Distrito distrito;
+	private EstadoCivil estadoCivil;
+	private List<CentroEstudio> centroEstudios;
 	private List<PuestoPrefConocim> puestoPrefConocims;
 	private List<PuestoPrefCurso> puestoPrefCursos;
-	private List<Estudio> estudios;
+	private List<PuestoPrefEstudio> puestoPrefEstudios;
 	private List<PuestoPrefIdioma> puestoPrefIdiomas;
 
 	public PreferenciaPuestoLaboral() {
@@ -44,21 +46,21 @@ public class PreferenciaPuestoLaboral implements Serializable {
 
 
 	@Column(name="prpu_edad_maxima")
-	public String getPrpuEdadMaxima() {
+	public int getPrpuEdadMaxima() {
 		return this.prpuEdadMaxima;
 	}
 
-	public void setPrpuEdadMaxima(String prpuEdadMaxima) {
+	public void setPrpuEdadMaxima(int prpuEdadMaxima) {
 		this.prpuEdadMaxima = prpuEdadMaxima;
 	}
 
 
 	@Column(name="prpu_edad_minima")
-	public String getPrpuEdadMinima() {
+	public int getPrpuEdadMinima() {
 		return this.prpuEdadMinima;
 	}
 
-	public void setPrpuEdadMinima(String prpuEdadMinima) {
+	public void setPrpuEdadMinima(int prpuEdadMinima) {
 		this.prpuEdadMinima = prpuEdadMinima;
 	}
 
@@ -83,18 +85,6 @@ public class PreferenciaPuestoLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Distrito
-	@ManyToOne
-	@JoinColumn(name="fk_dist_id")
-	public Distrito getDistrito() {
-		return this.distrito;
-	}
-
-	public void setDistrito(Distrito distrito) {
-		this.distrito = distrito;
-	}
-
-
 	//bi-directional many-to-one association to PuestoLaboral
 	@ManyToOne
 	@JoinColumn(name="fk_pula_id")
@@ -116,6 +106,50 @@ public class PreferenciaPuestoLaboral implements Serializable {
 
 	public void setTipoPuesto(TipoPuesto tipoPuesto) {
 		this.tipoPuesto = tipoPuesto;
+	}
+
+
+	//bi-directional many-to-one association to Distrito
+	@ManyToOne
+	@JoinColumn(name="fk_dist_id")
+	public Distrito getDistrito() {
+		return this.distrito;
+	}
+
+	public void setDistrito(Distrito distrito) {
+		this.distrito = distrito;
+	}
+
+
+	//bi-directional many-to-one association to EstadoCivil
+	@ManyToOne
+	@JoinColumn(name="fk_esci_id")
+	public EstadoCivil getEstadoCivil() {
+		return this.estadoCivil;
+	}
+
+	public void setEstadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+
+	//bi-directional many-to-many association to CentroEstudio
+	@ManyToMany
+	@JoinTable(
+		name="puesto_pref_centro_estudios"
+		, joinColumns={
+			@JoinColumn(name="fk_prpu_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="fk_cees_id")
+			}
+		)
+	public List<CentroEstudio> getCentroEstudios() {
+		return this.centroEstudios;
+	}
+
+	public void setCentroEstudios(List<CentroEstudio> centroEstudios) {
+		this.centroEstudios = centroEstudios;
 	}
 
 
@@ -169,23 +203,28 @@ public class PreferenciaPuestoLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to Estudio
-	@ManyToMany
-	@JoinTable(
-		name="puesto_pref_estudio"
-		, joinColumns={
-			@JoinColumn(name="fk_prpu_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="fk_estu_id")
-			}
-		)
-	public List<Estudio> getEstudios() {
-		return this.estudios;
+	//bi-directional many-to-one association to PuestoPrefEstudio
+	@OneToMany(mappedBy="preferenciaPuestoLaboral")
+	public List<PuestoPrefEstudio> getPuestoPrefEstudios() {
+		return this.puestoPrefEstudios;
 	}
 
-	public void setEstudios(List<Estudio> estudios) {
-		this.estudios = estudios;
+	public void setPuestoPrefEstudios(List<PuestoPrefEstudio> puestoPrefEstudios) {
+		this.puestoPrefEstudios = puestoPrefEstudios;
+	}
+
+	public PuestoPrefEstudio addPuestoPrefEstudio(PuestoPrefEstudio puestoPrefEstudio) {
+		getPuestoPrefEstudios().add(puestoPrefEstudio);
+		puestoPrefEstudio.setPreferenciaPuestoLaboral(this);
+
+		return puestoPrefEstudio;
+	}
+
+	public PuestoPrefEstudio removePuestoPrefEstudio(PuestoPrefEstudio puestoPrefEstudio) {
+		getPuestoPrefEstudios().remove(puestoPrefEstudio);
+		puestoPrefEstudio.setPreferenciaPuestoLaboral(null);
+
+		return puestoPrefEstudio;
 	}
 
 

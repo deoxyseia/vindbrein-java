@@ -21,6 +21,7 @@ public class CentroEstudio implements Serializable {
 	private List<CentroEstudio> centroEstudios;
 	private TipoCentroEstudio tipoCentroEstudio;
 	private List<Estudio> estudios;
+	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
 
 	public CentroEstudio() {
 	}
@@ -129,6 +130,17 @@ public class CentroEstudio implements Serializable {
 		estudio.setCentroEstudio(null);
 
 		return estudio;
+	}
+
+
+	//bi-directional many-to-many association to PreferenciaPuestoLaboral
+	@ManyToMany(mappedBy="centroEstudios")
+	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
+		return this.preferenciaPuestoLaborals;
+	}
+
+	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
+		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
 	}
 
 }

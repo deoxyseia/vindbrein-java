@@ -21,7 +21,7 @@
 
 			<p:dialog id="cambiarContraseniaDlg" header="Cambio de contraseña"
 				hideEffect="explode" widgetVar="cambiarContraseniaDialog"
-				resizable="false" modal="true" appendToBody="true">
+				resizable="false" modal="true" appendTo="@(body)">
 
 				<p:messages showDetail="true" autoUpdate="true" closable="true" />
 
@@ -65,7 +65,7 @@
 
 			<p:dialog id="confirmCambioContraseniaDlg" header="Confirmación"
 				hideEffect="explode" widgetVar="confirmCambioContraseniaDialog"
-				resizable="false" modal="true" appendToBody="true">
+				resizable="false" modal="true" appendTo="@(body)">
 				<h:form>
 					<p:panelGrid columns="1">
 						<h:outputText

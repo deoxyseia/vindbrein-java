@@ -103,6 +103,7 @@ public class UsuarioManagedBean implements Serializable {
 	
 	public void iniciarDatosUsuarioPostulante(){
 		usuarioPostulante = new Usuario();
+		usuarioPostulante.setUsuaFlagActivo("Y");
 		usuarioPostulante.setPostulante(new Postulante());			
 	}
 	
@@ -114,6 +115,7 @@ public class UsuarioManagedBean implements Serializable {
 		sucursal.setDistrito(new Distrito());
 		
 		usuarioRespRrhh = new Usuario();
+		usuarioRespRrhh.setUsuaFlagActivo("N");
 		usuarioRespRrhh.setRespRrhh(new RespRrhh());
 		usuarioRespRrhh.getRespRrhh().setSucursal(sucursal);				
 		
@@ -196,6 +198,8 @@ public class UsuarioManagedBean implements Serializable {
 		
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
+		
+		
 				
 		if(getOldPassword().equals(user.getPassword())){
 			if(getNewPassword().equals(getNewPasswordReload())){

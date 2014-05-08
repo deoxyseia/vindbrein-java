@@ -20,15 +20,17 @@ public class ProvinciaServiceImpl implements ProvinciaService, Serializable {
 	@Autowired	
 	ProvinciaDAO provinciaDAO;
 	
-
+	@Transactional(readOnly = false)
 	public void addProvincia(Provincia provincia) {
 		getProvinciaDAO().addProvincia(provincia);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void updateProvincia(Provincia provincia) {
 		getProvinciaDAO().updateProvincia(provincia);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void deleteProvincia(Provincia provincia) {
 		getProvinciaDAO().deleteProvincia(provincia);		
 	}

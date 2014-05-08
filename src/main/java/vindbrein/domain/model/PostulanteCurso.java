@@ -43,7 +43,7 @@ public class PostulanteCurso implements Serializable {
 
 	//bi-directional many-to-one association to Curso
 	@ManyToOne
-	@JoinColumn(name="fk_curs_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_curs_id",insertable=false, updatable=false)
 	public Curso getCurso() {
 		return this.curso;
 	}
@@ -55,7 +55,7 @@ public class PostulanteCurso implements Serializable {
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_post_id",insertable=false, updatable=false)
 	public Postulante getPostulante() {
 		return this.postulante;
 	}

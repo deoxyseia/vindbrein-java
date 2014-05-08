@@ -19,6 +19,7 @@ public class Sector implements Serializable {
 	private String sectDescripcion;
 	private String sectNombre;
 	private List<Organizacion> organizacions;
+	private List<PreferenciaPostulante> preferenciaPostulantes;
 
 	public Sector() {
 	}
@@ -88,6 +89,31 @@ public class Sector implements Serializable {
 		organizacion.setSector(null);
 
 		return organizacion;
+	}
+
+
+	//bi-directional many-to-one association to PreferenciaPostulante
+	@OneToMany(mappedBy="sector")
+	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
+		return this.preferenciaPostulantes;
+	}
+
+	public void setPreferenciaPostulantes(List<PreferenciaPostulante> preferenciaPostulantes) {
+		this.preferenciaPostulantes = preferenciaPostulantes;
+	}
+
+	public PreferenciaPostulante addPreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
+		getPreferenciaPostulantes().add(preferenciaPostulante);
+		preferenciaPostulante.setSector(this);
+
+		return preferenciaPostulante;
+	}
+
+	public PreferenciaPostulante removePreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
+		getPreferenciaPostulantes().remove(preferenciaPostulante);
+		preferenciaPostulante.setSector(null);
+
+		return preferenciaPostulante;
 	}
 
 }

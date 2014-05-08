@@ -19,15 +19,17 @@ public class DepartamentoServiceImpl implements DepartamentoService, Serializabl
 	@Autowired	
 	DepartamentoDAO departamentoDAO;
 	
-
+	@Transactional(readOnly = false)
 	public void addDepartamento(Departamento departamento) {
 		getDepartamentoDAO().addDepartamento(departamento);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void updateDepartamento(Departamento departamento) {
 		getDepartamentoDAO().updateDepartamento(departamento);		
 	}
-
+	
+	@Transactional(readOnly = false)
 	public void deleteDepartamento(Departamento departamento) {
 		getDepartamentoDAO().deleteDepartamento(departamento);		
 	}
