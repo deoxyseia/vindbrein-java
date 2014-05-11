@@ -1,5 +1,6 @@
 package vindbrein.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,9 @@ import org.springframework.stereotype.Repository;
 import vindbrein.domain.model.Departamento;
 
 @Repository
-public class DepartamentoDAO {
+public class DepartamentoDAO implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	@Qualifier("sessionFactory")
 	private SessionFactory sessionFactory;

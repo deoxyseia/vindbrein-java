@@ -54,7 +54,7 @@ public class PostulanteConocimientoDAO {
 	public ArrayList<PostulanteConocimiento> getPostulanteConocimientos() {
 		ArrayList<PostulanteConocimiento> list = (ArrayList<PostulanteConocimiento>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from PostulanteConocimiento")
+				.createQuery("from PostulanteConocimiento order by conocimiento.conoNombre asc")
 				.list();
 		return list;
 	}

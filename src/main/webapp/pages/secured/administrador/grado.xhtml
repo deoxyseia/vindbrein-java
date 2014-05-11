@@ -1,0 +1,91 @@
+<ui:composition template="/pages/templates/layout.xhtml"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:c="http://java.sun.com/jsp/jstl/core">
+     
+     <ui:define name="title"> Vales </ui:define>
+
+	<ui:define name="content">
+		<h:form id="formGrado">
+			<p:dataTable id="dataTableGrado" var="grado" emptyMessage="No hay grados registrados" 
+				value="#{gradoManagedBean.grados}" rowKey="#{grado.gradId}"
+				paginator="true" rows="10"
+				selection="#{gradoManagedBean.newGrado}"
+				selectionMode="single"
+				paginatorPosition="top"
+				rowsPerPageTemplate="10,15,50">
+				
+				<p:ajax event="rowDblselect"			                
+                    oncomplete="saveGradoDialog.show()" />
+				
+				
+				<f:facet name="header">
+                    Lista de vales
+                </f:facet>	
+                
+                <p:column sortBy="#{grado.gradCode}">
+					<f:facet name="header">
+						<h:outputText value="Código" />
+					</f:facet>
+					<h:outputText value="#{grado.gradCode}" />
+				</p:column>
+				
+				<p:column sortBy="#{grado.gradDescripcion}">
+					<f:facet name="header">
+						<h:outputText value="Descripción" />
+					</f:facet>
+					<h:outputText value="#{grado.gradDescripcion}" />
+				</p:column>
+				
+				<f:facet name="footer">
+					<p:commandButton value="Nuevo Grado"
+						actionListener="#{gradoManagedBean.reiniciarNewGrado()}"
+						update=":newGradoForm" 
+						oncomplete="saveGradoDialog.show()"
+						icon="ui-icon-star" />
+					<p:commandButton value="Eliminar Grado"
+						actionListener="#{gradoManagedBean.deleteGrado}"
+						update="dataTableGrado"
+						icon="ui-icon-trash" />
+				</f:facet>
+				
+			</p:dataTable>
+		</h:form>
+		
+		<!-- Dialog nuevo grado -->
+		<p:dialog id="saveGradoDlg" header="Nuevo grado"
+			widgetVar="saveGradoDialog" resizable="false"
+			modal="true" appendTo="@(body)">
+
+			<h:form id="newGradoForm">
+				<p:panelGrid columns="2">
+					
+					<h:outputText value="Codigo: " />
+					<p:inputText 
+					    value="#{gradoManagedBean.newGrado.gradCode}" />
+					    
+					<h:outputText value="Descripción: " />
+					<p:inputText
+						value="#{gradoManagedBean.newGrado.gradDescripcion}" />
+					
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{gradoManagedBean.saveGrado()}"
+							update=":formGrado:dataTableGrado"
+							oncomplete="saveGradoDialog.hide()"
+							 icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveGradoDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		<!-- Fin Dialog nuevo grado -->
+		
+		
+	</ui:define>
+</ui:composition>

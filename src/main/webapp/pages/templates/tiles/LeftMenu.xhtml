@@ -23,7 +23,14 @@
                        <p:submenu label="Inicio">
                            <p:menuitem value="Perfil" action="/pages/secured/postulante/postulante.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
                       </p:submenu>                                       
-                    </c:if>                   
+                    </c:if>
+                    
+                    <c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
+                       <p:submenu label="Inicio">
+                           <p:menuitem value="Manten Grado" action="/pages/secured/administrador/grado.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
+                      </p:submenu>                                       
+                    </c:if>               
+                                       
             </p:menu>
         </h:form>
     </h:body>
