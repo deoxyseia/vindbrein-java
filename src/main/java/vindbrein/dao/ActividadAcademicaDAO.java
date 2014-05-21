@@ -37,12 +37,10 @@ public class ActividadAcademicaDAO {
 	public void deleteActividadAcademica(ActividadAcademica actividadAcademica) {
 		getSessionFactory().getCurrentSession().delete(actividadAcademica);		
 	}
-	
-	
-	//sin probar
+		
 	public ActividadAcademica getActividadAcademicaById(int id) {
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from ActividadAcademica where depaId=?")
+				.createQuery("from ActividadAcademica where acacId=?")
 		        .setParameter(0, id).list();
 		
 		if(list.size()!=0){

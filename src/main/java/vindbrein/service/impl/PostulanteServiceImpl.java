@@ -77,7 +77,7 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 		postulante.setTelefonos(getTelefonoDAO().getTelefonosByPostulante(postulante));
 		postulante.setPostulanteConocimientos(getPostulanteConocimientoDAO().getPostulanteConocimientoByPostulante(postulante));
 		postulante.setResidencias(getResidenciaDAO().getResidenciasByPostulante(postulante));
-		postulante.setActividadAcademicas(getActividadAcademicaDAO().getActividadesAcademicasByPostulante(postulante));
+		postulante.setActividadesAcademicas(getActividadAcademicaDAO().getActividadesAcademicasByPostulante(postulante));
 		postulante.setExperienciasLaborales(getExperienciaLaboralDAO().getExperienciasLaboralesByPostulante(postulante));
 		postulante.setPostulanteIdiomas(getPostulanteIdiomaDAO().getPostulanteIdiomasByPostulante(postulante));
 		

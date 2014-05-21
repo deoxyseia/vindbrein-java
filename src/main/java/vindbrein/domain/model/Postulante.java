@@ -29,7 +29,7 @@ public class Postulante implements Serializable {
 	private String postNombres;
 	private int postSalario;
 	private String postSexo;
-	private List<ActividadAcademica> actividadAcademicas;
+	private List<ActividadAcademica> actividadesAcademicas;
 	private List<ExperienciaLaboral> experienciasLaborales;
 	private List<MatchResult> matchResults;
 	private DimensionOrganizacion dimensionOrganizacion;
@@ -184,23 +184,23 @@ public class Postulante implements Serializable {
 
 	//bi-directional many-to-one association to ActividadAcademica
 	@OneToMany(mappedBy="postulante")
-	public List<ActividadAcademica> getActividadAcademicas() {
-		return this.actividadAcademicas;
+	public List<ActividadAcademica> getActividadesAcademicas() {
+		return this.actividadesAcademicas;
 	}
 
-	public void setActividadAcademicas(List<ActividadAcademica> actividadAcademicas) {
-		this.actividadAcademicas = actividadAcademicas;
+	public void setActividadesAcademicas(List<ActividadAcademica> actividadesAcademicas) {
+		this.actividadesAcademicas = actividadesAcademicas;
 	}
 
 	public ActividadAcademica addActividadAcademica(ActividadAcademica actividadAcademica) {
-		getActividadAcademicas().add(actividadAcademica);
+		getActividadesAcademicas().add(actividadAcademica);
 		actividadAcademica.setPostulante(this);
 
 		return actividadAcademica;
 	}
 
 	public ActividadAcademica removeActividadAcademica(ActividadAcademica actividadAcademica) {
-		getActividadAcademicas().remove(actividadAcademica);
+		getActividadesAcademicas().remove(actividadAcademica);
 		actividadAcademica.setPostulante(null);
 
 		return actividadAcademica;

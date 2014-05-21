@@ -248,6 +248,51 @@
 				</p:dataTable>
 
 				<!-- fin de experiencia laboral -->
+				
+				<!-- Axtividad académica-->
+
+				<p:dataTable id="dataTableActividadAcademica"
+					var="actividadAcademica" rowKey="#{actividadAcademica.acacId}"
+					value="#{postulanteManagedBean.postulante.actividadesAcademicas}"
+					selection="#{postulanteManagedBean.newActividadAcademica}"
+					emptyMessage="No tiene registrado actividades académicas"
+					selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Actividades académicas
+                	</f:facet>
+                	
+                	<p:column headerText="Estudio">
+						<h:outputText value="#{actividadAcademica.estudio.estuNombre}" />
+					</p:column>
+					
+					<p:column headerText="Centro de estudio">
+						<h:outputText value="#{actividadAcademica.estudio.centroEstudio.ceesNombre}" />
+					</p:column>
+					
+					<p:column headerText="Fecha inicial">
+						<h:outputText value="#{actividadAcademica.acacFechaInicio}" />
+					</p:column>
+					
+					<p:column headerText="Fecha final">
+						<h:outputText value="#{actividadAcademica.acacFechaFinal}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{postulanteManagedBean.reiniciarNewActividadAcademica()}"
+							oncomplete="saveActividadAcademicaDialog.show()" immediate="true"
+							update=":newActividadAcademicaForm" icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar"
+							actionListener="#{postulanteManagedBean.deleteActividadAcademica()}"
+							update=":formPostulanteDetalle:dataTableActividadAcademica"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de actividad academica -->
 			</h:form>
 
 		</p:panel>
@@ -440,6 +485,51 @@
 			</h:form>
 		</p:dialog>
 		<!-- Fin Dialog nueva experiencia laboral -->
+		
+		
+		<!-- Dialog nuevo actividad academica-->
+		
+		<p:dialog id="saveActividadAcademicaDlg"
+			header="Nueva experiencia laboral" hideEffect="explode"
+			widgetVar="saveActividadAcademicaDialog" resizable="false"
+			modal="true" appendTo="@(body)">
+
+			<h:form id="newActividadAcademicaForm">
+				<p:panelGrid columns="2">
+					<h:outputText value="Fecha inicial :" />
+					<p:calendar
+						value="#{postulanteManagedBean.newActividadAcademica.acacFechaInicio}"
+						showOn="button" />
+
+					<h:outputText value="Fecha final :" />
+					<p:calendar
+						value="#{postulanteManagedBean.newActividadAcademica.acacFechaFinal}"
+						showOn="button" />
+
+					<p:selectOneMenu
+						value="#{postulanteManagedBean.newActividadAcademica.estudio.estuId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{postulanteManagedBean.estudios}"
+							var="estudio" itemLabel="#{estudio.estuNombre}"
+							itemValue="#{estudio.estuId}" />
+					</p:selectOneMenu>				
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{postulanteManagedBean.saveActividadAcademica()}"
+							oncomplete="saveActividadAcademicaDialog.hide()"
+							update=":formPostulanteDetalle:dataTableActividadAcademica"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveActividadAcademicaDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<!-- Fin Dialog nueva actividad academica -->
 		
 		
 		

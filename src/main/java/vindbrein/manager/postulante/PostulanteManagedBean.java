@@ -13,11 +13,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 
+import vindbrein.domain.model.ActividadAcademica;
 import vindbrein.domain.model.Beneficio;
 import vindbrein.domain.model.Conocimiento;
 import vindbrein.domain.model.Departamento;
 import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.EstadoCivil;
+import vindbrein.domain.model.Estudio;
 import vindbrein.domain.model.ExperienciaLaboral;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.Organizacion;
@@ -29,11 +31,13 @@ import vindbrein.domain.model.Provincia;
 import vindbrein.domain.model.Puesto;
 import vindbrein.domain.model.Residencia;
 import vindbrein.domain.model.Telefono;
+import vindbrein.service.ActividadAcademicaService;
 import vindbrein.service.BeneficioService;
 import vindbrein.service.ConocimientoService;
 import vindbrein.service.DepartamentoService;
 import vindbrein.service.DistritoService;
 import vindbrein.service.EstadoCivilService;
+import vindbrein.service.EstudioService;
 import vindbrein.service.ExperienciaLaboralService;
 import vindbrein.service.OrganizacionService;
 import vindbrein.service.PostulanteService;
@@ -58,6 +62,7 @@ public class PostulanteManagedBean implements Serializable{
 	private Residencia newResidencia;
 	private PostulanteConocimiento newPostulanteConocimiento;
 	private ExperienciaLaboral newExperienciaLaboral;
+	private ActividadAcademica newActividadAcademica;
 	
 			
 	@Autowired
@@ -108,6 +113,14 @@ public class PostulanteManagedBean implements Serializable{
 	@Qualifier("organizacionServiceImpl")
 	OrganizacionService organizacionService;
 	
+	@Autowired
+	@Qualifier("actividadAcademicaServiceImpl")
+	ActividadAcademicaService actividadAcademicaService;
+	
+	@Autowired
+	@Qualifier("estudioServiceImpl")
+	EstudioService estudioService;
+	
 	// datos maestros	
 	private ArrayList<Departamento> departamentos;
 	private ArrayList<Provincia> provincias;
@@ -118,6 +131,7 @@ public class PostulanteManagedBean implements Serializable{
 	private ArrayList<Beneficio> beneficios;
 	private ArrayList<NivelConocimiento> nivelesConocimiento;
 	private ArrayList<Organizacion> organizaciones;
+	private ArrayList<Estudio> estudios;
 
 	private Departamento selectedDepartamento;
 	private Provincia selectedProvincia;
@@ -154,11 +168,14 @@ public class PostulanteManagedBean implements Serializable{
 		estadosCiviles = getEstadoCivilService().getEstadosCiviles();
 		nivelesConocimiento = getConocimientoService().getNivelesConocimiento();
 		organizaciones = getOrganizacionService().getOrganizaciones();
+		estudios = getEstudioService().getEstudios();
+		
 		
 		reiniciarNewTelefono();
 		reiniciarNewResidencia();
 		reiniciarNewPostulanteConocimiento();
-		reiniciarNewExperienciaLaboral();		
+		reiniciarNewExperienciaLaboral();	
+		reiniciarNewActividadAcademica();
 	}
 	
 	public void savePostulante(){
@@ -306,6 +323,30 @@ public class PostulanteManagedBean implements Serializable{
 	public void deleteExperienciaLaboral(){
 		if(newExperienciaLaboral != null){
 			getExperienciaLaboralService().deleteExperienciaLaboral(newExperienciaLaboral);
+			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		}
+	}
+	
+	//actividad academica
+	public void reiniciarNewActividadAcademica(){
+		newActividadAcademica = new ActividadAcademica();
+		newActividadAcademica.setPostulante(postulante);
+		newActividadAcademica.setEstudio(new Estudio());		
+	}
+	
+	public void saveActividadAcademica(){		
+		if(newActividadAcademica.getAcacId()==0){
+			getActividadAcademicaService().addActividadAcademica(newActividadAcademica);
+		}else{
+			getActividadAcademicaService().updateActividadAcademica(newActividadAcademica);		
+		}
+		
+		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+	}
+	
+	public void deleteActividadAcademica(){
+		if(newActividadAcademica != null){
+			getActividadAcademicaService().deleteActividadAcademica(newActividadAcademica);
 			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
 		}
 	}
@@ -544,5 +585,38 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setOrganizaciones(ArrayList<Organizacion> organizaciones) {
 		this.organizaciones = organizaciones;
-	}		
+	}
+
+	public ActividadAcademica getNewActividadAcademica() {
+		return newActividadAcademica;
+	}
+
+	public void setNewActividadAcademica(ActividadAcademica newActividadAcademica) {
+		this.newActividadAcademica = newActividadAcademica;
+	}
+
+	public ActividadAcademicaService getActividadAcademicaService() {
+		return actividadAcademicaService;
+	}
+
+	public void setActividadAcademicaService(
+			ActividadAcademicaService actividadAcademicaService) {
+		this.actividadAcademicaService = actividadAcademicaService;
+	}
+
+	public EstudioService getEstudioService() {
+		return estudioService;
+	}
+
+	public void setEstudioService(EstudioService estudioService) {
+		this.estudioService = estudioService;
+	}
+
+	public ArrayList<Estudio> getEstudios() {
+		return estudios;
+	}
+
+	public void setEstudios(ArrayList<Estudio> estudios) {
+		this.estudios = estudios;
+	}
 }
