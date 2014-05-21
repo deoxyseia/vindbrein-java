@@ -7,11 +7,11 @@ import vindbrein.domain.model.Provincia;
 
 public interface DistritoService {
 	
-	public void addDistrito(Distrito Distrito);
+	public void addDistrito(Distrito distrito);
 
-	public void updateDistrito(Distrito Distrito);
+	public void updateDistrito(Distrito distrito);
 
-	public void deleteDistrito(Distrito Distrito);
+	public void deleteDistrito(Distrito distrito);
 
 	public Distrito getDistritoById(int id);
 

@@ -20,6 +20,8 @@ import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.EstadoCivil;
 import vindbrein.domain.model.ExperienciaLaboral;
 import vindbrein.domain.model.NivelConocimiento;
+import vindbrein.domain.model.Organizacion;
+import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Postulante;
 import vindbrein.domain.model.PostulanteConocimiento;
 import vindbrein.domain.model.PostulanteConocimientoPK;
@@ -33,6 +35,7 @@ import vindbrein.service.DepartamentoService;
 import vindbrein.service.DistritoService;
 import vindbrein.service.EstadoCivilService;
 import vindbrein.service.ExperienciaLaboralService;
+import vindbrein.service.OrganizacionService;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.ProvinciaService;
 import vindbrein.service.PuestoService;
@@ -71,7 +74,7 @@ public class PostulanteManagedBean implements Serializable{
 	
 	@Autowired
 	@Qualifier("departamentoServiceImpl")
-	DepartamentoService departamentoService;
+	private DepartamentoService departamentoService;
 	
 	@Autowired
 	@Qualifier("provinciaServiceImpl")
@@ -101,6 +104,10 @@ public class PostulanteManagedBean implements Serializable{
 	@Qualifier("beneficioServiceImpl")
 	BeneficioService beneficioService;
 	
+	@Autowired
+	@Qualifier("organizacionServiceImpl")
+	OrganizacionService organizacionService;
+	
 	// datos maestros	
 	private ArrayList<Departamento> departamentos;
 	private ArrayList<Provincia> provincias;
@@ -109,7 +116,8 @@ public class PostulanteManagedBean implements Serializable{
 	private ArrayList<Puesto> puestos;
 	private ArrayList<EstadoCivil> estadosCiviles;
 	private ArrayList<Beneficio> beneficios;
-	private ArrayList<NivelConocimiento> nivelesConocimiento; 
+	private ArrayList<NivelConocimiento> nivelesConocimiento;
+	private ArrayList<Organizacion> organizaciones;
 
 	private Departamento selectedDepartamento;
 	private Provincia selectedProvincia;
@@ -145,12 +153,12 @@ public class PostulanteManagedBean implements Serializable{
 		puestos = getPuestoService().getPuestos();
 		estadosCiviles = getEstadoCivilService().getEstadosCiviles();
 		nivelesConocimiento = getConocimientoService().getNivelesConocimiento();
-		
+		organizaciones = getOrganizacionService().getOrganizaciones();
 		
 		reiniciarNewTelefono();
 		reiniciarNewResidencia();
 		reiniciarNewPostulanteConocimiento();
-		reiniciarNewExperienciaLaboral();
+		reiniciarNewExperienciaLaboral();		
 	}
 	
 	public void savePostulante(){
@@ -276,14 +284,16 @@ public class PostulanteManagedBean implements Serializable{
 	
 	//experiencia laboral
 	public void reiniciarNewExperienciaLaboral(){
+		OrganizacionPuesto organizacionPuesto = new OrganizacionPuesto();
+		organizacionPuesto.setPuesto(new Puesto());
+		organizacionPuesto.setOrganizacion(new Organizacion());
+		
 		newExperienciaLaboral = new ExperienciaLaboral();
 		newExperienciaLaboral.setPostulante(postulante);
-		newExperienciaLaboral.setPuesto(new Puesto());
+		newExperienciaLaboral.setOrganizacionPuesto(organizacionPuesto);
 	}
 	
-	public void saveExperienciaLaboral(){
-		
-		
+	public void saveExperienciaLaboral(){		
 		if(newExperienciaLaboral.getExlaId()==0){
 			getExperienciaLaboralService().addExperienciaLaboral(newExperienciaLaboral);
 		}else{
@@ -346,7 +356,7 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setNewTelefono(Telefono newTelefono) {
 		this.newTelefono = newTelefono;
-	}
+	}	
 
 	public DepartamentoService getDepartamentoService() {
 		return departamentoService;
@@ -501,6 +511,14 @@ public class PostulanteManagedBean implements Serializable{
 	public void setBeneficioService(
 			BeneficioService beneficioService) {
 		this.beneficioService = beneficioService;
+	}	
+
+	public OrganizacionService getOrganizacionService() {
+		return organizacionService;
+	}
+
+	public void setOrganizacionService(OrganizacionService organizacionService) {
+		this.organizacionService = organizacionService;
 	}
 
 	public ArrayList<Beneficio> getBeneficios() {
@@ -518,5 +536,13 @@ public class PostulanteManagedBean implements Serializable{
 	public void setNivelesConocimiento(
 			ArrayList<NivelConocimiento> nivelesConocimiento) {
 		this.nivelesConocimiento = nivelesConocimiento;
-	}	
+	}
+
+	public ArrayList<Organizacion> getOrganizaciones() {
+		return organizaciones;
+	}
+
+	public void setOrganizaciones(ArrayList<Organizacion> organizaciones) {
+		this.organizaciones = organizaciones;
+	}		
 }

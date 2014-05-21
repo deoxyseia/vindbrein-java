@@ -18,7 +18,7 @@ public class Puesto implements Serializable {
 	private String puesDescripcion;
 	private String puesEstado;
 	private String puesNombre;
-	private List<ExperienciaLaboral> experienciaLaborals;
+	//private List<ExperienciaLaboral> experienciaLaborals;
 	private List<OrganizacionPuesto> organizacionPuestos;
 	private NivelPuesto nivelPuesto;
 
@@ -68,29 +68,29 @@ public class Puesto implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to ExperienciaLaboral
-	@OneToMany(mappedBy="puesto")
-	public List<ExperienciaLaboral> getExperienciaLaborals() {
-		return this.experienciaLaborals;
-	}
-
-	public void setExperienciaLaborals(List<ExperienciaLaboral> experienciaLaborals) {
-		this.experienciaLaborals = experienciaLaborals;
-	}
-
-	public ExperienciaLaboral addExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
-		getExperienciaLaborals().add(experienciaLaboral);
-		experienciaLaboral.setPuesto(this);
-
-		return experienciaLaboral;
-	}
-
-	public ExperienciaLaboral removeExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
-		getExperienciaLaborals().remove(experienciaLaboral);
-		experienciaLaboral.setPuesto(null);
-
-		return experienciaLaboral;
-	}
+//	//bi-directional many-to-one association to ExperienciaLaboral
+//	@OneToMany(mappedBy="puesto")
+//	public List<ExperienciaLaboral> getExperienciaLaborals() {
+//		return this.experienciaLaborals;
+//	}
+//
+//	public void setExperienciaLaborals(List<ExperienciaLaboral> experienciaLaborals) {
+//		this.experienciaLaborals = experienciaLaborals;
+//	}
+//
+//	public ExperienciaLaboral addExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
+//		getExperienciaLaborals().add(experienciaLaboral);
+//		experienciaLaboral.setPuesto(this);
+//
+//		return experienciaLaboral;
+//	}
+//
+//	public ExperienciaLaboral removeExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
+//		getExperienciaLaborals().remove(experienciaLaboral);
+//		experienciaLaboral.setPuesto(null);
+//
+//		return experienciaLaboral;
+//	}
 
 
 	//bi-directional many-to-one association to OrganizacionPuesto

@@ -19,7 +19,7 @@ public class ExperienciaLaboral implements Serializable {
 	private Date exlaFechaInicio;
 	private int exlaTiempoMeses;
 	private Postulante postulante;
-	private Puesto puesto;
+	//private Puesto puesto;
 	private OrganizacionPuesto organizacionPuesto;
 
 	public ExperienciaLaboral() {
@@ -72,7 +72,7 @@ public class ExperienciaLaboral implements Serializable {
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
+	@JoinColumn(name="fk_post_id")
 	public Postulante getPostulante() {
 		return this.postulante;
 	}
@@ -82,16 +82,16 @@ public class ExperienciaLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Puesto
-	@ManyToOne
-	@JoinColumn(name="fk_pues_id", insertable=false, updatable=false)
-	public Puesto getPuesto() {
-		return this.puesto;
-	}
-
-	public void setPuesto(Puesto puesto) {
-		this.puesto = puesto;
-	}
+//	//bi-directional many-to-one association to Puesto
+//	@ManyToOne
+//	@JoinColumn(name="fk_pues_id")
+//	public Puesto getPuesto() {
+//		return this.puesto;
+//	}
+//
+//	public void setPuesto(Puesto puesto) {
+//		this.puesto = puesto;
+//	}
 
 
 	//bi-directional many-to-one association to OrganizacionPuesto
