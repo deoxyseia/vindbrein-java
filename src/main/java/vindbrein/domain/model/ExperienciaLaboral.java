@@ -2,6 +2,7 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -14,11 +15,12 @@ import javax.persistence.*;
 public class ExperienciaLaboral implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int exlaId;
-	private String exlaFechaFinal;
-	private String exlaFechaInicio;
+	private Date exlaFechaFinal;
+	private Date exlaFechaInicio;
 	private int exlaTiempoMeses;
-	private TipoPuesto tipoPuesto;
 	private Postulante postulante;
+	private Puesto puesto;
+	private OrganizacionPuesto organizacionPuesto;
 
 	public ExperienciaLaboral() {
 	}
@@ -36,22 +38,24 @@ public class ExperienciaLaboral implements Serializable {
 	}
 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="exla_fecha_final")
-	public String getExlaFechaFinal() {
+	public Date getExlaFechaFinal() {
 		return this.exlaFechaFinal;
 	}
 
-	public void setExlaFechaFinal(String exlaFechaFinal) {
+	public void setExlaFechaFinal(Date exlaFechaFinal) {
 		this.exlaFechaFinal = exlaFechaFinal;
 	}
 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="exla_fecha_inicio")
-	public String getExlaFechaInicio() {
+	public Date getExlaFechaInicio() {
 		return this.exlaFechaInicio;
 	}
 
-	public void setExlaFechaInicio(String exlaFechaInicio) {
+	public void setExlaFechaInicio(Date exlaFechaInicio) {
 		this.exlaFechaInicio = exlaFechaInicio;
 	}
 
@@ -66,27 +70,42 @@ public class ExperienciaLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to TipoPuesto
-	@ManyToOne
-	@JoinColumn(name="fk_tipu_id")
-	public TipoPuesto getTipoPuesto() {
-		return this.tipoPuesto;
-	}
-
-	public void setTipoPuesto(TipoPuesto tipoPuesto) {
-		this.tipoPuesto = tipoPuesto;
-	}
-
-
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id")
+	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
 	public Postulante getPostulante() {
 		return this.postulante;
 	}
 
 	public void setPostulante(Postulante postulante) {
 		this.postulante = postulante;
+	}
+
+
+	//bi-directional many-to-one association to Puesto
+	@ManyToOne
+	@JoinColumn(name="fk_pues_id", insertable=false, updatable=false)
+	public Puesto getPuesto() {
+		return this.puesto;
+	}
+
+	public void setPuesto(Puesto puesto) {
+		this.puesto = puesto;
+	}
+
+
+	//bi-directional many-to-one association to OrganizacionPuesto
+	@ManyToOne
+	@JoinColumns({
+		@JoinColumn(name="fk_orga_id", referencedColumnName="fk_orga_id"),
+		@JoinColumn(name="fk_pues_id", referencedColumnName="fk_pues_id")
+		})
+	public OrganizacionPuesto getOrganizacionPuesto() {
+		return this.organizacionPuesto;
+	}
+
+	public void setOrganizacionPuesto(OrganizacionPuesto organizacionPuesto) {
+		this.organizacionPuesto = organizacionPuesto;
 	}
 
 }

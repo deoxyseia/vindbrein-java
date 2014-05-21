@@ -17,8 +17,9 @@ public class NivelIdioma implements Serializable {
 	private int niidId;
 	private String niidCode;
 	private String niidDescripcion;
+	private String niidNombre;
 	private List<PostulanteIdioma> postulanteIdiomas;
-	private List<PuestoPrefIdioma> puestoPrefIdiomas;
+	private List<OfertaIdioma> ofertaIdiomas;
 
 	public NivelIdioma() {
 	}
@@ -56,6 +57,16 @@ public class NivelIdioma implements Serializable {
 	}
 
 
+	@Column(name="niid_nombre")
+	public String getNiidNombre() {
+		return this.niidNombre;
+	}
+
+	public void setNiidNombre(String niidNombre) {
+		this.niidNombre = niidNombre;
+	}
+
+
 	//bi-directional many-to-one association to PostulanteIdioma
 	@OneToMany(mappedBy="nivelIdioma")
 	public List<PostulanteIdioma> getPostulanteIdiomas() {
@@ -81,28 +92,28 @@ public class NivelIdioma implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoPrefIdioma
+	//bi-directional many-to-one association to OfertaIdioma
 	@OneToMany(mappedBy="nivelIdioma")
-	public List<PuestoPrefIdioma> getPuestoPrefIdiomas() {
-		return this.puestoPrefIdiomas;
+	public List<OfertaIdioma> getOfertaIdiomas() {
+		return this.ofertaIdiomas;
 	}
 
-	public void setPuestoPrefIdiomas(List<PuestoPrefIdioma> puestoPrefIdiomas) {
-		this.puestoPrefIdiomas = puestoPrefIdiomas;
+	public void setOfertaIdiomas(List<OfertaIdioma> ofertaIdiomas) {
+		this.ofertaIdiomas = ofertaIdiomas;
 	}
 
-	public PuestoPrefIdioma addPuestoPrefIdioma(PuestoPrefIdioma puestoPrefIdioma) {
-		getPuestoPrefIdiomas().add(puestoPrefIdioma);
-		puestoPrefIdioma.setNivelIdioma(this);
+	public OfertaIdioma addOfertaIdioma(OfertaIdioma ofertaIdioma) {
+		getOfertaIdiomas().add(ofertaIdioma);
+		ofertaIdioma.setNivelIdioma(this);
 
-		return puestoPrefIdioma;
+		return ofertaIdioma;
 	}
 
-	public PuestoPrefIdioma removePuestoPrefIdioma(PuestoPrefIdioma puestoPrefIdioma) {
-		getPuestoPrefIdiomas().remove(puestoPrefIdioma);
-		puestoPrefIdioma.setNivelIdioma(null);
+	public OfertaIdioma removeOfertaIdioma(OfertaIdioma ofertaIdioma) {
+		getOfertaIdiomas().remove(ofertaIdioma);
+		ofertaIdioma.setNivelIdioma(null);
 
-		return puestoPrefIdioma;
+		return ofertaIdioma;
 	}
 
 }

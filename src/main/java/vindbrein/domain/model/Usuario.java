@@ -16,10 +16,9 @@ public class Usuario implements Serializable {
 	private int usuaId;
 	private String usuaContrasenia;
 	private String usuaCorreo;
-	private String usuaFlagActivo;
-	private String usuaNombre;
+	private byte usuaFlagActivo;
 	private Postulante postulante;
-	private RespRrhh respRrhh;
+	private Reclutador reclutador;
 
 	public Usuario() {
 	}
@@ -58,22 +57,12 @@ public class Usuario implements Serializable {
 
 
 	@Column(name="usua_flag_activo")
-	public String getUsuaFlagActivo() {
+	public byte getUsuaFlagActivo() {
 		return this.usuaFlagActivo;
 	}
 
-	public void setUsuaFlagActivo(String usuaFlagActivo) {
+	public void setUsuaFlagActivo(byte usuaFlagActivo) {
 		this.usuaFlagActivo = usuaFlagActivo;
-	}
-
-
-	@Column(name="usua_nombre")
-	public String getUsuaNombre() {
-		return this.usuaNombre;
-	}
-
-	public void setUsuaNombre(String usuaNombre) {
-		this.usuaNombre = usuaNombre;
 	}
 
 
@@ -89,15 +78,15 @@ public class Usuario implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to RespRrhh
+	//bi-directional many-to-one association to Reclutador
 	@ManyToOne
-	@JoinColumn(name="fk_rerr_id")
-	public RespRrhh getRespRrhh() {
-		return this.respRrhh;
+	@JoinColumn(name="fk_recl_id")
+	public Reclutador getReclutador() {
+		return this.reclutador;
 	}
 
-	public void setRespRrhh(RespRrhh respRrhh) {
-		this.respRrhh = respRrhh;
+	public void setReclutador(Reclutador reclutador) {
+		this.reclutador = reclutador;
 	}
 
 }

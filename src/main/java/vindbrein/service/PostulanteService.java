@@ -16,7 +16,7 @@ public interface PostulanteService {
 
 	public ArrayList<Postulante> getPostulantes();
 	
-	public Postulante getPostulanteByUsername(String username);
+	public Postulante getPostulanteByCorreo(String correo);
 	
 	public Postulante getPostulanteCompletoByPostulante(Postulante postulante);
 

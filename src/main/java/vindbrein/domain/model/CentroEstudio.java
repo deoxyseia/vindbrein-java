@@ -16,12 +16,13 @@ public class CentroEstudio implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int ceesId;
 	private String ceesCode;
+	private String ceesEstado;
 	private String ceesNombre;
 	private CentroEstudio centroEstudio;
 	private List<CentroEstudio> centroEstudios;
 	private TipoCentroEstudio tipoCentroEstudio;
 	private List<Estudio> estudios;
-	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
+	private List<OfertaLaboral> ofertaLaborals;
 
 	public CentroEstudio() {
 	}
@@ -49,6 +50,16 @@ public class CentroEstudio implements Serializable {
 	}
 
 
+	@Column(name="cees_estado")
+	public String getCeesEstado() {
+		return this.ceesEstado;
+	}
+
+	public void setCeesEstado(String ceesEstado) {
+		this.ceesEstado = ceesEstado;
+	}
+
+
 	@Column(name="cees_nombre")
 	public String getCeesNombre() {
 		return this.ceesNombre;
@@ -61,7 +72,7 @@ public class CentroEstudio implements Serializable {
 
 	//bi-directional many-to-one association to CentroEstudio
 	@ManyToOne
-	@JoinColumn(name="fk_cees_padre")
+	@JoinColumn(name="fk_cees_id_padre")
 	public CentroEstudio getCentroEstudio() {
 		return this.centroEstudio;
 	}
@@ -133,14 +144,14 @@ public class CentroEstudio implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to PreferenciaPuestoLaboral
+	//bi-directional many-to-many association to OfertaLaboral
 	@ManyToMany(mappedBy="centroEstudios")
-	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
-		return this.preferenciaPuestoLaborals;
+	public List<OfertaLaboral> getOfertaLaborals() {
+		return this.ofertaLaborals;
 	}
 
-	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
-		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
+	public void setOfertaLaborals(List<OfertaLaboral> ofertaLaborals) {
+		this.ofertaLaborals = ofertaLaborals;
 	}
 
 }

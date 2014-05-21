@@ -17,9 +17,9 @@ public class TipoHorario implements Serializable {
 	private int tihoId;
 	private String tihoCode;
 	private String tihoDescripcion;
-	private String tihoName;
-	private List<PreferenciaPostulante> preferenciaPostulantes;
-	private List<PuestoLaboral> puestoLaborals;
+	private String tihoNombre;
+	private List<Postulante> postulantes;
+	private List<OfertaLaboral> ofertaLaborals;
 
 	public TipoHorario() {
 	}
@@ -57,63 +57,63 @@ public class TipoHorario implements Serializable {
 	}
 
 
-	@Column(name="tiho_name")
-	public String getTihoName() {
-		return this.tihoName;
+	@Column(name="tiho_nombre")
+	public String getTihoNombre() {
+		return this.tihoNombre;
 	}
 
-	public void setTihoName(String tihoName) {
-		this.tihoName = tihoName;
+	public void setTihoNombre(String tihoNombre) {
+		this.tihoNombre = tihoNombre;
 	}
 
 
-	//bi-directional many-to-one association to PreferenciaPostulante
+	//bi-directional many-to-one association to Postulante
 	@OneToMany(mappedBy="tipoHorario")
-	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
-		return this.preferenciaPostulantes;
+	public List<Postulante> getPostulantes() {
+		return this.postulantes;
 	}
 
-	public void setPreferenciaPostulantes(List<PreferenciaPostulante> preferenciaPostulantes) {
-		this.preferenciaPostulantes = preferenciaPostulantes;
+	public void setPostulantes(List<Postulante> postulantes) {
+		this.postulantes = postulantes;
 	}
 
-	public PreferenciaPostulante addPreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
-		getPreferenciaPostulantes().add(preferenciaPostulante);
-		preferenciaPostulante.setTipoHorario(this);
+	public Postulante addPostulante(Postulante postulante) {
+		getPostulantes().add(postulante);
+		postulante.setTipoHorario(this);
 
-		return preferenciaPostulante;
+		return postulante;
 	}
 
-	public PreferenciaPostulante removePreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
-		getPreferenciaPostulantes().remove(preferenciaPostulante);
-		preferenciaPostulante.setTipoHorario(null);
+	public Postulante removePostulante(Postulante postulante) {
+		getPostulantes().remove(postulante);
+		postulante.setTipoHorario(null);
 
-		return preferenciaPostulante;
+		return postulante;
 	}
 
 
-	//bi-directional many-to-one association to PuestoLaboral
+	//bi-directional many-to-one association to OfertaLaboral
 	@OneToMany(mappedBy="tipoHorario")
-	public List<PuestoLaboral> getPuestoLaborals() {
-		return this.puestoLaborals;
+	public List<OfertaLaboral> getOfertaLaborals() {
+		return this.ofertaLaborals;
 	}
 
-	public void setPuestoLaborals(List<PuestoLaboral> puestoLaborals) {
-		this.puestoLaborals = puestoLaborals;
+	public void setOfertaLaborals(List<OfertaLaboral> ofertaLaborals) {
+		this.ofertaLaborals = ofertaLaborals;
 	}
 
-	public PuestoLaboral addPuestoLaboral(PuestoLaboral puestoLaboral) {
-		getPuestoLaborals().add(puestoLaboral);
-		puestoLaboral.setTipoHorario(this);
+	public OfertaLaboral addOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		getOfertaLaborals().add(ofertaLaboral);
+		ofertaLaboral.setTipoHorario(this);
 
-		return puestoLaboral;
+		return ofertaLaboral;
 	}
 
-	public PuestoLaboral removePuestoLaboral(PuestoLaboral puestoLaboral) {
-		getPuestoLaborals().remove(puestoLaboral);
-		puestoLaboral.setTipoHorario(null);
+	public OfertaLaboral removeOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		getOfertaLaborals().remove(ofertaLaboral);
+		ofertaLaboral.setTipoHorario(null);
 
-		return puestoLaboral;
+		return ofertaLaboral;
 	}
 
 }

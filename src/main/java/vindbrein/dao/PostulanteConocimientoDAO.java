@@ -36,7 +36,7 @@ public class PostulanteConocimientoDAO {
 
 	public void deletePostulanteConocimiento(PostulanteConocimiento postulanteConocimiento) {
 		getSessionFactory().getCurrentSession().delete(postulanteConocimiento);		
-	}
+	}	
 
 	//no verificado ni hecho de veras xD!
 	public PostulanteConocimiento getPostulanteConocimientoById(int id) {

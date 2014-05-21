@@ -16,9 +16,9 @@ public class Idioma implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int idioId;
 	private String idioCode;
-	private String idioDescripcion;
+	private String idioNombre;
 	private List<PostulanteIdioma> postulanteIdiomas;
-	private List<PuestoPrefIdioma> puestoPrefIdiomas;
+	private List<OfertaIdioma> ofertaIdiomas;
 
 	public Idioma() {
 	}
@@ -46,13 +46,13 @@ public class Idioma implements Serializable {
 	}
 
 
-	@Column(name="idio_descripcion")
-	public String getIdioDescripcion() {
-		return this.idioDescripcion;
+	@Column(name="idio_nombre")
+	public String getIdioNombre() {
+		return this.idioNombre;
 	}
 
-	public void setIdioDescripcion(String idioDescripcion) {
-		this.idioDescripcion = idioDescripcion;
+	public void setIdioNombre(String idioNombre) {
+		this.idioNombre = idioNombre;
 	}
 
 
@@ -81,28 +81,28 @@ public class Idioma implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoPrefIdioma
+	//bi-directional many-to-one association to OfertaIdioma
 	@OneToMany(mappedBy="idioma")
-	public List<PuestoPrefIdioma> getPuestoPrefIdiomas() {
-		return this.puestoPrefIdiomas;
+	public List<OfertaIdioma> getOfertaIdiomas() {
+		return this.ofertaIdiomas;
 	}
 
-	public void setPuestoPrefIdiomas(List<PuestoPrefIdioma> puestoPrefIdiomas) {
-		this.puestoPrefIdiomas = puestoPrefIdiomas;
+	public void setOfertaIdiomas(List<OfertaIdioma> ofertaIdiomas) {
+		this.ofertaIdiomas = ofertaIdiomas;
 	}
 
-	public PuestoPrefIdioma addPuestoPrefIdioma(PuestoPrefIdioma puestoPrefIdioma) {
-		getPuestoPrefIdiomas().add(puestoPrefIdioma);
-		puestoPrefIdioma.setIdioma(this);
+	public OfertaIdioma addOfertaIdioma(OfertaIdioma ofertaIdioma) {
+		getOfertaIdiomas().add(ofertaIdioma);
+		ofertaIdioma.setIdioma(this);
 
-		return puestoPrefIdioma;
+		return ofertaIdioma;
 	}
 
-	public PuestoPrefIdioma removePuestoPrefIdioma(PuestoPrefIdioma puestoPrefIdioma) {
-		getPuestoPrefIdiomas().remove(puestoPrefIdioma);
-		puestoPrefIdioma.setIdioma(null);
+	public OfertaIdioma removeOfertaIdioma(OfertaIdioma ofertaIdioma) {
+		getOfertaIdiomas().remove(ofertaIdioma);
+		ofertaIdioma.setIdioma(null);
 
-		return puestoPrefIdioma;
+		return ofertaIdioma;
 	}
 
 }

@@ -26,7 +26,7 @@ import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.Postulante;
 import vindbrein.domain.model.Provincia;
-import vindbrein.domain.model.RespRrhh;
+import vindbrein.domain.model.Reclutador;
 import vindbrein.domain.model.Sector;
 import vindbrein.domain.model.Sucursal;
 import vindbrein.domain.model.Usuario;
@@ -52,7 +52,7 @@ public class UsuarioManagedBean implements Serializable {
 	private String newPasswordReload;
 	
 	//datos para registro
-	private Usuario usuarioRespRrhh;		
+	private Usuario usuarioReclutador;		
 	private Usuario usuarioPostulante;
 	
 	//datos maestros
@@ -103,21 +103,26 @@ public class UsuarioManagedBean implements Serializable {
 	
 	public void iniciarDatosUsuarioPostulante(){
 		usuarioPostulante = new Usuario();
-		usuarioPostulante.setUsuaFlagActivo("Y");
+		usuarioPostulante.setUsuaFlagActivo((byte)1);
 		usuarioPostulante.setPostulante(new Postulante());			
 	}
 	
 	public void iniciarDatosUsuarioOrganizacion(){
+		Organizacion organizacion = new Organizacion();
+		organizacion.setDimensionOrganizacion(new DimensionOrganizacion());
+		organizacion.setSector(new Sector());
+				
 		Sucursal sucursal = new Sucursal();
-		sucursal.setOrganizacion(new Organizacion());
-		sucursal.getOrganizacion().setDimensionOrganizacion(new DimensionOrganizacion());
-		sucursal.getOrganizacion().setSector(new Sector());
 		sucursal.setDistrito(new Distrito());
+		sucursal.setOrganizacion(organizacion);
 		
-		usuarioRespRrhh = new Usuario();
-		usuarioRespRrhh.setUsuaFlagActivo("N");
-		usuarioRespRrhh.setRespRrhh(new RespRrhh());
-		usuarioRespRrhh.getRespRrhh().setSucursal(sucursal);				
+		organizacion.setSucursales(new ArrayList<Sucursal>());	
+		organizacion.addSucursal(sucursal);
+		
+		usuarioReclutador = new Usuario();
+		usuarioReclutador.setUsuaFlagActivo((byte)1);
+		usuarioReclutador.setReclutador(new Reclutador());
+		usuarioReclutador.getReclutador().setOrganizacion(organizacion);				
 		
 		//otros datos necesario
 		sectores = getSectorService().getSectores();		
@@ -150,7 +155,7 @@ public class UsuarioManagedBean implements Serializable {
 		boolean verificado = false;
 		
 		if(getNewPassword().equals(getNewPasswordReload())){
-			getUsuarioRespRrhh().setUsuaContrasenia(getNewPassword());
+			getUsuarioReclutador().setUsuaContrasenia(getNewPassword());
 			verificado = true;
 		}else{
 			Util.lanzarMensaje("ERROR", "GLOBAL", "Las contraseñas no coinciden, vuelva a probar");
@@ -160,11 +165,11 @@ public class UsuarioManagedBean implements Serializable {
 	}
 	
 	public void saveUsuarioOrganizacion(){
-		logger.info("Agregando nuevo usuario de postulante");	
+		logger.info("Agregando nuevo usuario reclutador");	
 		
-		usuarioRespRrhh.getRespRrhh().getSucursal().setDistrito(selectedDistrito);
-		
-		getUsuarioService().addUsuarioOrganizacion(usuarioRespRrhh);
+		usuarioReclutador.getReclutador().getOrganizacion().getSucursales().get(0).setDistrito(selectedDistrito);
+				
+		getUsuarioService().addUsuarioOrganizacion(usuarioReclutador);
 				
 		Util.lanzarMensaje("INFO", "GLOBAL","Se ha creado un nuevo usuario");	
 	}
@@ -243,15 +248,15 @@ public class UsuarioManagedBean implements Serializable {
 	//getters and setters		
 	public UsuarioService getUsuarioService() {
 		return usuarioService;
-	}
-
-	public Usuario getUsuarioRespRrhh() {
-		return usuarioRespRrhh;
-	}
-
-	public void setUsuarioRespRrhh(Usuario usuarioRespRrhh) {
-		this.usuarioRespRrhh = usuarioRespRrhh;
 	}	
+
+	public Usuario getUsuarioReclutador() {
+		return usuarioReclutador;
+	}
+
+	public void setUsuarioReclutador(Usuario usuarioReclutador) {
+		this.usuarioReclutador = usuarioReclutador;
+	}
 
 	public Usuario getUsuarioPostulante() {
 		return usuarioPostulante;

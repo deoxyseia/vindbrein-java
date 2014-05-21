@@ -4,25 +4,17 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the puesto_pref_estudio database table.
+ * The primary key class for the oferta_estudio database table.
  * 
  */
 @Embeddable
-public class PuestoPrefEstudioPK implements Serializable {
+public class OfertaEstudioPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
-	private int fkPrpuId;
 	private int fkEsgeId;
+	private int fkOflaId;
 
-	public PuestoPrefEstudioPK() {
-	}
-
-	@Column(name="fk_prpu_id", insertable=false, updatable=false)
-	public int getFkPrpuId() {
-		return this.fkPrpuId;
-	}
-	public void setFkPrpuId(int fkPrpuId) {
-		this.fkPrpuId = fkPrpuId;
+	public OfertaEstudioPK() {
 	}
 
 	@Column(name="fk_esge_id", insertable=false, updatable=false)
@@ -33,24 +25,32 @@ public class PuestoPrefEstudioPK implements Serializable {
 		this.fkEsgeId = fkEsgeId;
 	}
 
+	@Column(name="fk_ofla_id", insertable=false, updatable=false)
+	public int getFkOflaId() {
+		return this.fkOflaId;
+	}
+	public void setFkOflaId(int fkOflaId) {
+		this.fkOflaId = fkOflaId;
+	}
+
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof PuestoPrefEstudioPK)) {
+		if (!(other instanceof OfertaEstudioPK)) {
 			return false;
 		}
-		PuestoPrefEstudioPK castOther = (PuestoPrefEstudioPK)other;
+		OfertaEstudioPK castOther = (OfertaEstudioPK)other;
 		return 
-			(this.fkPrpuId == castOther.fkPrpuId)
-			&& (this.fkEsgeId == castOther.fkEsgeId);
+			(this.fkEsgeId == castOther.fkEsgeId)
+			&& (this.fkOflaId == castOther.fkOflaId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.fkPrpuId;
 		hash = hash * prime + this.fkEsgeId;
+		hash = hash * prime + this.fkOflaId;
 		
 		return hash;
 	}

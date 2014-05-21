@@ -66,19 +66,19 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 		return getPostulanteDAO().getPostulantes();
 	}	
 	
-	public Postulante getPostulanteByUsername(String username){
-		Postulante postulante = getPostulanteDAO().getPostulanteByUsername(username);
+	public Postulante getPostulanteByCorreo(String correo){
+		Postulante postulante = getPostulanteDAO().getPostulanteByCorreo(correo);
 				
 		return postulante;
 	}
 	
 	public Postulante getPostulanteCompletoByPostulante(Postulante postulante){
-		
+		postulante = getPostulanteById(postulante.getPostId());
 		postulante.setTelefonos(getTelefonoDAO().getTelefonosByPostulante(postulante));
 		postulante.setPostulanteConocimientos(getPostulanteConocimientoDAO().getPostulanteConocimientoByPostulante(postulante));
 		postulante.setResidencias(getResidenciaDAO().getResidenciasByPostulante(postulante));
 		postulante.setActividadAcademicas(getActividadAcademicaDAO().getActividadesAcademicasByPostulante(postulante));
-		postulante.setExperienciaLaborals(getExperienciaLaboralDAO().getExperienciasLaboralesByPostulante(postulante));
+		postulante.setExperienciasLaborales(getExperienciaLaboralDAO().getExperienciasLaboralesByPostulante(postulante));
 		postulante.setPostulanteIdiomas(getPostulanteIdiomaDAO().getPostulanteIdiomasByPostulante(postulante));
 		
 		return postulante;

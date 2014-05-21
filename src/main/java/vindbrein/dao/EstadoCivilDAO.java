@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import vindbrein.domain.model.Departamento;
-import vindbrein.domain.model.RespRrhh;
+import vindbrein.domain.model.EstadoCivil;
 
 @Repository
-public class RespRrhhDAO {
+public class EstadoCivilDAO {
 	
 	@Autowired
 	@Qualifier("sessionFactory")
@@ -26,34 +25,34 @@ public class RespRrhhDAO {
         this.sessionFactory = sessionFactory;
     }
 		
-	public void addRespRrhh(RespRrhh respRrhh) {
-		getSessionFactory().getCurrentSession().save(respRrhh);		
+	public void addEstadoCivil(EstadoCivil EstadoCivil) {
+		getSessionFactory().getCurrentSession().save(EstadoCivil);		
 	}
 
-	public void updateRespRrhh(RespRrhh respRrhh) {
-		getSessionFactory().getCurrentSession().update(respRrhh);		
+	public void updateEstadoCivil(EstadoCivil EstadoCivil) {
+		getSessionFactory().getCurrentSession().update(EstadoCivil);		
 	}
 
-	public void deleteRespRrhh(RespRrhh respRrhh) {
-		getSessionFactory().getCurrentSession().delete(respRrhh);		
+	public void deleteEstadoCivil(EstadoCivil EstadoCivil) {
+		getSessionFactory().getCurrentSession().delete(EstadoCivil);		
 	}
 
-	public RespRrhh getRespRrhhById(int id) {
+	public EstadoCivil getEstadoCivilById(int id) {
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from RespRrhh where rerrId=?")
+				.createQuery("from EstadoCivil where esciId=?")
 		        .setParameter(0, id).list();
 		
 		if(list.size()!=0){
-			return (RespRrhh)list.get(0);
+			return (EstadoCivil)list.get(0);
 		} else {
 			return null;
 		}
 	}
 
-	public ArrayList<RespRrhh> getRespRrhhs() {
-		ArrayList<RespRrhh> list = (ArrayList<RespRrhh>) getSessionFactory()
+	public ArrayList<EstadoCivil> getEstadosCiviles() {
+		ArrayList<EstadoCivil> list = (ArrayList<EstadoCivil>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from RespRrhh order by rerrNombres asc")
+				.createQuery("from EstadoCivil order by esciNombre asc")
 				.list();
 		return list;
 	}	

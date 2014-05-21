@@ -30,20 +30,20 @@
         <authentication-manager alias="authenticationManager" erase-credentials="false">
         	<authentication-provider >        		
         		<jdbc-user-service data-source-ref="dataSource"
-	users-by-username-query="SELECT usua_nombre AS username, 
-        		 								 usua_contrasenia AS password,
-        		 								 true AS enabled
-                                          FROM vindbrein.usuario
-                                          WHERE usua_nombre =  ?"
+	users-by-username-query="SELECT usua_correo AS username, 
+        		 					usua_contrasenia AS password,
+        		 					true AS enabled
+                             FROM vindbrein.usuario
+                             WHERE usua_correo =  ?"
 	authorities-by-username-query="SELECT 
-									u.usua_nombre AS username, 
+									u.usua_correo AS username, 
 									CASE 
 									WHEN u.fk_post_id is not null THEN 'ROLE_ESTUDIANTE' 
-									WHEN u.fk_rerr_id is not null THEN 'ROLE_ORGANIZACION'
-									WHEN (u.fk_rerr_id is null and u.fk_post_id is null) THEN 'ROLE_ESTUDIANTE'
+									WHEN u.fk_recl_id is not null THEN 'ROLE_ORGANIZACION'
+									WHEN (u.fk_recl_id is null and u.fk_post_id is null) THEN 'ROLE_ESTUDIANTE'
 									END  AS authority 
 									FROM vindbrein.usuario u
-									WHERE u.usua_nombre = ?" />        		
+									WHERE u.usua_correo = ?" />        		
         	</authentication-provider>
         </authentication-manager>  
 </beans:beans>

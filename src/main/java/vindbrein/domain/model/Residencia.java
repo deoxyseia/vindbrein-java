@@ -14,8 +14,8 @@ import javax.persistence.*;
 public class Residencia implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int resiId;
+	private byte resiActivo;
 	private String resiDireccion;
-	private byte resiEstado;
 	private String resiTelefono;
 	private Distrito distrito;
 	private Postulante postulante;
@@ -36,6 +36,16 @@ public class Residencia implements Serializable {
 	}
 
 
+	@Column(name="resi_activo")
+	public byte getResiActivo() {
+		return this.resiActivo;
+	}
+
+	public void setResiActivo(byte resiActivo) {
+		this.resiActivo = resiActivo;
+	}
+
+
 	@Column(name="resi_direccion")
 	public String getResiDireccion() {
 		return this.resiDireccion;
@@ -43,16 +53,6 @@ public class Residencia implements Serializable {
 
 	public void setResiDireccion(String resiDireccion) {
 		this.resiDireccion = resiDireccion;
-	}
-
-
-	@Column(name="resi_estado")
-	public byte getResiEstado() {
-		return this.resiEstado;
-	}
-
-	public void setResiEstado(byte resiEstado) {
-		this.resiEstado = resiEstado;
 	}
 
 

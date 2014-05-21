@@ -5,19 +5,19 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the postulante_pref_benef database table.
+ * The persistent class for the postulante_beneficio database table.
  * 
  */
 @Entity
-@Table(name="postulante_pref_benef")
-@NamedQuery(name="PostulantePrefBenef.findAll", query="SELECT p FROM PostulantePrefBenef p")
-public class PostulantePrefBenef implements Serializable {
+@Table(name="postulante_beneficio")
+@NamedQuery(name="PostulanteBeneficio.findAll", query="SELECT p FROM PostulanteBeneficio p")
+public class PostulanteBeneficio implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int fkBeneId;
-	private BeneficioLaboral beneficioLaboral;
+	private Beneficio beneficio;
 	private Postulante postulante;
 
-	public PostulantePrefBenef() {
+	public PostulanteBeneficio() {
 	}
 
 
@@ -33,15 +33,15 @@ public class PostulantePrefBenef implements Serializable {
 	}
 
 
-	//bi-directional one-to-one association to BeneficioLaboral
+	//bi-directional one-to-one association to Beneficio
 	@OneToOne
 	@JoinColumn(name="fk_bene_id")
-	public BeneficioLaboral getBeneficioLaboral() {
-		return this.beneficioLaboral;
+	public Beneficio getBeneficio() {
+		return this.beneficio;
 	}
 
-	public void setBeneficioLaboral(BeneficioLaboral beneficioLaboral) {
-		this.beneficioLaboral = beneficioLaboral;
+	public void setBeneficio(Beneficio beneficio) {
+		this.beneficio = beneficio;
 	}
 
 

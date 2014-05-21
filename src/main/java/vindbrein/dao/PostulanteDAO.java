@@ -31,7 +31,7 @@ public class PostulanteDAO {
 
 	public Postulante getPostulanteById(int id) {
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from Postulante where bancId=?")
+				.createQuery("from Postulante where postId=?")
 		        .setParameter(0, id).list();
 		
 		if(list.size()!=0){
@@ -49,10 +49,10 @@ public class PostulanteDAO {
 		return list;
 	}
 	
-	public Postulante getPostulanteByUsername(String username) {
+	public Postulante getPostulanteByCorreo(String correo) {
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from Postulante p where p.usuario.usuaNombre=?")
-				.setParameter(0, username).list();
+				.createQuery("from Postulante p where p.usuario.usuaCorreo=?")
+				.setParameter(0, correo).list();
 
 		if (list.size() != 0) {
 			return (Postulante) list.get(0);

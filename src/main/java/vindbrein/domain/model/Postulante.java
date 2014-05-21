@@ -2,6 +2,7 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -18,26 +19,31 @@ public class Postulante implements Serializable {
 	private int postId;
 	private String postApellidoMaterno;
 	private String postApellidoPaterno;
+	private BigInteger postCodigoEstudiante;
 	private String postDni;
 	private int postEdad;
-	private Date postFecNacimiento;
+	private Date postFechaNacimiento;
 	private int postIdProfH;
 	private int postIdProfP;
 	private int postIdProfS;
 	private String postNombres;
+	private int postSalario;
 	private String postSexo;
 	private List<ActividadAcademica> actividadAcademicas;
-	private List<ExperienciaLaboral> experienciaLaborals;
+	private List<ExperienciaLaboral> experienciasLaborales;
 	private List<MatchResult> matchResults;
+	private DimensionOrganizacion dimensionOrganizacion;
 	private EstadoCivil estadoCivil;
+	private Sector sector;
+	private TipoHorario tipoHorario;
 	private List<PostulanteConocimiento> postulanteConocimientos;
 	private List<PostulanteCurso> postulanteCursos;
 	private List<PostulanteIdioma> postulanteIdiomas;
-	private List<PostulantePrefBenef> postulantePrefBenefs;
-	private List<PreferenciaPostulante> preferenciaPostulantes;
 	private List<Residencia> residencias;
 	private List<Telefono> telefonos;
 	private Usuario usuario;
+	private NivelPuesto nivelPuesto;
+	private List<PostulanteBeneficio> postulanteBeneficios;
 
 	public Postulante() {
 	}
@@ -75,6 +81,16 @@ public class Postulante implements Serializable {
 	}
 
 
+	@Column(name="post_codigo_estudiante")
+	public BigInteger getPostCodigoEstudiante() {
+		return this.postCodigoEstudiante;
+	}
+
+	public void setPostCodigoEstudiante(BigInteger postCodigoEstudiante) {
+		this.postCodigoEstudiante = postCodigoEstudiante;
+	}
+
+
 	@Column(name="post_dni")
 	public String getPostDni() {
 		return this.postDni;
@@ -96,13 +112,13 @@ public class Postulante implements Serializable {
 
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="post_fec_nacimiento")
-	public Date getPostFecNacimiento() {
-		return this.postFecNacimiento;
+	@Column(name="post_fecha_nacimiento")
+	public Date getPostFechaNacimiento() {
+		return this.postFechaNacimiento;
 	}
 
-	public void setPostFecNacimiento(Date postFecNacimiento) {
-		this.postFecNacimiento = postFecNacimiento;
+	public void setPostFechaNacimiento(Date postFechaNacimiento) {
+		this.postFechaNacimiento = postFechaNacimiento;
 	}
 
 
@@ -146,6 +162,16 @@ public class Postulante implements Serializable {
 	}
 
 
+	@Column(name="post_salario")
+	public int getPostSalario() {
+		return this.postSalario;
+	}
+
+	public void setPostSalario(int postSalario) {
+		this.postSalario = postSalario;
+	}
+
+
 	@Column(name="post_sexo")
 	public String getPostSexo() {
 		return this.postSexo;
@@ -183,23 +209,23 @@ public class Postulante implements Serializable {
 
 	//bi-directional many-to-one association to ExperienciaLaboral
 	@OneToMany(mappedBy="postulante")
-	public List<ExperienciaLaboral> getExperienciaLaborals() {
-		return this.experienciaLaborals;
+	public List<ExperienciaLaboral> getExperienciasLaborales() {
+		return this.experienciasLaborales;
 	}
 
-	public void setExperienciaLaborals(List<ExperienciaLaboral> experienciaLaborals) {
-		this.experienciaLaborals = experienciaLaborals;
+	public void setExperienciasLaborales(List<ExperienciaLaboral> experienciasLaborales) {
+		this.experienciasLaborales = experienciasLaborales;
 	}
 
 	public ExperienciaLaboral addExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
-		getExperienciaLaborals().add(experienciaLaboral);
+		getExperienciasLaborales().add(experienciaLaboral);
 		experienciaLaboral.setPostulante(this);
 
 		return experienciaLaboral;
 	}
 
 	public ExperienciaLaboral removeExperienciaLaboral(ExperienciaLaboral experienciaLaboral) {
-		getExperienciaLaborals().remove(experienciaLaboral);
+		getExperienciasLaborales().remove(experienciaLaboral);
 		experienciaLaboral.setPostulante(null);
 
 		return experienciaLaboral;
@@ -231,6 +257,18 @@ public class Postulante implements Serializable {
 	}
 
 
+	//bi-directional many-to-one association to DimensionOrganizacion
+	@ManyToOne
+	@JoinColumn(name="fk_dior_id")
+	public DimensionOrganizacion getDimensionOrganizacion() {
+		return this.dimensionOrganizacion;
+	}
+
+	public void setDimensionOrganizacion(DimensionOrganizacion dimensionOrganizacion) {
+		this.dimensionOrganizacion = dimensionOrganizacion;
+	}
+
+
 	//bi-directional many-to-one association to EstadoCivil
 	@ManyToOne
 	@JoinColumn(name="fk_esci_id")
@@ -240,6 +278,30 @@ public class Postulante implements Serializable {
 
 	public void setEstadoCivil(EstadoCivil estadoCivil) {
 		this.estadoCivil = estadoCivil;
+	}
+
+
+	//bi-directional many-to-one association to Sector
+	@ManyToOne
+	@JoinColumn(name="fk_sect_id")
+	public Sector getSector() {
+		return this.sector;
+	}
+
+	public void setSector(Sector sector) {
+		this.sector = sector;
+	}
+
+
+	//bi-directional many-to-one association to TipoHorario
+	@ManyToOne
+	@JoinColumn(name="fk_tiho_id")
+	public TipoHorario getTipoHorario() {
+		return this.tipoHorario;
+	}
+
+	public void setTipoHorario(TipoHorario tipoHorario) {
+		this.tipoHorario = tipoHorario;
 	}
 
 
@@ -318,56 +380,6 @@ public class Postulante implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PostulantePrefBenef
-	@OneToMany(mappedBy="postulante")
-	public List<PostulantePrefBenef> getPostulantePrefBenefs() {
-		return this.postulantePrefBenefs;
-	}
-
-	public void setPostulantePrefBenefs(List<PostulantePrefBenef> postulantePrefBenefs) {
-		this.postulantePrefBenefs = postulantePrefBenefs;
-	}
-
-	public PostulantePrefBenef addPostulantePrefBenef(PostulantePrefBenef postulantePrefBenef) {
-		getPostulantePrefBenefs().add(postulantePrefBenef);
-		postulantePrefBenef.setPostulante(this);
-
-		return postulantePrefBenef;
-	}
-
-	public PostulantePrefBenef removePostulantePrefBenef(PostulantePrefBenef postulantePrefBenef) {
-		getPostulantePrefBenefs().remove(postulantePrefBenef);
-		postulantePrefBenef.setPostulante(null);
-
-		return postulantePrefBenef;
-	}
-
-
-	//bi-directional many-to-one association to PreferenciaPostulante
-	@OneToMany(mappedBy="postulante")
-	public List<PreferenciaPostulante> getPreferenciaPostulantes() {
-		return this.preferenciaPostulantes;
-	}
-
-	public void setPreferenciaPostulantes(List<PreferenciaPostulante> preferenciaPostulantes) {
-		this.preferenciaPostulantes = preferenciaPostulantes;
-	}
-
-	public PreferenciaPostulante addPreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
-		getPreferenciaPostulantes().add(preferenciaPostulante);
-		preferenciaPostulante.setPostulante(this);
-
-		return preferenciaPostulante;
-	}
-
-	public PreferenciaPostulante removePreferenciaPostulante(PreferenciaPostulante preferenciaPostulante) {
-		getPreferenciaPostulantes().remove(preferenciaPostulante);
-		preferenciaPostulante.setPostulante(null);
-
-		return preferenciaPostulante;
-	}
-
-
 	//bi-directional many-to-one association to Residencia
 	@OneToMany(mappedBy="postulante")
 	public List<Residencia> getResidencias() {
@@ -426,5 +438,41 @@ public class Postulante implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}	
+	}
+
+	//bi-directional many-to-one association to NivelPuesto
+	@ManyToOne
+	@JoinColumn(name="fk_nipu_id")
+	public NivelPuesto getNivelPuesto() {
+		return this.nivelPuesto;
+	}
+
+	public void setNivelPuesto(NivelPuesto nivelPuesto) {
+		this.nivelPuesto = nivelPuesto;
+	}
+
+	//bi-directional many-to-one association to PostulanteBeneficio
+	@OneToMany(mappedBy="postulante")
+	public List<PostulanteBeneficio> getPostulanteBeneficios() {
+		return this.postulanteBeneficios;
+	}
+
+	public void setPostulanteBeneficios(List<PostulanteBeneficio> postulanteBeneficios) {
+		this.postulanteBeneficios = postulanteBeneficios;
+	}
+
+	public PostulanteBeneficio addPostulanteBeneficio(PostulanteBeneficio postulanteBeneficio) {
+		getPostulanteBeneficios().add(postulanteBeneficio);
+		postulanteBeneficio.setPostulante(this);
+
+		return postulanteBeneficio;
+	}
+
+	public PostulanteBeneficio removePostulanteBeneficio(PostulanteBeneficio postulanteBeneficio) {
+		getPostulanteBeneficios().remove(postulanteBeneficio);
+		postulanteBeneficio.setPostulante(null);
+
+		return postulanteBeneficio;
+	}
+
 }

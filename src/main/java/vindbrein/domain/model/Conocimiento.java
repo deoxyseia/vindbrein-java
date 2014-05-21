@@ -17,10 +17,11 @@ public class Conocimiento implements Serializable {
 	private int conoId;
 	private String conoCode;
 	private String conoDescripcion;
+	private String conoEstado;
 	private String conoNombre;
 	private SubcategoriaConocimiento subcategoriaConocimiento;
 	private List<PostulanteConocimiento> postulanteConocimientos;
-	private List<PuestoPrefConocim> puestoPrefConocims;
+	private List<OfertaConocimiento> ofertaConocimientos;
 
 	public Conocimiento() {
 	}
@@ -55,6 +56,16 @@ public class Conocimiento implements Serializable {
 
 	public void setConoDescripcion(String conoDescripcion) {
 		this.conoDescripcion = conoDescripcion;
+	}
+
+
+	@Column(name="cono_estado")
+	public String getConoEstado() {
+		return this.conoEstado;
+	}
+
+	public void setConoEstado(String conoEstado) {
+		this.conoEstado = conoEstado;
 	}
 
 
@@ -105,28 +116,28 @@ public class Conocimiento implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoPrefConocim
+	//bi-directional many-to-one association to OfertaConocimiento
 	@OneToMany(mappedBy="conocimiento")
-	public List<PuestoPrefConocim> getPuestoPrefConocims() {
-		return this.puestoPrefConocims;
+	public List<OfertaConocimiento> getOfertaConocimientos() {
+		return this.ofertaConocimientos;
 	}
 
-	public void setPuestoPrefConocims(List<PuestoPrefConocim> puestoPrefConocims) {
-		this.puestoPrefConocims = puestoPrefConocims;
+	public void setOfertaConocimientos(List<OfertaConocimiento> ofertaConocimientos) {
+		this.ofertaConocimientos = ofertaConocimientos;
 	}
 
-	public PuestoPrefConocim addPuestoPrefConocim(PuestoPrefConocim puestoPrefConocim) {
-		getPuestoPrefConocims().add(puestoPrefConocim);
-		puestoPrefConocim.setConocimiento(this);
+	public OfertaConocimiento addOfertaConocimiento(OfertaConocimiento ofertaConocimiento) {
+		getOfertaConocimientos().add(ofertaConocimiento);
+		ofertaConocimiento.setConocimiento(this);
 
-		return puestoPrefConocim;
+		return ofertaConocimiento;
 	}
 
-	public PuestoPrefConocim removePuestoPrefConocim(PuestoPrefConocim puestoPrefConocim) {
-		getPuestoPrefConocims().remove(puestoPrefConocim);
-		puestoPrefConocim.setConocimiento(null);
+	public OfertaConocimiento removeOfertaConocimiento(OfertaConocimiento ofertaConocimiento) {
+		getOfertaConocimientos().remove(ofertaConocimiento);
+		ofertaConocimiento.setConocimiento(null);
 
-		return puestoPrefConocim;
+		return ofertaConocimiento;
 	}
 
 }

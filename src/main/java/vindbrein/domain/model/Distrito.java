@@ -18,9 +18,9 @@ public class Distrito implements Serializable {
 	private String distCode;
 	private String distNombre;
 	private Provincia provincia;
-	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
 	private List<Residencia> residencias;
 	private List<Sucursal> sucursals;
+	private List<OfertaLaboral> ofertaLaborals;
 
 	public Distrito() {
 	}
@@ -67,31 +67,6 @@ public class Distrito implements Serializable {
 
 	public void setProvincia(Provincia provincia) {
 		this.provincia = provincia;
-	}
-
-
-	//bi-directional many-to-one association to PreferenciaPuestoLaboral
-	@OneToMany(mappedBy="distrito")
-	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
-		return this.preferenciaPuestoLaborals;
-	}
-
-	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
-		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
-	}
-
-	public PreferenciaPuestoLaboral addPreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
-		getPreferenciaPuestoLaborals().add(preferenciaPuestoLaboral);
-		preferenciaPuestoLaboral.setDistrito(this);
-
-		return preferenciaPuestoLaboral;
-	}
-
-	public PreferenciaPuestoLaboral removePreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
-		getPreferenciaPuestoLaborals().remove(preferenciaPuestoLaboral);
-		preferenciaPuestoLaboral.setDistrito(null);
-
-		return preferenciaPuestoLaboral;
 	}
 
 
@@ -142,6 +117,31 @@ public class Distrito implements Serializable {
 		sucursal.setDistrito(null);
 
 		return sucursal;
+	}
+
+
+	//bi-directional many-to-one association to OfertaLaboral
+	@OneToMany(mappedBy="distrito")
+	public List<OfertaLaboral> getOfertaLaborals() {
+		return this.ofertaLaborals;
+	}
+
+	public void setOfertaLaborals(List<OfertaLaboral> ofertaLaborals) {
+		this.ofertaLaborals = ofertaLaborals;
+	}
+
+	public OfertaLaboral addOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		getOfertaLaborals().add(ofertaLaboral);
+		ofertaLaboral.setDistrito(this);
+
+		return ofertaLaboral;
+	}
+
+	public OfertaLaboral removeOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		getOfertaLaborals().remove(ofertaLaboral);
+		ofertaLaboral.setDistrito(null);
+
+		return ofertaLaboral;
 	}
 
 }

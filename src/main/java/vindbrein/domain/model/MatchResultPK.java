@@ -11,18 +11,18 @@ import javax.persistence.*;
 public class MatchResultPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
-	private int fkPulaId;
+	private int fkOflaId;
 	private int fkPostId;
 
 	public MatchResultPK() {
 	}
 
-	@Column(name="fk_pula_id", insertable=false, updatable=false)
-	public int getFkPulaId() {
-		return this.fkPulaId;
+	@Column(name="fk_ofla_id", insertable=false, updatable=false)
+	public int getFkOflaId() {
+		return this.fkOflaId;
 	}
-	public void setFkPulaId(int fkPulaId) {
-		this.fkPulaId = fkPulaId;
+	public void setFkOflaId(int fkOflaId) {
+		this.fkOflaId = fkOflaId;
 	}
 
 	@Column(name="fk_post_id", insertable=false, updatable=false)
@@ -42,14 +42,14 @@ public class MatchResultPK implements Serializable {
 		}
 		MatchResultPK castOther = (MatchResultPK)other;
 		return 
-			(this.fkPulaId == castOther.fkPulaId)
+			(this.fkOflaId == castOther.fkOflaId)
 			&& (this.fkPostId == castOther.fkPostId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.fkPulaId;
+		hash = hash * prime + this.fkOflaId;
 		hash = hash * prime + this.fkPostId;
 		
 		return hash;

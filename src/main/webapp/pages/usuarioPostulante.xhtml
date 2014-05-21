@@ -42,7 +42,7 @@
 
 						<h:outputText value="Fecha de nacimiento :" />
 						<p:calendar
-							value="#{usuarioManagedBean.usuarioPostulante.postulante.postFecNacimiento}"
+							value="#{usuarioManagedBean.usuarioPostulante.postulante.postFechaNacimiento}"
 							showOn="button" />
 					</h:panelGrid>
 					<p:fieldset legend="Datos de de autenticación">
@@ -53,11 +53,11 @@
 								converterMessage="Ingrese un valor válido" required="true"
 								requiredMessage="Su e-mail es necesario" />
 
-							<h:outputText value="Usuario :"></h:outputText>
-							<p:inputText
-								value="#{usuarioManagedBean.usuarioPostulante.usuaNombre}"
-								converterMessage="Ingrese un valor válido" required="true"
-								requiredMessage="Su e-mail es necesario" />
+<!-- 							<h:outputText value="Usuario :"></h:outputText> -->
+<!-- 							<p:inputText -->
+<!-- 								value="#{usuarioManagedBean.usuarioPostulante.usuaNombre}" -->
+<!-- 								converterMessage="Ingrese un valor válido" required="true" -->
+<!-- 								requiredMessage="Su e-mail es necesario" /> -->
 
 							<h:outputText value="Contraseña :"></h:outputText>
 							<p:inputText value="#{usuarioManagedBean.newPassword}"

@@ -2,7 +2,6 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -16,11 +15,10 @@ public class Sucursal implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int sucuId;
 	private String sucuDireccion;
+	private byte sucuPrincipal;
 	private String sucuTelefono;
-	private List<RespRrhh> respRrhhs;
-	private Organizacion organizacion;
 	private Distrito distrito;
-	private List<Puesto> puestos;
+	private Organizacion organizacion;
 
 	public Sucursal() {
 	}
@@ -48,6 +46,16 @@ public class Sucursal implements Serializable {
 	}
 
 
+	@Column(name="sucu_principal")
+	public byte getSucuPrincipal() {
+		return this.sucuPrincipal;
+	}
+
+	public void setSucuPrincipal(byte sucuPrincipal) {
+		this.sucuPrincipal = sucuPrincipal;
+	}
+
+
 	@Column(name="sucu_telefono")
 	public String getSucuTelefono() {
 		return this.sucuTelefono;
@@ -55,43 +63,6 @@ public class Sucursal implements Serializable {
 
 	public void setSucuTelefono(String sucuTelefono) {
 		this.sucuTelefono = sucuTelefono;
-	}
-
-
-	//bi-directional many-to-one association to RespRrhh
-	@OneToMany(mappedBy="sucursal")
-	public List<RespRrhh> getRespRrhhs() {
-		return this.respRrhhs;
-	}
-
-	public void setRespRrhhs(List<RespRrhh> respRrhhs) {
-		this.respRrhhs = respRrhhs;
-	}
-
-	public RespRrhh addRespRrhh(RespRrhh respRrhh) {
-		getRespRrhhs().add(respRrhh);
-		respRrhh.setSucursal(this);
-
-		return respRrhh;
-	}
-
-	public RespRrhh removeRespRrhh(RespRrhh respRrhh) {
-		getRespRrhhs().remove(respRrhh);
-		respRrhh.setSucursal(null);
-
-		return respRrhh;
-	}
-
-
-	//bi-directional many-to-one association to Organizacion
-	@ManyToOne
-	@JoinColumn(name="fk_org_id")
-	public Organizacion getOrganizacion() {
-		return this.organizacion;
-	}
-
-	public void setOrganizacion(Organizacion organizacion) {
-		this.organizacion = organizacion;
 	}
 
 
@@ -107,23 +78,15 @@ public class Sucursal implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to Puesto
-	@ManyToMany
-	@JoinTable(
-		name="sucursal_puesto"
-		, joinColumns={
-			@JoinColumn(name="fk_sucu_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="fk_pues_id")
-			}
-		)
-	public List<Puesto> getPuestos() {
-		return this.puestos;
+	//bi-directional many-to-one association to Organizacion
+	@ManyToOne
+	@JoinColumn(name="fk_orga_id")
+	public Organizacion getOrganizacion() {
+		return this.organizacion;
 	}
 
-	public void setPuestos(List<Puesto> puestos) {
-		this.puestos = puestos;
+	public void setOrganizacion(Organizacion organizacion) {
+		this.organizacion = organizacion;
 	}
 
 }

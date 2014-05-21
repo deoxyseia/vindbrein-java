@@ -17,10 +17,10 @@ public class Curso implements Serializable {
 	private int cursId;
 	private String cursDescripcion;
 	private String cursNombre;
-	private int cursNumCiclo;
+	private int cursNumeroCiclo;
 	private Estudio estudio;
 	private List<PostulanteCurso> postulanteCursos;
-	private List<PuestoPrefCurso> puestoPrefCursos;
+	private List<OfertaCurso> ofertaCursos;
 
 	public Curso() {
 	}
@@ -58,13 +58,13 @@ public class Curso implements Serializable {
 	}
 
 
-	@Column(name="curs_num_ciclo")
-	public int getCursNumCiclo() {
-		return this.cursNumCiclo;
+	@Column(name="curs_numero_ciclo")
+	public int getCursNumeroCiclo() {
+		return this.cursNumeroCiclo;
 	}
 
-	public void setCursNumCiclo(int cursNumCiclo) {
-		this.cursNumCiclo = cursNumCiclo;
+	public void setCursNumeroCiclo(int cursNumeroCiclo) {
+		this.cursNumeroCiclo = cursNumeroCiclo;
 	}
 
 
@@ -105,28 +105,28 @@ public class Curso implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoPrefCurso
+	//bi-directional many-to-one association to OfertaCurso
 	@OneToMany(mappedBy="curso")
-	public List<PuestoPrefCurso> getPuestoPrefCursos() {
-		return this.puestoPrefCursos;
+	public List<OfertaCurso> getOfertaCursos() {
+		return this.ofertaCursos;
 	}
 
-	public void setPuestoPrefCursos(List<PuestoPrefCurso> puestoPrefCursos) {
-		this.puestoPrefCursos = puestoPrefCursos;
+	public void setOfertaCursos(List<OfertaCurso> ofertaCursos) {
+		this.ofertaCursos = ofertaCursos;
 	}
 
-	public PuestoPrefCurso addPuestoPrefCurso(PuestoPrefCurso puestoPrefCurso) {
-		getPuestoPrefCursos().add(puestoPrefCurso);
-		puestoPrefCurso.setCurso(this);
+	public OfertaCurso addOfertaCurso(OfertaCurso ofertaCurso) {
+		getOfertaCursos().add(ofertaCurso);
+		ofertaCurso.setCurso(this);
 
-		return puestoPrefCurso;
+		return ofertaCurso;
 	}
 
-	public PuestoPrefCurso removePuestoPrefCurso(PuestoPrefCurso puestoPrefCurso) {
-		getPuestoPrefCursos().remove(puestoPrefCurso);
-		puestoPrefCurso.setCurso(null);
+	public OfertaCurso removeOfertaCurso(OfertaCurso ofertaCurso) {
+		getOfertaCursos().remove(ofertaCurso);
+		ofertaCurso.setCurso(null);
 
-		return puestoPrefCurso;
+		return ofertaCurso;
 	}
 
 }

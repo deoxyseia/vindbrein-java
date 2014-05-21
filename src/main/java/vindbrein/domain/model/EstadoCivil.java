@@ -16,9 +16,9 @@ public class EstadoCivil implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int esciId;
 	private String esciCode;
-	private String esciDescripcion;
+	private String esciNombre;
 	private List<Postulante> postulantes;
-	private List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals;
+	private List<OfertaLaboral> ofertaLaborals;
 
 	public EstadoCivil() {
 	}
@@ -46,13 +46,13 @@ public class EstadoCivil implements Serializable {
 	}
 
 
-	@Column(name="esci_descripcion")
-	public String getEsciDescripcion() {
-		return this.esciDescripcion;
+	@Column(name="esci_nombre")
+	public String getEsciNombre() {
+		return this.esciNombre;
 	}
 
-	public void setEsciDescripcion(String esciDescripcion) {
-		this.esciDescripcion = esciDescripcion;
+	public void setEsciNombre(String esciNombre) {
+		this.esciNombre = esciNombre;
 	}
 
 
@@ -81,28 +81,28 @@ public class EstadoCivil implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PreferenciaPuestoLaboral
+	//bi-directional many-to-one association to OfertaLaboral
 	@OneToMany(mappedBy="estadoCivil")
-	public List<PreferenciaPuestoLaboral> getPreferenciaPuestoLaborals() {
-		return this.preferenciaPuestoLaborals;
+	public List<OfertaLaboral> getOfertaLaborals() {
+		return this.ofertaLaborals;
 	}
 
-	public void setPreferenciaPuestoLaborals(List<PreferenciaPuestoLaboral> preferenciaPuestoLaborals) {
-		this.preferenciaPuestoLaborals = preferenciaPuestoLaborals;
+	public void setOfertaLaborals(List<OfertaLaboral> ofertaLaborals) {
+		this.ofertaLaborals = ofertaLaborals;
 	}
 
-	public PreferenciaPuestoLaboral addPreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
-		getPreferenciaPuestoLaborals().add(preferenciaPuestoLaboral);
-		preferenciaPuestoLaboral.setEstadoCivil(this);
+	public OfertaLaboral addOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		getOfertaLaborals().add(ofertaLaboral);
+		ofertaLaboral.setEstadoCivil(this);
 
-		return preferenciaPuestoLaboral;
+		return ofertaLaboral;
 	}
 
-	public PreferenciaPuestoLaboral removePreferenciaPuestoLaboral(PreferenciaPuestoLaboral preferenciaPuestoLaboral) {
-		getPreferenciaPuestoLaborals().remove(preferenciaPuestoLaboral);
-		preferenciaPuestoLaboral.setEstadoCivil(null);
+	public OfertaLaboral removeOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		getOfertaLaborals().remove(ofertaLaboral);
+		ofertaLaboral.setEstadoCivil(null);
 
-		return preferenciaPuestoLaboral;
+		return ofertaLaboral;
 	}
 
 }

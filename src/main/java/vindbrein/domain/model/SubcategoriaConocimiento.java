@@ -94,7 +94,7 @@ public class SubcategoriaConocimiento implements Serializable {
 
 	//bi-directional many-to-one association to CategoriaConocimiento
 	@ManyToOne
-	@JoinColumn(name="fk_cate_id")
+	@JoinColumn(name="fk_caco_id")
 	public CategoriaConocimiento getCategoriaConocimiento() {
 		return this.categoriaConocimiento;
 	}

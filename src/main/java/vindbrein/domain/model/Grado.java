@@ -17,6 +17,7 @@ public class Grado implements Serializable {
 	private int gradId;
 	private String gradCode;
 	private String gradDescripcion;
+	private String gradNombre;
 	private List<EstudioGenerico> estudioGenericos;
 
 	public Grado() {
@@ -52,6 +53,16 @@ public class Grado implements Serializable {
 
 	public void setGradDescripcion(String gradDescripcion) {
 		this.gradDescripcion = gradDescripcion;
+	}
+
+
+	@Column(name="grad_nombre")
+	public String getGradNombre() {
+		return this.gradNombre;
+	}
+
+	public void setGradNombre(String gradNombre) {
+		this.gradNombre = gradNombre;
 	}
 
 

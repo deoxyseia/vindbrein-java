@@ -55,7 +55,7 @@ public class PostulanteIdiomaDAO {
 	public ArrayList<PostulanteIdioma> getPostulanteIdiomas() {
 		ArrayList<PostulanteIdioma> list = (ArrayList<PostulanteIdioma>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from PostulanteIdioma order by idioma.idioDescripcion asc")
+				.createQuery("from PostulanteIdioma order by idioma.idioNombre asc")
 				.list();
 		return list;
 	}
@@ -63,7 +63,7 @@ public class PostulanteIdiomaDAO {
 	public ArrayList<PostulanteIdioma> getPostulanteIdiomasByPostulante(Postulante postulante) {
 		ArrayList<PostulanteIdioma> list = (ArrayList<PostulanteIdioma>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from PostulanteIdioma where postulante.postId=? order by idioma.idioDescripcion asc")
+				.createQuery("from PostulanteIdioma where postulante.postId=? order by idioma.idioNombre asc")
 				.setParameter(0, postulante.getPostId()).list();
 		
 		return list;

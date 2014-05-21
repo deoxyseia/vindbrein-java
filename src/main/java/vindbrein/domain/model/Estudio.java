@@ -15,7 +15,8 @@ import java.util.List;
 public class Estudio implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int estuId;
-	private String estudNombre;
+	private String estuEstado;
+	private String estuNombre;
 	private List<ActividadAcademica> actividadAcademicas;
 	private List<Curso> cursos;
 	private CentroEstudio centroEstudio;
@@ -37,13 +38,23 @@ public class Estudio implements Serializable {
 	}
 
 
-	@Column(name="estud_nombre")
-	public String getEstudNombre() {
-		return this.estudNombre;
+	@Column(name="estu_estado")
+	public String getEstuEstado() {
+		return this.estuEstado;
 	}
 
-	public void setEstudNombre(String estudNombre) {
-		this.estudNombre = estudNombre;
+	public void setEstuEstado(String estuEstado) {
+		this.estuEstado = estuEstado;
+	}
+
+
+	@Column(name="estu_nombre")
+	public String getEstuNombre() {
+		return this.estuNombre;
+	}
+
+	public void setEstuNombre(String estuNombre) {
+		this.estuNombre = estuNombre;
 	}
 
 

@@ -4,25 +4,25 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the sucursal_puesto database table.
+ * The primary key class for the organizacion_puesto database table.
  * 
  */
 @Embeddable
-public class SucursalPuestoPK implements Serializable {
+public class OrganizacionPuestoPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
-	private int fkSucuId;
+	private int fkOrgaId;
 	private int fkPuesId;
 
-	public SucursalPuestoPK() {
+	public OrganizacionPuestoPK() {
 	}
 
-	@Column(name="fk_sucu_id", insertable=false, updatable=false)
-	public int getFkSucuId() {
-		return this.fkSucuId;
+	@Column(name="fk_orga_id", insertable=false, updatable=false)
+	public int getFkOrgaId() {
+		return this.fkOrgaId;
 	}
-	public void setFkSucuId(int fkSucuId) {
-		this.fkSucuId = fkSucuId;
+	public void setFkOrgaId(int fkOrgaId) {
+		this.fkOrgaId = fkOrgaId;
 	}
 
 	@Column(name="fk_pues_id", insertable=false, updatable=false)
@@ -37,19 +37,19 @@ public class SucursalPuestoPK implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof SucursalPuestoPK)) {
+		if (!(other instanceof OrganizacionPuestoPK)) {
 			return false;
 		}
-		SucursalPuestoPK castOther = (SucursalPuestoPK)other;
+		OrganizacionPuestoPK castOther = (OrganizacionPuestoPK)other;
 		return 
-			(this.fkSucuId == castOther.fkSucuId)
+			(this.fkOrgaId == castOther.fkOrgaId)
 			&& (this.fkPuesId == castOther.fkPuesId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.fkSucuId;
+		hash = hash * prime + this.fkOrgaId;
 		hash = hash * prime + this.fkPuesId;
 		
 		return hash;

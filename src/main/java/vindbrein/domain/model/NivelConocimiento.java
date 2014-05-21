@@ -17,8 +17,9 @@ public class NivelConocimiento implements Serializable {
 	private int nicoId;
 	private String nicoCode;
 	private String nicoDescripcion;
+	private String nicoNombre;
 	private List<PostulanteConocimiento> postulanteConocimientos;
-	private List<PuestoPrefConocim> puestoPrefConocims;
+	private List<OfertaConocimiento> ofertaConocimientos;
 
 	public NivelConocimiento() {
 	}
@@ -56,6 +57,16 @@ public class NivelConocimiento implements Serializable {
 	}
 
 
+	@Column(name="nico_nombre")
+	public String getNicoNombre() {
+		return this.nicoNombre;
+	}
+
+	public void setNicoNombre(String nicoNombre) {
+		this.nicoNombre = nicoNombre;
+	}
+
+
 	//bi-directional many-to-one association to PostulanteConocimiento
 	@OneToMany(mappedBy="nivelConocimiento")
 	public List<PostulanteConocimiento> getPostulanteConocimientos() {
@@ -81,28 +92,28 @@ public class NivelConocimiento implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoPrefConocim
+	//bi-directional many-to-one association to OfertaConocimiento
 	@OneToMany(mappedBy="nivelConocimiento")
-	public List<PuestoPrefConocim> getPuestoPrefConocims() {
-		return this.puestoPrefConocims;
+	public List<OfertaConocimiento> getOfertaConocimientos() {
+		return this.ofertaConocimientos;
 	}
 
-	public void setPuestoPrefConocims(List<PuestoPrefConocim> puestoPrefConocims) {
-		this.puestoPrefConocims = puestoPrefConocims;
+	public void setOfertaConocimientos(List<OfertaConocimiento> ofertaConocimientos) {
+		this.ofertaConocimientos = ofertaConocimientos;
 	}
 
-	public PuestoPrefConocim addPuestoPrefConocim(PuestoPrefConocim puestoPrefConocim) {
-		getPuestoPrefConocims().add(puestoPrefConocim);
-		puestoPrefConocim.setNivelConocimiento(this);
+	public OfertaConocimiento addOfertaConocimiento(OfertaConocimiento ofertaConocimiento) {
+		getOfertaConocimientos().add(ofertaConocimiento);
+		ofertaConocimiento.setNivelConocimiento(this);
 
-		return puestoPrefConocim;
+		return ofertaConocimiento;
 	}
 
-	public PuestoPrefConocim removePuestoPrefConocim(PuestoPrefConocim puestoPrefConocim) {
-		getPuestoPrefConocims().remove(puestoPrefConocim);
-		puestoPrefConocim.setNivelConocimiento(null);
+	public OfertaConocimiento removeOfertaConocimiento(OfertaConocimiento ofertaConocimiento) {
+		getOfertaConocimientos().remove(ofertaConocimiento);
+		ofertaConocimiento.setNivelConocimiento(null);
 
-		return puestoPrefConocim;
+		return ofertaConocimiento;
 	}
 
 }

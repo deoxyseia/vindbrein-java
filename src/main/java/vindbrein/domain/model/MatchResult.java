@@ -2,6 +2,7 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -14,10 +15,12 @@ import javax.persistence.*;
 public class MatchResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private MatchResultPK id;
-	private String mareFlagRecomendado;
-	private String mareFlagSeleccionado;
-	private PuestoLaboral puestoLaboral;
+	private Date mareFecha;
+	private byte mareFlagRecomendado;
+	private byte mareFlagSeleccionado;
+	private byte mareFlagVisitado;
 	private Postulante postulante;
+	private OfertaLaboral ofertaLaboral;
 
 	public MatchResult() {
 	}
@@ -33,47 +36,68 @@ public class MatchResult implements Serializable {
 	}
 
 
+	@Temporal(TemporalType.DATE)
+	@Column(name="mare_fecha")
+	public Date getMareFecha() {
+		return this.mareFecha;
+	}
+
+	public void setMareFecha(Date mareFecha) {
+		this.mareFecha = mareFecha;
+	}
+
+
 	@Column(name="mare_flag_recomendado")
-	public String getMareFlagRecomendado() {
+	public byte getMareFlagRecomendado() {
 		return this.mareFlagRecomendado;
 	}
 
-	public void setMareFlagRecomendado(String mareFlagRecomendado) {
+	public void setMareFlagRecomendado(byte mareFlagRecomendado) {
 		this.mareFlagRecomendado = mareFlagRecomendado;
 	}
 
 
 	@Column(name="mare_flag_seleccionado")
-	public String getMareFlagSeleccionado() {
+	public byte getMareFlagSeleccionado() {
 		return this.mareFlagSeleccionado;
 	}
 
-	public void setMareFlagSeleccionado(String mareFlagSeleccionado) {
+	public void setMareFlagSeleccionado(byte mareFlagSeleccionado) {
 		this.mareFlagSeleccionado = mareFlagSeleccionado;
 	}
 
 
-	//bi-directional many-to-one association to PuestoLaboral
-	@ManyToOne
-	@JoinColumn(name="fk_pula_id",insertable=false, updatable=false)
-	public PuestoLaboral getPuestoLaboral() {
-		return this.puestoLaboral;
+	@Column(name="mare_flag_visitado")
+	public byte getMareFlagVisitado() {
+		return this.mareFlagVisitado;
 	}
 
-	public void setPuestoLaboral(PuestoLaboral puestoLaboral) {
-		this.puestoLaboral = puestoLaboral;
+	public void setMareFlagVisitado(byte mareFlagVisitado) {
+		this.mareFlagVisitado = mareFlagVisitado;
 	}
 
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id",insertable=false, updatable=false)
+	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
 	public Postulante getPostulante() {
 		return this.postulante;
 	}
 
 	public void setPostulante(Postulante postulante) {
 		this.postulante = postulante;
+	}
+
+
+	//bi-directional many-to-one association to OfertaLaboral
+	@ManyToOne
+	@JoinColumn(name="fk_ofla_id", insertable=false, updatable=false)
+	public OfertaLaboral getOfertaLaboral() {
+		return this.ofertaLaboral;
+	}
+
+	public void setOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		this.ofertaLaboral = ofertaLaboral;
 	}
 
 }

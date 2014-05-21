@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vindbrein.dao.ConocimientoDAO;
+import vindbrein.dao.NivelConocimientoDAO;
 import vindbrein.dao.PostulanteConocimientoDAO;
 import vindbrein.domain.model.Conocimiento;
+import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.PostulanteConocimiento;
+import vindbrein.domain.model.PostulanteConocimientoPK;
 import vindbrein.service.ConocimientoService;
 
 @Service
@@ -20,6 +23,9 @@ public class ConocimientoServiceImpl implements ConocimientoService, Serializabl
 	private static final long serialVersionUID = 1L;
 	@Autowired	
 	ConocimientoDAO conocimientoDAO;
+	
+	@Autowired	
+	NivelConocimientoDAO nivelConocimientoDAO;
 	
 	@Autowired	
 	PostulanteConocimientoDAO postulanteConocimientoDAO;
@@ -48,19 +54,47 @@ public class ConocimientoServiceImpl implements ConocimientoService, Serializabl
 	}
 	
 	@Transactional(readOnly = false)
+	public void addNivelConocimiento(NivelConocimiento nivelConocimiento){
+		getNivelConocimientoDAO().addNivelConocimiento(nivelConocimiento);
+	}
+
+	@Transactional(readOnly = false)
+	public void updateNivelConocimiento(NivelConocimiento nivelConocimiento){
+		getNivelConocimientoDAO().updateNivelConocimiento(nivelConocimiento);
+	}
+
+	@Transactional(readOnly = false)
+	public void deleteNivelConocimiento(NivelConocimiento nivelConocimiento){
+		getNivelConocimientoDAO().deleteNivelConocimiento(nivelConocimiento);
+	}
+
+	public NivelConocimiento getNivelConocimientoById(int id){
+		return getNivelConocimientoDAO().getNivelConocimientoById(id);
+	}
+
+	public ArrayList<NivelConocimiento> getNivelesConocimiento(){
+		return getNivelConocimientoDAO().getNivelesConocimiento();
+	}
+	
+	@Transactional(readOnly = false)
 	public void addConocimientoToPostulante(PostulanteConocimiento postulanteConocimiento){
 		postulanteConocimiento.getId().setFkConoId(postulanteConocimiento.getConocimiento().getConoId());
 		postulanteConocimiento.getId().setFkPostId(postulanteConocimiento.getPostulante().getPostId());
+		postulanteConocimiento.getId().setFkNicoId(postulanteConocimiento.getNivelConocimiento().getNicoId());
 		
 		getPostulanteConocimientoDAO().addPostulanteConocimiento(postulanteConocimiento);
 	}
 	
+	
+	//incompleto, no funciona
 	@Transactional(readOnly = false)
 	public void updateConocimientoToPostulante(PostulanteConocimiento postulanteConocimiento){
+		getPostulanteConocimientoDAO().deletePostulanteConocimiento(postulanteConocimiento);
+		
 		postulanteConocimiento.getId().setFkConoId(postulanteConocimiento.getConocimiento().getConoId());
 		postulanteConocimiento.getId().setFkPostId(postulanteConocimiento.getPostulante().getPostId());
 		
-		getPostulanteConocimientoDAO().updatePostulanteConocimiento(postulanteConocimiento);
+		getPostulanteConocimientoDAO().addPostulanteConocimiento(postulanteConocimiento);
 	}
 	
 	@Transactional(readOnly = false)
@@ -85,5 +119,13 @@ public class ConocimientoServiceImpl implements ConocimientoService, Serializabl
 	public void setPostulanteConocimientoDAO(
 			PostulanteConocimientoDAO postulanteConocimientoDAO) {
 		this.postulanteConocimientoDAO = postulanteConocimientoDAO;
-	}	
+	}
+
+	public NivelConocimientoDAO getNivelConocimientoDAO() {
+		return nivelConocimientoDAO;
+	}
+
+	public void setNivelConocimientoDAO(NivelConocimientoDAO nivelConocimientoDAO) {
+		this.nivelConocimientoDAO = nivelConocimientoDAO;
+	}
 }

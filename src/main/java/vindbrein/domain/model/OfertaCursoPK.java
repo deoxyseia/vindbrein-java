@@ -4,25 +4,25 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 /**
- * The primary key class for the puesto_pref_curso database table.
+ * The primary key class for the oferta_curso database table.
  * 
  */
 @Embeddable
-public class PuestoPrefCursoPK implements Serializable {
+public class OfertaCursoPK implements Serializable {
 	//default serial version id, required for serializable classes.
 	private static final long serialVersionUID = 1L;
-	private int fkPrpuId;
+	private int fkOflaId;
 	private int fkCursId;
 
-	public PuestoPrefCursoPK() {
+	public OfertaCursoPK() {
 	}
 
-	@Column(name="fk_prpu_id", insertable=false, updatable=false)
-	public int getFkPrpuId() {
-		return this.fkPrpuId;
+	@Column(name="fk_ofla_id", insertable=false, updatable=false)
+	public int getFkOflaId() {
+		return this.fkOflaId;
 	}
-	public void setFkPrpuId(int fkPrpuId) {
-		this.fkPrpuId = fkPrpuId;
+	public void setFkOflaId(int fkOflaId) {
+		this.fkOflaId = fkOflaId;
 	}
 
 	@Column(name="fk_curs_id", insertable=false, updatable=false)
@@ -37,19 +37,19 @@ public class PuestoPrefCursoPK implements Serializable {
 		if (this == other) {
 			return true;
 		}
-		if (!(other instanceof PuestoPrefCursoPK)) {
+		if (!(other instanceof OfertaCursoPK)) {
 			return false;
 		}
-		PuestoPrefCursoPK castOther = (PuestoPrefCursoPK)other;
+		OfertaCursoPK castOther = (OfertaCursoPK)other;
 		return 
-			(this.fkPrpuId == castOther.fkPrpuId)
+			(this.fkOflaId == castOther.fkOflaId)
 			&& (this.fkCursId == castOther.fkCursId);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
-		hash = hash * prime + this.fkPrpuId;
+		hash = hash * prime + this.fkOflaId;
 		hash = hash * prime + this.fkCursId;
 		
 		return hash;

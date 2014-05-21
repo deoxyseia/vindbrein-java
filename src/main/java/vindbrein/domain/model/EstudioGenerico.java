@@ -20,7 +20,7 @@ public class EstudioGenerico implements Serializable {
 	private String esgeNombre;
 	private List<Estudio> estudios;
 	private Grado grado;
-	private List<PuestoPrefEstudio> puestoPrefEstudios;
+	private List<OfertaEstudio> ofertaEstudios;
 
 	public EstudioGenerico() {
 	}
@@ -105,28 +105,28 @@ public class EstudioGenerico implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to PuestoPrefEstudio
+	//bi-directional many-to-one association to OfertaEstudio
 	@OneToMany(mappedBy="estudioGenerico")
-	public List<PuestoPrefEstudio> getPuestoPrefEstudios() {
-		return this.puestoPrefEstudios;
+	public List<OfertaEstudio> getOfertaEstudios() {
+		return this.ofertaEstudios;
 	}
 
-	public void setPuestoPrefEstudios(List<PuestoPrefEstudio> puestoPrefEstudios) {
-		this.puestoPrefEstudios = puestoPrefEstudios;
+	public void setOfertaEstudios(List<OfertaEstudio> ofertaEstudios) {
+		this.ofertaEstudios = ofertaEstudios;
 	}
 
-	public PuestoPrefEstudio addPuestoPrefEstudio(PuestoPrefEstudio puestoPrefEstudio) {
-		getPuestoPrefEstudios().add(puestoPrefEstudio);
-		puestoPrefEstudio.setEstudioGenerico(this);
+	public OfertaEstudio addOfertaEstudio(OfertaEstudio ofertaEstudio) {
+		getOfertaEstudios().add(ofertaEstudio);
+		ofertaEstudio.setEstudioGenerico(this);
 
-		return puestoPrefEstudio;
+		return ofertaEstudio;
 	}
 
-	public PuestoPrefEstudio removePuestoPrefEstudio(PuestoPrefEstudio puestoPrefEstudio) {
-		getPuestoPrefEstudios().remove(puestoPrefEstudio);
-		puestoPrefEstudio.setEstudioGenerico(null);
+	public OfertaEstudio removeOfertaEstudio(OfertaEstudio ofertaEstudio) {
+		getOfertaEstudios().remove(ofertaEstudio);
+		ofertaEstudio.setEstudioGenerico(null);
 
-		return puestoPrefEstudio;
+		return ofertaEstudio;
 	}
 
 }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import vindbrein.dao.OrganizacionDAO;
 import vindbrein.dao.PostulanteDAO;
-import vindbrein.dao.RespRrhhDAO;
+import vindbrein.dao.ReclutadorDAO;
 import vindbrein.dao.SucursalDAO;
 import vindbrein.dao.UsuarioDAO;
 import vindbrein.domain.model.Usuario;
@@ -36,7 +36,7 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	SucursalDAO sucursalDAO;
 	
 	@Autowired
-	RespRrhhDAO respRrhhDAO;
+	ReclutadorDAO reclutadorDAO;
 	
 	
 	@Transactional(readOnly = false)
@@ -77,9 +77,9 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	
 	@Transactional(readOnly = false)
 	public void addUsuarioOrganizacion(Usuario usuario){
-		getOrganizacionDAO().addOrganizacion(usuario.getRespRrhh().getSucursal().getOrganizacion());
-		getSucursalDAO().addSucursal(usuario.getRespRrhh().getSucursal());
-		getRespRrhhDAO().addRespRrhh(usuario.getRespRrhh());
+		getOrganizacionDAO().addOrganizacion(usuario.getReclutador().getOrganizacion());
+		getSucursalDAO().addSucursal(usuario.getReclutador().getOrganizacion().getSucursales().get(0));
+		getReclutadorDAO().addReclutador(usuario.getReclutador());
 		getUsuarioDAO().addUsuario(usuario);
 	}
 	
@@ -117,11 +117,11 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 		this.sucursalDAO = sucursalDAO;
 	}
 
-	public RespRrhhDAO getRespRrhhDAO() {
-		return respRrhhDAO;
+	public ReclutadorDAO getReclutadorDAO() {
+		return reclutadorDAO;
 	}
 
-	public void setRespRrhhDAO(RespRrhhDAO respRrhhDAO) {
-		this.respRrhhDAO = respRrhhDAO;
-	}	
+	public void setReclutadorDAO(ReclutadorDAO reclutadorDAO) {
+		this.reclutadorDAO = reclutadorDAO;
+	}
 }

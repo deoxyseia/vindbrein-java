@@ -2,6 +2,7 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -14,8 +15,8 @@ import javax.persistence.*;
 public class ActividadAcademica implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int acacId;
-	private String acacFechaFinal;
-	private String acacFechaInicio;
+	private Date acacFechaFinal;
+	private Date acacFechaInicio;
 	private int acacPorcentajeAvance;
 	private Estudio estudio;
 	private Postulante postulante;
@@ -36,22 +37,24 @@ public class ActividadAcademica implements Serializable {
 	}
 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="acac_fecha_final")
-	public String getAcacFechaFinal() {
+	public Date getAcacFechaFinal() {
 		return this.acacFechaFinal;
 	}
 
-	public void setAcacFechaFinal(String acacFechaFinal) {
+	public void setAcacFechaFinal(Date acacFechaFinal) {
 		this.acacFechaFinal = acacFechaFinal;
 	}
 
 
+	@Temporal(TemporalType.DATE)
 	@Column(name="acac_fecha_inicio")
-	public String getAcacFechaInicio() {
+	public Date getAcacFechaInicio() {
 		return this.acacFechaInicio;
 	}
 
-	public void setAcacFechaInicio(String acacFechaInicio) {
+	public void setAcacFechaInicio(Date acacFechaInicio) {
 		this.acacFechaInicio = acacFechaInicio;
 	}
 

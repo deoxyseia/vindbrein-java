@@ -2,6 +2,7 @@ package vindbrein.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 
 /**
@@ -14,7 +15,7 @@ import javax.persistence.*;
 public class PostulanteCurso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private PostulanteCursoPK id;
-	private int nota;
+	private BigDecimal pocuNota;
 	private Curso curso;
 	private Postulante postulante;
 
@@ -32,18 +33,19 @@ public class PostulanteCurso implements Serializable {
 	}
 
 
-	public int getNota() {
-		return this.nota;
+	@Column(name="pocu_nota")
+	public BigDecimal getPocuNota() {
+		return this.pocuNota;
 	}
 
-	public void setNota(int nota) {
-		this.nota = nota;
+	public void setPocuNota(BigDecimal pocuNota) {
+		this.pocuNota = pocuNota;
 	}
 
 
 	//bi-directional many-to-one association to Curso
 	@ManyToOne
-	@JoinColumn(name="fk_curs_id",insertable=false, updatable=false)
+	@JoinColumn(name="fk_curs_id", insertable=false, updatable=false)
 	public Curso getCurso() {
 		return this.curso;
 	}
@@ -55,7 +57,7 @@ public class PostulanteCurso implements Serializable {
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id",insertable=false, updatable=false)
+	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
 	public Postulante getPostulante() {
 		return this.postulante;
 	}

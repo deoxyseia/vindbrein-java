@@ -5,29 +5,29 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the postulante_idioma database table.
+ * The persistent class for the oferta_idioma database table.
  * 
  */
 @Entity
-@Table(name="postulante_idioma")
-@NamedQuery(name="PostulanteIdioma.findAll", query="SELECT p FROM PostulanteIdioma p")
-public class PostulanteIdioma implements Serializable {
+@Table(name="oferta_idioma")
+@NamedQuery(name="OfertaIdioma.findAll", query="SELECT o FROM OfertaIdioma o")
+public class OfertaIdioma implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private PostulanteIdiomaPK id;
+	private OfertaIdiomaPK id;
 	private Idioma idioma;
 	private NivelIdioma nivelIdioma;
-	private Postulante postulante;
+	private OfertaLaboral ofertaLaboral;
 
-	public PostulanteIdioma() {
+	public OfertaIdioma() {
 	}
 
 
 	@EmbeddedId
-	public PostulanteIdiomaPK getId() {
+	public OfertaIdiomaPK getId() {
 		return this.id;
 	}
 
-	public void setId(PostulanteIdiomaPK id) {
+	public void setId(OfertaIdiomaPK id) {
 		this.id = id;
 	}
 
@@ -56,15 +56,15 @@ public class PostulanteIdioma implements Serializable {
 	}
 
 
-	//bi-directional many-to-one association to Postulante
+	//bi-directional many-to-one association to OfertaLaboral
 	@ManyToOne
-	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
-	public Postulante getPostulante() {
-		return this.postulante;
+	@JoinColumn(name="fk_ofla_id", insertable=false, updatable=false)
+	public OfertaLaboral getOfertaLaboral() {
+		return this.ofertaLaboral;
 	}
 
-	public void setPostulante(Postulante postulante) {
-		this.postulante = postulante;
+	public void setOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		this.ofertaLaboral = ofertaLaboral;
 	}
 
 }
