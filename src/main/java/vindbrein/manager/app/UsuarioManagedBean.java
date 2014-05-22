@@ -31,8 +31,8 @@ import vindbrein.domain.model.Sector;
 import vindbrein.domain.model.Sucursal;
 import vindbrein.domain.model.Usuario;
 import vindbrein.service.DepartamentoService;
-import vindbrein.service.DimensionOrganizacionService;
 import vindbrein.service.DistritoService;
+import vindbrein.service.OrganizacionService;
 import vindbrein.service.ProvinciaService;
 import vindbrein.service.SectorService;
 import vindbrein.service.UsuarioService;
@@ -75,8 +75,8 @@ public class UsuarioManagedBean implements Serializable {
 	SectorService sectorService;
 	
 	@Autowired
-	@Qualifier("dimensionOrganizacionServiceImpl")
-	DimensionOrganizacionService dimensionOrganizacionService;
+	@Qualifier("organizacionServiceImpl")
+	OrganizacionService organizacionService;
 	
 	@Autowired
 	@Qualifier("departamentoServiceImpl")
@@ -126,7 +126,7 @@ public class UsuarioManagedBean implements Serializable {
 		
 		//otros datos necesario
 		sectores = getSectorService().getSectores();		
-		dimensionesOrganizacion = getDimensionOrganizacionService().getDimensionesOrganizacion();
+		dimensionesOrganizacion = organizacionService.getDimensionesOrganizacion();
 		departamentos = getDepartamentoService().getDepartamentos();
 	}
 		
@@ -317,16 +317,7 @@ public class UsuarioManagedBean implements Serializable {
 	public void setDimensionesOrganizacion(
 			ArrayList<DimensionOrganizacion> dimensionesOrganizacion) {
 		this.dimensionesOrganizacion = dimensionesOrganizacion;
-	}
-
-	public DimensionOrganizacionService getDimensionOrganizacionService() {
-		return dimensionOrganizacionService;
-	}
-
-	public void setDimensionOrganizacionService(
-			DimensionOrganizacionService dimensionOrganizacionService) {
-		this.dimensionOrganizacionService = dimensionOrganizacionService;
-	}
+	}	
 
 	public ArrayList<Departamento> getDepartamentos() {
 		return departamentos;

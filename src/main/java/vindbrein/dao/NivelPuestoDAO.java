@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import vindbrein.domain.model.Beneficio;
+import vindbrein.domain.model.NivelPuesto;
 
 @Repository
-public class BeneficioDAO implements Serializable{
+public class NivelPuestoDAO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	@Autowired
@@ -27,34 +27,34 @@ public class BeneficioDAO implements Serializable{
         this.sessionFactory = sessionFactory;
     }
 		
-	public void addBeneficio(Beneficio beneficio) {
-		getSessionFactory().getCurrentSession().save(beneficio);		
+	public void addNivelPuesto(NivelPuesto nivelPuesto) {
+		getSessionFactory().getCurrentSession().save(nivelPuesto);		
 	}
 
-	public void updateBeneficio(Beneficio beneficio) {
-		getSessionFactory().getCurrentSession().update(beneficio);		
+	public void updateNivelPuesto(NivelPuesto nivelPuesto) {
+		getSessionFactory().getCurrentSession().update(nivelPuesto);		
 	}
 
-	public void deleteBeneficio(Beneficio beneficio) {
-		getSessionFactory().getCurrentSession().delete(beneficio);		
+	public void deleteNivelPuesto(NivelPuesto nivelPuesto) {
+		getSessionFactory().getCurrentSession().delete(nivelPuesto);		
 	}
 
-	public Beneficio getBeneficioById(int id) {
+	public NivelPuesto getNivelPuestoById(int id) {
 		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from Beneficio where beneId=?")
+				.createQuery("from NivelPuesto where nipuId=?")
 		        .setParameter(0, id).list();
 		
 		if(list.size()!=0){
-			return (Beneficio)list.get(0);
+			return (NivelPuesto)list.get(0);
 		} else {
 			return null;
 		}
 	}
 
-	public ArrayList<Beneficio> getBeneficios() {
-		ArrayList<Beneficio> list = (ArrayList<Beneficio>) getSessionFactory()
+	public ArrayList<NivelPuesto> getNivelesPuesto() {
+		ArrayList<NivelPuesto> list = (ArrayList<NivelPuesto>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from Beneficio order by beneNombre asc")
+				.createQuery("from NivelPuesto order by nipuNombre asc")
 				.list();
 		return list;
 	}	

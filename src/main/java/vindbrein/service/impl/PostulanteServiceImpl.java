@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import vindbrein.dao.ActividadAcademicaDAO;
 import vindbrein.dao.ExperienciaLaboralDAO;
+import vindbrein.dao.PostulanteBeneficioDAO;
 import vindbrein.dao.PostulanteConocimientoDAO;
 import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.PostulanteIdiomaDAO;
@@ -42,6 +43,9 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	
 	@Autowired	
 	PostulanteIdiomaDAO postulanteIdiomaDAO;
+	
+	@Autowired	
+	PostulanteBeneficioDAO postulanteBeneficioDAO;
 	
 	@Transactional(readOnly = false)
 	public void addPostulante(Postulante postulante) {
@@ -80,6 +84,7 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 		postulante.setActividadesAcademicas(getActividadAcademicaDAO().getActividadesAcademicasByPostulante(postulante));
 		postulante.setExperienciasLaborales(getExperienciaLaboralDAO().getExperienciasLaboralesByPostulante(postulante));
 		postulante.setPostulanteIdiomas(getPostulanteIdiomaDAO().getPostulanteIdiomasByPostulante(postulante));
+		postulante.setPostulanteBeneficios(getPostulanteBeneficioDAO().getPostulanteBeneficioByPostulante(postulante));
 		
 		return postulante;
 	}
@@ -141,5 +146,14 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 
 	public void setPostulanteIdiomaDAO(PostulanteIdiomaDAO postulanteIdiomaDAO) {
 		this.postulanteIdiomaDAO = postulanteIdiomaDAO;
-	}	
+	}
+
+	public PostulanteBeneficioDAO getPostulanteBeneficioDAO() {
+		return postulanteBeneficioDAO;
+	}
+
+	public void setPostulanteBeneficioDAO(
+			PostulanteBeneficioDAO postulanteBeneficioDAO) {
+		this.postulanteBeneficioDAO = postulanteBeneficioDAO;
+	}		
 }

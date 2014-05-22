@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NamedQuery(name="PostulanteBeneficio.findAll", query="SELECT p FROM PostulanteBeneficio p")
 public class PostulanteBeneficio implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private int fkBeneId;
+	private PostulanteBeneficioPK id;
 	private Beneficio beneficio;
 	private Postulante postulante;
 
@@ -21,21 +21,19 @@ public class PostulanteBeneficio implements Serializable {
 	}
 
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="fk_bene_id")
-	public int getFkBeneId() {
-		return this.fkBeneId;
+	@EmbeddedId
+	public PostulanteBeneficioPK getId() {
+		return this.id;
 	}
 
-	public void setFkBeneId(int fkBeneId) {
-		this.fkBeneId = fkBeneId;
+	public void setId(PostulanteBeneficioPK id) {
+		this.id = id;
 	}
 
 
 	//bi-directional one-to-one association to Beneficio
 	@OneToOne
-	@JoinColumn(name="fk_bene_id")
+	@JoinColumn(name="fk_bene_id", insertable=false, updatable=false)
 	public Beneficio getBeneficio() {
 		return this.beneficio;
 	}
@@ -47,7 +45,7 @@ public class PostulanteBeneficio implements Serializable {
 
 	//bi-directional many-to-one association to Postulante
 	@ManyToOne
-	@JoinColumn(name="fk_post_id")
+	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
 	public Postulante getPostulante() {
 		return this.postulante;
 	}

@@ -17,6 +17,7 @@ import vindbrein.domain.model.ActividadAcademica;
 import vindbrein.domain.model.Beneficio;
 import vindbrein.domain.model.Conocimiento;
 import vindbrein.domain.model.Departamento;
+import vindbrein.domain.model.DimensionOrganizacion;
 import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.EstadoCivil;
 import vindbrein.domain.model.Estudio;
@@ -24,9 +25,12 @@ import vindbrein.domain.model.ExperienciaLaboral;
 import vindbrein.domain.model.Idioma;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.NivelIdioma;
+import vindbrein.domain.model.NivelPuesto;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Postulante;
+import vindbrein.domain.model.PostulanteBeneficio;
+import vindbrein.domain.model.PostulanteBeneficioPK;
 import vindbrein.domain.model.PostulanteConocimiento;
 import vindbrein.domain.model.PostulanteConocimientoPK;
 import vindbrein.domain.model.PostulanteIdioma;
@@ -34,7 +38,9 @@ import vindbrein.domain.model.PostulanteIdiomaPK;
 import vindbrein.domain.model.Provincia;
 import vindbrein.domain.model.Puesto;
 import vindbrein.domain.model.Residencia;
+import vindbrein.domain.model.Sector;
 import vindbrein.domain.model.Telefono;
+import vindbrein.domain.model.TipoHorario;
 import vindbrein.service.ActividadAcademicaService;
 import vindbrein.service.BeneficioService;
 import vindbrein.service.ConocimientoService;
@@ -49,7 +55,9 @@ import vindbrein.service.PostulanteService;
 import vindbrein.service.ProvinciaService;
 import vindbrein.service.PuestoService;
 import vindbrein.service.ResidenciaService;
+import vindbrein.service.SectorService;
 import vindbrein.service.TelefonoService;
+import vindbrein.service.TipoHorarioService;
 
 @Controller
 @Scope("session")
@@ -68,7 +76,8 @@ public class PostulanteManagedBean implements Serializable{
 	private PostulanteConocimiento newPostulanteConocimiento;
 	private ExperienciaLaboral newExperienciaLaboral;
 	private ActividadAcademica newActividadAcademica;
-	private PostulanteIdioma newPostulanteIdioma;	
+	private PostulanteIdioma newPostulanteIdioma;
+	private PostulanteBeneficio newPostulanteBeneficio;
 	
 			
 	@Autowired
@@ -89,47 +98,55 @@ public class PostulanteManagedBean implements Serializable{
 	
 	@Autowired
 	@Qualifier("provinciaServiceImpl")
-	ProvinciaService provinciaService;
+	private ProvinciaService provinciaService;
 	
 	@Autowired
 	@Qualifier("distritoServiceImpl")
-	DistritoService distritoService;
+	private DistritoService distritoService;
 	
 	@Autowired
 	@Qualifier("conocimientoServiceImpl")
-	ConocimientoService conocimientoService;
+	private ConocimientoService conocimientoService;
 		
 	@Autowired
 	@Qualifier("puestoServiceImpl")
-	PuestoService puestoService;
+	private PuestoService puestoService;
 	
 	@Autowired
 	@Qualifier("experienciaLaboralServiceImpl")
-	ExperienciaLaboralService experienciaLaboralService;
+	private ExperienciaLaboralService experienciaLaboralService;
 	
 	@Autowired
 	@Qualifier("estadoCivilServiceImpl")
-	EstadoCivilService estadoCivilService;
+	private EstadoCivilService estadoCivilService;
 	
 	@Autowired
 	@Qualifier("beneficioServiceImpl")
-	BeneficioService beneficioService;
+	private BeneficioService beneficioService;
 	
 	@Autowired
 	@Qualifier("organizacionServiceImpl")
-	OrganizacionService organizacionService;
+	private OrganizacionService organizacionService;
 	
 	@Autowired
 	@Qualifier("actividadAcademicaServiceImpl")
-	ActividadAcademicaService actividadAcademicaService;
+	private ActividadAcademicaService actividadAcademicaService;
 	
 	@Autowired
 	@Qualifier("estudioServiceImpl")
-	EstudioService estudioService;
+	private EstudioService estudioService;
 	
 	@Autowired
 	@Qualifier("idiomaServiceImpl")
-	IdiomaService idiomaService;
+	private IdiomaService idiomaService;
+	
+	@Autowired
+	@Qualifier("tipoHorarioServiceImpl")
+	private TipoHorarioService tipoHorarioService;
+	
+	@Autowired
+	@Qualifier("sectorServiceImpl")
+	private SectorService sectorService;
 	
 	
 	// datos maestros	
@@ -145,6 +162,10 @@ public class PostulanteManagedBean implements Serializable{
 	private ArrayList<Estudio> estudios;
 	private ArrayList<Idioma> idiomas;
 	private ArrayList<NivelIdioma> nivelesIdioma;
+	private ArrayList<TipoHorario> tiposHorario;
+	private ArrayList<NivelPuesto> nivelesPuesto;
+	private ArrayList<DimensionOrganizacion> dimensionesOrganizacion;
+	private ArrayList<Sector> sectores; 
 
 	private Departamento selectedDepartamento;
 	private Provincia selectedProvincia;
@@ -153,20 +174,43 @@ public class PostulanteManagedBean implements Serializable{
 		
 	@PostConstruct
 	public void init() {		
-		cargarPostulante();	
+		iniciarPostulante();	
 		
 		iniciarDatosMaestros();			
 	}
 	
-	private void cargarPostulante(){
+	private void iniciarPostulante(){
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		
-		postulante = getPostulanteService().getPostulanteByCorreo(user.getUsername());
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		postulante = postulanteService.getPostulanteByCorreo(user.getUsername());
+		
+		recargarPostulante();
+		
+		
+	}
+	
+	private void recargarPostulante(){
+		postulante = postulanteService.getPostulanteCompletoByPostulante(postulante);
 		
 		if(postulante.getEstadoCivil() == null){
 			postulante.setEstadoCivil(new EstadoCivil());
+		}
+		
+		if(postulante.getTipoHorario() == null){
+			postulante.setTipoHorario(new TipoHorario());
+		}
+		
+		if(postulante.getNivelPuesto() == null){
+			postulante.setNivelPuesto(new NivelPuesto());
+		}
+		
+		if(postulante.getDimensionOrganizacion() == null){
+			postulante.setDimensionOrganizacion(new DimensionOrganizacion());
+		}
+		
+		if(postulante.getSector() == null){
+			postulante.setSector(new Sector());
 		}
 	}
 	
@@ -175,16 +219,20 @@ public class PostulanteManagedBean implements Serializable{
 		selectedProvincia = new Provincia();
 		selectedDistrito = new Distrito();	
 		
-		departamentos = getDepartamentoService().getDepartamentos();
-		conocimientos = getConocimientoService().getConocimientos();
-		puestos = getPuestoService().getPuestos();
-		estadosCiviles = getEstadoCivilService().getEstadosCiviles();
-		nivelesConocimiento = getConocimientoService().getNivelesConocimiento();
-		organizaciones = getOrganizacionService().getOrganizaciones();
-		estudios = getEstudioService().getEstudios();
-		idiomas = getIdiomaService().getIdiomas();
-		nivelesIdioma = getIdiomaService().getNivelesIdioma();
-		
+		departamentos = departamentoService.getDepartamentos();
+		conocimientos = conocimientoService.getConocimientos();
+		puestos = puestoService.getPuestos();
+		estadosCiviles = estadoCivilService.getEstadosCiviles();
+		nivelesConocimiento = conocimientoService.getNivelesConocimiento();
+		organizaciones = organizacionService.getOrganizaciones();
+		estudios = estudioService.getEstudios();
+		idiomas = idiomaService.getIdiomas();
+		nivelesIdioma = idiomaService.getNivelesIdioma();
+		tiposHorario = tipoHorarioService.getTiposHorario();
+		nivelesPuesto = puestoService.getNivelesPuesto();
+		dimensionesOrganizacion = organizacionService.getDimensionesOrganizacion();
+		sectores = sectorService.getSectores();
+		beneficios = beneficioService.getBeneficios();
 		
 		reiniciarNewTelefono();
 		reiniciarNewResidencia();
@@ -192,28 +240,30 @@ public class PostulanteManagedBean implements Serializable{
 		reiniciarNewExperienciaLaboral();	
 		reiniciarNewActividadAcademica();
 		reiniciarNewPostulanteIdioma();
+		reiniciarNewPostulanteBeneficio();
 	}
 	
 	public void savePostulante(){
-		getPostulanteService().updatePostulante(postulante);
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		postulanteService.updatePostulante(postulante);
+		
+		recargarPostulante();
 	}
 	
 	public void cancelSavePostulante(){
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void chargeProvincias(){
 		logger.info("Cargando pronvincias");
 		
-		provincias = getProvinciaService().getProvinciasByDepartamento(selectedDepartamento);
+		provincias = provinciaService.getProvinciasByDepartamento(selectedDepartamento);
 		distritos = null;
 	}
 	
 	public void chargeDistritos(){
 		logger.info("Cargando distritos");
 		
-		distritos = getDistritoService().getDistritosByProvincia(selectedProvincia);
+		distritos = distritoService.getDistritosByProvincia(selectedProvincia);
 	}
 	
 	//telefono
@@ -230,13 +280,14 @@ public class PostulanteManagedBean implements Serializable{
 			telefonoService.updateTelefono(newTelefono);
 		}		
 		
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void deleteTelefono(){		
 		if(newTelefono!= null){
 			telefonoService.deleteTelefono(newTelefono);
-			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+			
+			recargarPostulante();
 		}	
 	}
 	
@@ -264,25 +315,26 @@ public class PostulanteManagedBean implements Serializable{
 			residenciaService.updateResidencia(newResidencia);
 		}		
 		
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void loadResidencia(){
 		
-		newResidencia = getResidenciaService().getResidenciaById(newResidencia.getResiId());
+		newResidencia = residenciaService.getResidenciaById(newResidencia.getResiId());
 		
 		selectedDistrito = newResidencia.getDistrito();
 		selectedProvincia = newResidencia.getDistrito().getProvincia();
 		selectedDepartamento = newResidencia.getDistrito().getProvincia().getDepartamento();
 		
-		provincias = getProvinciaService().getProvinciasByDepartamento(selectedDepartamento);
-		distritos = getDistritoService().getDistritosByProvincia(selectedProvincia);
+		provincias = provinciaService.getProvinciasByDepartamento(selectedDepartamento);
+		distritos = distritoService.getDistritosByProvincia(selectedProvincia);
 	}
 	
 	public void deleteResidencia(){	
 		if(newResidencia != null){
 			residenciaService.deleteResidencia(newResidencia);
-			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+			
+			recargarPostulante();
 		}		
 	}
 	
@@ -300,18 +352,19 @@ public class PostulanteManagedBean implements Serializable{
 	public void savePostulanteConocimiento(){		
 				
 		if(newPostulanteConocimiento.getId().getFkConoId()==0){
-			getConocimientoService().addConocimientoToPostulante(newPostulanteConocimiento);
+			conocimientoService.addConocimientoToPostulante(newPostulanteConocimiento);
 		}else{
-			getConocimientoService().updateConocimientoToPostulante(newPostulanteConocimiento);
+			conocimientoService.updateConocimientoToPostulante(newPostulanteConocimiento);
 		}		
 		
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void deletePostulanteConocimiento(){	
 		if(newPostulanteConocimiento != null){
-			getConocimientoService().deleteConocimientoToPostulante(newPostulanteConocimiento);
-			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+			conocimientoService.deleteConocimientoToPostulante(newPostulanteConocimiento);
+			
+			recargarPostulante();
 		}		
 	}
 	
@@ -328,18 +381,19 @@ public class PostulanteManagedBean implements Serializable{
 	
 	public void saveExperienciaLaboral(){		
 		if(newExperienciaLaboral.getExlaId()==0){
-			getExperienciaLaboralService().addExperienciaLaboral(newExperienciaLaboral);
+			experienciaLaboralService.addExperienciaLaboral(newExperienciaLaboral);
 		}else{
-			getExperienciaLaboralService().updateExperienciaLaboral(newExperienciaLaboral);			
+			experienciaLaboralService.updateExperienciaLaboral(newExperienciaLaboral);			
 		}
 		
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void deleteExperienciaLaboral(){
 		if(newExperienciaLaboral != null){
-			getExperienciaLaboralService().deleteExperienciaLaboral(newExperienciaLaboral);
-			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+			experienciaLaboralService.deleteExperienciaLaboral(newExperienciaLaboral);
+			
+			recargarPostulante();
 		}
 	}
 	
@@ -352,18 +406,19 @@ public class PostulanteManagedBean implements Serializable{
 	
 	public void saveActividadAcademica(){		
 		if(newActividadAcademica.getAcacId()==0){
-			getActividadAcademicaService().addActividadAcademica(newActividadAcademica);
+			actividadAcademicaService.addActividadAcademica(newActividadAcademica);
 		}else{
-			getActividadAcademicaService().updateActividadAcademica(newActividadAcademica);		
+			actividadAcademicaService.updateActividadAcademica(newActividadAcademica);		
 		}
 		
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void deleteActividadAcademica(){
 		if(newActividadAcademica != null){
-			getActividadAcademicaService().deleteActividadAcademica(newActividadAcademica);
-			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+			actividadAcademicaService.deleteActividadAcademica(newActividadAcademica);
+			
+			recargarPostulante();
 		}
 	}
 	
@@ -379,19 +434,46 @@ public class PostulanteManagedBean implements Serializable{
 	
 	public void savePostulanteIdioma(){		
 		if(newPostulanteIdioma.getId().getFkIdioId()==0){
-			getIdiomaService().addIdiomaToPostulante(newPostulanteIdioma);
+			idiomaService.addIdiomaToPostulante(newPostulanteIdioma);
 		}else{
-			getIdiomaService().updateIdiomaToPostulante(newPostulanteIdioma);		
+			idiomaService.updateIdiomaToPostulante(newPostulanteIdioma);		
 		}
 		
-		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		recargarPostulante();
 	}
 	
 	public void deletePostulanteIdioma(){
 		if(newPostulanteIdioma != null){
-			getIdiomaService().deleteIdiomaToPostulante(newPostulanteIdioma);
+			idiomaService.deleteIdiomaToPostulante(newPostulanteIdioma);
 			
-			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+			recargarPostulante();
+		}
+	}
+	
+	//beneficio
+	public void reiniciarNewPostulanteBeneficio(){
+		newPostulanteBeneficio = new PostulanteBeneficio();
+		newPostulanteBeneficio.setId(new PostulanteBeneficioPK());
+		
+		newPostulanteBeneficio.setPostulante(postulante);
+		newPostulanteBeneficio.setBeneficio(new Beneficio());
+	}
+	
+	public void savePostulanteBeneficio(){		
+		if(newPostulanteBeneficio.getId().getFkBeneId() == 0){
+			beneficioService.addBeneficioToPostulante(newPostulanteBeneficio);
+		}else{
+			beneficioService.updateBeneficioToPostulante(newPostulanteBeneficio);		
+		}
+		
+		recargarPostulante();
+	}
+	
+	public void deletePostulanteBeneficio(){
+		if(newPostulanteBeneficio != null){
+			beneficioService.deleteBeneficioToPostulante(newPostulanteBeneficio);
+			
+			recargarPostulante();
 		}
 	}
 
@@ -403,36 +485,12 @@ public class PostulanteManagedBean implements Serializable{
 		this.postulante = postulante;
 	}
 
-	public PostulanteService getPostulanteService() {
-		return postulanteService;
-	}
-
-	public void setPostulanteService(PostulanteService postulanteService) {
-		this.postulanteService = postulanteService;
-	}
-
-	public TelefonoService getTelefonoService() {
-		return telefonoService;
-	}
-
-	public void setTelefonoService(TelefonoService telefonoService) {
-		this.telefonoService = telefonoService;
-	}	
-
 	public Residencia getNewResidencia() {
 		return newResidencia;
 	}
 
 	public void setNewResidencia(Residencia newResidencia) {
 		this.newResidencia = newResidencia;
-	}
-
-	public ResidenciaService getResidenciaService() {
-		return residenciaService;
-	}
-
-	public void setResidenciaService(ResidenciaService residenciaService) {
-		this.residenciaService = residenciaService;
 	}
 
 	public Telefono getNewTelefono() {
@@ -442,47 +500,6 @@ public class PostulanteManagedBean implements Serializable{
 	public void setNewTelefono(Telefono newTelefono) {
 		this.newTelefono = newTelefono;
 	}	
-
-	public DepartamentoService getDepartamentoService() {
-		return departamentoService;
-	}
-
-	public void setDepartamentoService(DepartamentoService departamentoService) {
-		this.departamentoService = departamentoService;
-	}
-
-	public ProvinciaService getProvinciaService() {
-		return provinciaService;
-	}
-
-	public void setProvinciaService(ProvinciaService provinciaService) {
-		this.provinciaService = provinciaService;
-	}
-
-	public DistritoService getDistritoService() {
-		return distritoService;
-	}
-
-	public void setDistritoService(DistritoService distritoService) {
-		this.distritoService = distritoService;
-	}	
-
-	public PuestoService getPuestoService() {
-		return puestoService;
-	}
-
-	public void setPuestoService(PuestoService puestoService) {
-		this.puestoService = puestoService;
-	}	
-
-	public ExperienciaLaboralService getExperienciaLaboralService() {
-		return experienciaLaboralService;
-	}
-
-	public void setExperienciaLaboralService(
-			ExperienciaLaboralService experienciaLaboralService) {
-		this.experienciaLaboralService = experienciaLaboralService;
-	}
 
 	public ArrayList<Puesto> getPuestos() {
 		return puestos;
@@ -540,22 +557,6 @@ public class PostulanteManagedBean implements Serializable{
 		this.selectedDistrito = selectedDistrito;
 	}
 
-	public ConocimientoService getConocimientoService() {
-		return conocimientoService;
-	}
-
-	public void setConocimientoService(ConocimientoService conocimientoService) {
-		this.conocimientoService = conocimientoService;
-	}
-
-	public EstadoCivilService getEstadoCivilService() {
-		return estadoCivilService;
-	}
-
-	public void setEstadoCivilService(EstadoCivilService estadoCivilService) {
-		this.estadoCivilService = estadoCivilService;
-	}
-
 	public ArrayList<EstadoCivil> getEstadosCiviles() {
 		return estadosCiviles;
 	}
@@ -587,23 +588,6 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setNewExperienciaLaboral(ExperienciaLaboral newExperienciaLaboral) {
 		this.newExperienciaLaboral = newExperienciaLaboral;
-	}
-
-	public BeneficioService getBeneficioService() {
-		return beneficioService;
-	}
-
-	public void setBeneficioService(
-			BeneficioService beneficioService) {
-		this.beneficioService = beneficioService;
-	}	
-
-	public OrganizacionService getOrganizacionService() {
-		return organizacionService;
-	}
-
-	public void setOrganizacionService(OrganizacionService organizacionService) {
-		this.organizacionService = organizacionService;
 	}
 
 	public ArrayList<Beneficio> getBeneficios() {
@@ -639,23 +623,6 @@ public class PostulanteManagedBean implements Serializable{
 		this.newActividadAcademica = newActividadAcademica;
 	}
 
-	public ActividadAcademicaService getActividadAcademicaService() {
-		return actividadAcademicaService;
-	}
-
-	public void setActividadAcademicaService(
-			ActividadAcademicaService actividadAcademicaService) {
-		this.actividadAcademicaService = actividadAcademicaService;
-	}
-
-	public EstudioService getEstudioService() {
-		return estudioService;
-	}
-
-	public void setEstudioService(EstudioService estudioService) {
-		this.estudioService = estudioService;
-	}
-
 	public ArrayList<Estudio> getEstudios() {
 		return estudios;
 	}
@@ -672,14 +639,6 @@ public class PostulanteManagedBean implements Serializable{
 		this.newPostulanteIdioma = newPostulanteIdioma;
 	}
 
-	public IdiomaService getIdiomaService() {
-		return idiomaService;
-	}
-
-	public void setIdiomaService(IdiomaService idiomaService) {
-		this.idiomaService = idiomaService;
-	}
-
 	public ArrayList<Idioma> getIdiomas() {
 		return idiomas;
 	}
@@ -694,5 +653,46 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setNivelesIdioma(ArrayList<NivelIdioma> nivelesIdioma) {
 		this.nivelesIdioma = nivelesIdioma;
-	}	
+	}
+
+	public ArrayList<TipoHorario> getTiposHorario() {
+		return tiposHorario;
+	}
+
+	public void setTiposHorario(ArrayList<TipoHorario> tiposHorario) {
+		this.tiposHorario = tiposHorario;
+	}
+
+	public ArrayList<NivelPuesto> getNivelesPuesto() {
+		return nivelesPuesto;
+	}
+
+	public void setNivelesPuesto(ArrayList<NivelPuesto> nivelesPuesto) {
+		this.nivelesPuesto = nivelesPuesto;
+	}
+
+	public ArrayList<DimensionOrganizacion> getDimensionesOrganizacion() {
+		return dimensionesOrganizacion;
+	}
+
+	public void setDimensionesOrganizacion(
+			ArrayList<DimensionOrganizacion> dimensionesOrganizacion) {
+		this.dimensionesOrganizacion = dimensionesOrganizacion;
+	}
+
+	public ArrayList<Sector> getSectores() {
+		return sectores;
+	}
+
+	public void setSectores(ArrayList<Sector> sectores) {
+		this.sectores = sectores;
+	}
+
+	public PostulanteBeneficio getNewPostulanteBeneficio() {
+		return newPostulanteBeneficio;
+	}
+
+	public void setNewPostulanteBeneficio(PostulanteBeneficio newPostulanteBeneficio) {
+		this.newPostulanteBeneficio = newPostulanteBeneficio;
+	}
 }

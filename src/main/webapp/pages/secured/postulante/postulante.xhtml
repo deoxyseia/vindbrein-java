@@ -14,9 +14,10 @@
 
 		<p:messages showDetail="true" autoUpdate="true" closable="true" />
 
-		<p:panel header="Información básica personal">
 
-			<h:form id="formPostulante">
+
+		<h:form id="formPostulante">
+			<p:panel header="Información básica personal">
 
 				<h:panelGrid columns="2">
 					<h:outputText value="Nombres :"></h:outputText>
@@ -63,24 +64,103 @@
 							var="estadoCivil" itemLabel="#{estadoCivil.esciNombre}"
 							itemValue="#{estadoCivil.esciId}" />
 					</p:selectOneMenu>
-					
-					<f:facet name="footer">
-						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.savePostulante()}"
-							update=":formPostulante" icon="ui-icon-check" />
-						<p:commandButton value="Cancelar"
-							actionListener="#{postulanteManagedBean.cancelSavePostulante()}"
-							update=":formPostulante" icon="ui-icon-close" />
-					</f:facet>
-
-					
 				</h:panelGrid>
-			</h:form>
-		</p:panel>
+			</p:panel>
+			
+			<p:panel header="Preferencias">
+			
+				<!-- Tipo de horario -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.tipoHorario.tihoId}"
+					effect="fade" required="true" requiredMessage="Elija el tipo de horario que prefiera">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.tiposHorario}"
+						var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
+						itemValue="#{tipoHorario.tihoId}" />					
+				</p:selectOneMenu>
+				
+				<!-- Nivel de puesto -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.nivelPuesto.nipuId}"
+					effect="fade" required="true" requiredMessage="Elija el tipo nivel de puesto">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.nivelesPuesto}"
+						var="nivelPuesto" itemLabel="#{nivelPuesto.nipuNombre}"
+						itemValue="#{nivelPuesto.nipuId}" />					
+				</p:selectOneMenu>
+				
+				<!-- Dimensión de organización -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.dimensionOrganizacion.diorId}"
+					effect="fade" required="true" requiredMessage="Elija la dimensión de la organización">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.dimensionesOrganizacion}"
+						var="dimensionOrganizacion" itemLabel="#{dimensionOrganizacion.diorNombre}"
+						itemValue="#{dimensionOrganizacion.diorId}" />					
+				</p:selectOneMenu>
+				
+				<!-- Sector de organización -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.sector.sectId}"
+					effect="fade">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.sectores}"
+						var="sector" itemLabel="#{sector.sectNombre}"
+						itemValue="#{sector.sectId}" />					
+				</p:selectOneMenu>
+				
+				<!-- beneficios-->
+
+				<p:dataTable id="dataTablePostulanteBeneficio" var="postulanteBeneficio"
+					rowKey="#{postulanteBeneficio.id}"
+					value="#{postulanteManagedBean.postulante.postulanteBeneficios}"
+					selection="#{postulanteManagedBean.newPostulanteBeneficio}"
+					emptyMessage="No tiene registrado beneficios" selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Beneficios
+                	</f:facet>
+
+					<p:column headerText="beneficio">
+						<h:outputText value="#{postulanteBeneficio.beneficio.beneNombre}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteBeneficio()}"
+							oncomplete="savePostulanteBeneficioDialog.show()" immediate="true"
+							update=":newPostulanteBeneficioForm" icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar"
+							actionListener="#{postulanteManagedBean.deletePostulanteBeneficio()}"
+							update=":formPostulante:dataTablePostulanteBeneficio"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de beneficios -->
+				
+			</p:panel>
+
+
+			<p:panel>
+				<f:facet name="footer">
+					<p:commandButton value="Guardar"
+						actionListener="#{postulanteManagedBean.savePostulante()}"
+						update=":formPostulante" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar"
+						actionListener="#{postulanteManagedBean.cancelSavePostulante()}"
+						update=":formPostulante" icon="ui-icon-close" />
+				</f:facet>
+			</p:panel>
+		</h:form>
+
+
 
 		<p:panel header="Información detallada">
-
 			<h:form id="formPostulanteDetalle">
+
 
 				<!-- Telefonos -->
 
@@ -181,7 +261,7 @@
 						<h:outputText
 							value="#{postulanteConocimiento.conocimiento.conoNombre}" />
 					</p:column>
-					
+
 					<p:column headerText="Nivel de conocimiento">
 						<h:outputText
 							value="#{postulanteConocimiento.nivelConocimiento.nicoNombre}" />
@@ -216,13 +296,15 @@
 					<f:facet name="header">
                     Lista de Experiencias laborales
                 	</f:facet>
-                	
-                	<p:column headerText="Puesto">
-						<h:outputText value="#{experienciaLaboral.organizacionPuesto.puesto.puesNombre}" />
-					</p:column>
-					
+
 					<p:column headerText="Puesto">
-						<h:outputText value="#{experienciaLaboral.organizacionPuesto.organizacion.orgaRazonSocial}" />
+						<h:outputText
+							value="#{experienciaLaboral.organizacionPuesto.puesto.puesNombre}" />
+					</p:column>
+
+					<p:column headerText="Puesto">
+						<h:outputText
+							value="#{experienciaLaboral.organizacionPuesto.organizacion.orgaRazonSocial}" />
 					</p:column>
 
 					<p:column headerText="Fecha inicio">
@@ -248,7 +330,7 @@
 				</p:dataTable>
 
 				<!-- fin de experiencia laboral -->
-				
+
 				<!-- Actividad académica-->
 
 				<p:dataTable id="dataTableActividadAcademica"
@@ -261,19 +343,20 @@
 					<f:facet name="header">
                     Lista de Actividades académicas
                 	</f:facet>
-                	
-                	<p:column headerText="Estudio">
+
+					<p:column headerText="Estudio">
 						<h:outputText value="#{actividadAcademica.estudio.estuNombre}" />
 					</p:column>
-					
+
 					<p:column headerText="Centro de estudio">
-						<h:outputText value="#{actividadAcademica.estudio.centroEstudio.ceesNombre}" />
+						<h:outputText
+							value="#{actividadAcademica.estudio.centroEstudio.ceesNombre}" />
 					</p:column>
-					
+
 					<p:column headerText="Fecha inicial">
 						<h:outputText value="#{actividadAcademica.acacFechaInicio}" />
 					</p:column>
-					
+
 					<p:column headerText="Fecha final">
 						<h:outputText value="#{actividadAcademica.acacFechaFinal}" />
 					</p:column>
@@ -293,28 +376,27 @@
 				</p:dataTable>
 
 				<!-- fin de actividad academica -->
-				
+
 				<!-- Idioma-->
 
-				<p:dataTable id="dataTablePostulanteIdioma"
-					var="postulanteIdioma" rowKey="#{postulanteIdioma.id}"
+				<p:dataTable id="dataTablePostulanteIdioma" var="postulanteIdioma"
+					rowKey="#{postulanteIdioma.id}"
 					value="#{postulanteManagedBean.postulante.postulanteIdiomas}"
 					selection="#{postulanteManagedBean.newPostulanteIdioma}"
-					emptyMessage="No tiene registrado idiomas"
-					selectionMode="single">
+					emptyMessage="No tiene registrado idiomas" selectionMode="single">
 
 					<f:facet name="header">
                     Lista de Idiomas
                 	</f:facet>
-                	
-                	<p:column headerText="Idioma">
+
+					<p:column headerText="Idioma">
 						<h:outputText value="#{postulanteIdioma.idioma.idioNombre}" />
 					</p:column>
-					
+
 					<p:column headerText="Nivel de Conocimiento">
 						<h:outputText value="#{postulanteIdioma.nivelIdioma.niidNombre}" />
 					</p:column>
-					
+
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteIdioma()}"
@@ -333,6 +415,8 @@
 			</h:form>
 
 		</p:panel>
+
+
 
 		<!--FIN POSTULANTE -->
 
@@ -445,14 +529,17 @@
 							var="conocimiento" itemLabel="#{conocimiento.conoNombre}"
 							itemValue="#{conocimiento.conoId}" />
 					</p:selectOneMenu>
-					
+
 					<h:outputText value="Nivel de Conocimiento :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newPostulanteConocimiento.nivelConocimiento.nicoId}"
-						effect="fade" required="true" requiredMessage="Elija el nivel de conocimiento">
+						effect="fade" required="true"
+						requiredMessage="Elija el nivel de conocimiento">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems value="#{postulanteManagedBean.nivelesConocimiento}"
-							var="nivelConocimiento" itemLabel="#{nivelConocimiento.nicoNombre}"
+						<f:selectItems
+							value="#{postulanteManagedBean.nivelesConocimiento}"
+							var="nivelConocimiento"
+							itemLabel="#{nivelConocimiento.nicoNombre}"
 							itemValue="#{nivelConocimiento.nicoId}" />
 					</p:selectOneMenu>
 
@@ -472,7 +559,7 @@
 		<!-- Fin Dialog nuevo postulante conocimiento -->
 
 		<!-- Dialog nuevo experiencia laboral -->
-		
+
 		<p:dialog id="saveExperienciaLaboralDlg"
 			header="Nueva experiencia laboral" hideEffect="explode"
 			widgetVar="saveExperienciaLaboralDialog" resizable="false"
@@ -498,7 +585,7 @@
 							var="puesto" itemLabel="#{puesto.puesNombre}"
 							itemValue="#{puesto.puesId}" />
 					</p:selectOneMenu>
-					
+
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newExperienciaLaboral.organizacionPuesto.organizacion.orgaId}"
 						effect="fade">
@@ -522,10 +609,10 @@
 			</h:form>
 		</p:dialog>
 		<!-- Fin Dialog nueva experiencia laboral -->
-		
-		
+
+
 		<!-- Dialog nuevo actividad academica-->
-		
+
 		<p:dialog id="saveActividadAcademicaDlg"
 			header="Nueva experiencia laboral" hideEffect="explode"
 			widgetVar="saveActividadAcademicaDialog" resizable="false"
@@ -550,7 +637,7 @@
 						<f:selectItems value="#{postulanteManagedBean.estudios}"
 							var="estudio" itemLabel="#{estudio.estuNombre}"
 							itemValue="#{estudio.estuId}" />
-					</p:selectOneMenu>				
+					</p:selectOneMenu>
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
@@ -565,15 +652,14 @@
 				</p:panelGrid>
 			</h:form>
 		</p:dialog>
-		
+
 		<!-- Fin Dialog nueva actividad academica -->
-		
+
 		<!-- Dialog nuevo postulante Idioma -->
-		
-		<p:dialog id="savePostulanteIdiomaDlg"
-			header="Nuevo idioma" hideEffect="explode"
-			widgetVar="savePostulanteIdiomaDialog" resizable="false"
-			modal="true" appendTo="@(body)">
+
+		<p:dialog id="savePostulanteIdiomaDlg" header="Nuevo idioma"
+			hideEffect="explode" widgetVar="savePostulanteIdiomaDialog"
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newPostulanteIdiomaForm">
 				<p:panelGrid columns="2">
@@ -584,8 +670,8 @@
 						<f:selectItems value="#{postulanteManagedBean.idiomas}"
 							var="idioma" itemLabel="#{idioma.idioNombre}"
 							itemValue="#{idioma.idioId}" />
-					</p:selectOneMenu>	
-					
+					</p:selectOneMenu>
+
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newPostulanteIdioma.nivelIdioma.niidId}"
 						effect="fade">
@@ -593,7 +679,7 @@
 						<f:selectItems value="#{postulanteManagedBean.nivelesIdioma}"
 							var="nivelIdioma" itemLabel="#{nivelIdioma.niidNombre}"
 							itemValue="#{nivelIdioma.niidId}" />
-					</p:selectOneMenu>			
+					</p:selectOneMenu>
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
@@ -608,10 +694,43 @@
 				</p:panelGrid>
 			</h:form>
 		</p:dialog>
-		
+
 		<!-- Fin Dialog nuevo postulante idioma -->
+	
 		
-		
-		
+		<!-- Dialog nuevo postulante Beneficio -->
+
+		<p:dialog id="savePostulanteBeneficioDlg" header="Nuevo beneficio"
+			hideEffect="explode" widgetVar="savePostulanteBeneficioDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+
+			<h:form id="newPostulanteBeneficioForm">
+				<p:panelGrid columns="2">
+					<p:selectOneMenu
+						value="#{postulanteManagedBean.newPostulanteBeneficio.beneficio.beneId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{postulanteManagedBean.beneficios}"
+							var="beneficio" itemLabel="#{beneficio.beneNombre}"
+							itemValue="#{beneficio.beneId}" />
+					</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{postulanteManagedBean.savePostulanteBeneficio()}"
+							oncomplete="savePostulanteBeneficioDialog.hide()"
+							update=":formPostulante:dataTablePostulanteBeneficio"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="savePostulanteBeneficioDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<!-- Fin Dialog nuevo postulante beneficio -->
+
+
 	</ui:define>
 </ui:composition>
