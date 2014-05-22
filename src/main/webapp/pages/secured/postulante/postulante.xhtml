@@ -249,7 +249,7 @@
 
 				<!-- fin de experiencia laboral -->
 				
-				<!-- Axtividad académica-->
+				<!-- Actividad académica-->
 
 				<p:dataTable id="dataTableActividadAcademica"
 					var="actividadAcademica" rowKey="#{actividadAcademica.acacId}"
@@ -293,6 +293,43 @@
 				</p:dataTable>
 
 				<!-- fin de actividad academica -->
+				
+				<!-- Idioma-->
+
+				<p:dataTable id="dataTablePostulanteIdioma"
+					var="postulanteIdioma" rowKey="#{postulanteIdioma.id}"
+					value="#{postulanteManagedBean.postulante.postulanteIdiomas}"
+					selection="#{postulanteManagedBean.newPostulanteIdioma}"
+					emptyMessage="No tiene registrado idiomas"
+					selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Idiomas
+                	</f:facet>
+                	
+                	<p:column headerText="Idioma">
+						<h:outputText value="#{postulanteIdioma.idioma.idioNombre}" />
+					</p:column>
+					
+					<p:column headerText="Nivel de Conocimiento">
+						<h:outputText value="#{postulanteIdioma.nivelIdioma.niidNombre}" />
+					</p:column>
+					
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteIdioma()}"
+							oncomplete="savePostulanteIdiomaDialog.show()" immediate="true"
+							update=":newPostulanteIdiomaForm" icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar"
+							actionListener="#{postulanteManagedBean.deletePostulanteIdioma()}"
+							update=":formPostulanteDetalle:dataTablePostulanteIdioma"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de idioma -->
 			</h:form>
 
 		</p:panel>
@@ -530,6 +567,49 @@
 		</p:dialog>
 		
 		<!-- Fin Dialog nueva actividad academica -->
+		
+		<!-- Dialog nuevo postulante Idioma -->
+		
+		<p:dialog id="savePostulanteIdiomaDlg"
+			header="Nuevo idioma" hideEffect="explode"
+			widgetVar="savePostulanteIdiomaDialog" resizable="false"
+			modal="true" appendTo="@(body)">
+
+			<h:form id="newPostulanteIdiomaForm">
+				<p:panelGrid columns="2">
+					<p:selectOneMenu
+						value="#{postulanteManagedBean.newPostulanteIdioma.idioma.idioId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{postulanteManagedBean.idiomas}"
+							var="idioma" itemLabel="#{idioma.idioNombre}"
+							itemValue="#{idioma.idioId}" />
+					</p:selectOneMenu>	
+					
+					<p:selectOneMenu
+						value="#{postulanteManagedBean.newPostulanteIdioma.nivelIdioma.niidId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{postulanteManagedBean.nivelesIdioma}"
+							var="nivelIdioma" itemLabel="#{nivelIdioma.niidNombre}"
+							itemValue="#{nivelIdioma.niidId}" />
+					</p:selectOneMenu>			
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{postulanteManagedBean.savePostulanteIdioma()}"
+							oncomplete="savePostulanteIdiomaDialog.hide()"
+							update=":formPostulanteDetalle:dataTablePostulanteIdioma"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="savePostulanteIdiomaDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<!-- Fin Dialog nuevo postulante idioma -->
 		
 		
 		

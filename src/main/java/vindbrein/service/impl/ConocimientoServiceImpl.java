@@ -13,7 +13,6 @@ import vindbrein.dao.PostulanteConocimientoDAO;
 import vindbrein.domain.model.Conocimiento;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.PostulanteConocimiento;
-import vindbrein.domain.model.PostulanteConocimientoPK;
 import vindbrein.service.ConocimientoService;
 
 @Service

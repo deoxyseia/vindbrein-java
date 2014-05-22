@@ -3,11 +3,14 @@ package vindbrein.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import vindbrein.domain.model.Idioma;
+import vindbrein.domain.model.NivelIdioma;
 import vindbrein.domain.model.Postulante;
 import vindbrein.domain.model.PostulanteIdioma;
 
@@ -39,18 +42,22 @@ public class PostulanteIdiomaDAO {
 	}
 
 	//sin probar
-	public PostulanteIdioma getPostulanteIdiomaById(int id) {
-		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from PostulanteIdioma where depaId=?")
-		        .setParameter(0, id).list();
+	public PostulanteIdioma getPostulanteIdiomaById(Idioma idioma, NivelIdioma nivelIdioma, Postulante postulante) {
+		Query query = getSessionFactory().getCurrentSession()
+				.createQuery("from PostulanteIdioma where idioma.idioId=? and nivelIdioma.niidId=? and postulante.postId=?");
+		
+		query.setParameter(0, idioma.getIdioId());
+		query.setParameter(1, nivelIdioma.getNiidId());
+		query.setParameter(2, postulante.getPostId());
+		
+		List<PostulanteIdioma> list = (ArrayList<PostulanteIdioma>)query.list();		        
 		
 		if(list.size()!=0){
 			return (PostulanteIdioma)list.get(0);
 		} else {
 			return null;
 		}
-	}
-	
+	}	
 	
 	public ArrayList<PostulanteIdioma> getPostulanteIdiomas() {
 		ArrayList<PostulanteIdioma> list = (ArrayList<PostulanteIdioma>) getSessionFactory()

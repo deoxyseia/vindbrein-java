@@ -21,12 +21,16 @@ import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.EstadoCivil;
 import vindbrein.domain.model.Estudio;
 import vindbrein.domain.model.ExperienciaLaboral;
+import vindbrein.domain.model.Idioma;
 import vindbrein.domain.model.NivelConocimiento;
+import vindbrein.domain.model.NivelIdioma;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Postulante;
 import vindbrein.domain.model.PostulanteConocimiento;
 import vindbrein.domain.model.PostulanteConocimientoPK;
+import vindbrein.domain.model.PostulanteIdioma;
+import vindbrein.domain.model.PostulanteIdiomaPK;
 import vindbrein.domain.model.Provincia;
 import vindbrein.domain.model.Puesto;
 import vindbrein.domain.model.Residencia;
@@ -39,6 +43,7 @@ import vindbrein.service.DistritoService;
 import vindbrein.service.EstadoCivilService;
 import vindbrein.service.EstudioService;
 import vindbrein.service.ExperienciaLaboralService;
+import vindbrein.service.IdiomaService;
 import vindbrein.service.OrganizacionService;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.ProvinciaService;
@@ -63,6 +68,7 @@ public class PostulanteManagedBean implements Serializable{
 	private PostulanteConocimiento newPostulanteConocimiento;
 	private ExperienciaLaboral newExperienciaLaboral;
 	private ActividadAcademica newActividadAcademica;
+	private PostulanteIdioma newPostulanteIdioma;	
 	
 			
 	@Autowired
@@ -121,6 +127,11 @@ public class PostulanteManagedBean implements Serializable{
 	@Qualifier("estudioServiceImpl")
 	EstudioService estudioService;
 	
+	@Autowired
+	@Qualifier("idiomaServiceImpl")
+	IdiomaService idiomaService;
+	
+	
 	// datos maestros	
 	private ArrayList<Departamento> departamentos;
 	private ArrayList<Provincia> provincias;
@@ -132,6 +143,8 @@ public class PostulanteManagedBean implements Serializable{
 	private ArrayList<NivelConocimiento> nivelesConocimiento;
 	private ArrayList<Organizacion> organizaciones;
 	private ArrayList<Estudio> estudios;
+	private ArrayList<Idioma> idiomas;
+	private ArrayList<NivelIdioma> nivelesIdioma;
 
 	private Departamento selectedDepartamento;
 	private Provincia selectedProvincia;
@@ -169,6 +182,8 @@ public class PostulanteManagedBean implements Serializable{
 		nivelesConocimiento = getConocimientoService().getNivelesConocimiento();
 		organizaciones = getOrganizacionService().getOrganizaciones();
 		estudios = getEstudioService().getEstudios();
+		idiomas = getIdiomaService().getIdiomas();
+		nivelesIdioma = getIdiomaService().getNivelesIdioma();
 		
 		
 		reiniciarNewTelefono();
@@ -176,6 +191,7 @@ public class PostulanteManagedBean implements Serializable{
 		reiniciarNewPostulanteConocimiento();
 		reiniciarNewExperienciaLaboral();	
 		reiniciarNewActividadAcademica();
+		reiniciarNewPostulanteIdioma();
 	}
 	
 	public void savePostulante(){
@@ -347,6 +363,34 @@ public class PostulanteManagedBean implements Serializable{
 	public void deleteActividadAcademica(){
 		if(newActividadAcademica != null){
 			getActividadAcademicaService().deleteActividadAcademica(newActividadAcademica);
+			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+		}
+	}
+	
+	//idioma
+	public void reiniciarNewPostulanteIdioma(){
+		newPostulanteIdioma = new PostulanteIdioma();
+		
+		newPostulanteIdioma.setId(new PostulanteIdiomaPK());		
+		newPostulanteIdioma.setPostulante(postulante);
+		newPostulanteIdioma.setIdioma(new Idioma());
+		newPostulanteIdioma.setNivelIdioma(new NivelIdioma());
+	}
+	
+	public void savePostulanteIdioma(){		
+		if(newPostulanteIdioma.getId().getFkIdioId()==0){
+			getIdiomaService().addIdiomaToPostulante(newPostulanteIdioma);
+		}else{
+			getIdiomaService().updateIdiomaToPostulante(newPostulanteIdioma);		
+		}
+		
+		postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
+	}
+	
+	public void deletePostulanteIdioma(){
+		if(newPostulanteIdioma != null){
+			getIdiomaService().deleteIdiomaToPostulante(newPostulanteIdioma);
+			
 			postulante = getPostulanteService().getPostulanteCompletoByPostulante(postulante);
 		}
 	}
@@ -619,4 +663,36 @@ public class PostulanteManagedBean implements Serializable{
 	public void setEstudios(ArrayList<Estudio> estudios) {
 		this.estudios = estudios;
 	}
+
+	public PostulanteIdioma getNewPostulanteIdioma() {
+		return newPostulanteIdioma;
+	}
+
+	public void setNewPostulanteIdioma(PostulanteIdioma newPostulanteIdioma) {
+		this.newPostulanteIdioma = newPostulanteIdioma;
+	}
+
+	public IdiomaService getIdiomaService() {
+		return idiomaService;
+	}
+
+	public void setIdiomaService(IdiomaService idiomaService) {
+		this.idiomaService = idiomaService;
+	}
+
+	public ArrayList<Idioma> getIdiomas() {
+		return idiomas;
+	}
+
+	public void setIdiomas(ArrayList<Idioma> idiomas) {
+		this.idiomas = idiomas;
+	}
+
+	public ArrayList<NivelIdioma> getNivelesIdioma() {
+		return nivelesIdioma;
+	}
+
+	public void setNivelesIdioma(ArrayList<NivelIdioma> nivelesIdioma) {
+		this.nivelesIdioma = nivelesIdioma;
+	}	
 }
