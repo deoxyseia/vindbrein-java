@@ -18,8 +18,8 @@ public class Beneficio implements Serializable {
 	private String beneCode;
 	private String beneDescripcion;
 	private String beneNombre;
-	private List<OfertaLaboral> ofertaLaborals;
-	private PostulanteBeneficio postulanteBeneficio;
+	private List<OfertaBeneficio> ofertaBeneficios;
+	private List<PostulanteBeneficio> postulanteBeneficios;
 
 	public Beneficio() {
 	}
@@ -67,34 +67,53 @@ public class Beneficio implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to OfertaLaboral
-	@ManyToMany
-	@JoinTable(
-		name="oferta_beneficio"
-		, joinColumns={
-			@JoinColumn(name="fk_bene_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="fk_ofla_id")
-			}
-		)
-	public List<OfertaLaboral> getOfertaLaborals() {
-		return this.ofertaLaborals;
+	//bi-directional many-to-one association to OfertaBeneficio
+	@OneToMany(mappedBy="beneficio")
+	public List<OfertaBeneficio> getOfertaBeneficios() {
+		return this.ofertaBeneficios;
 	}
 
-	public void setOfertaLaborals(List<OfertaLaboral> ofertaLaborals) {
-		this.ofertaLaborals = ofertaLaborals;
+	public void setOfertaBeneficios(List<OfertaBeneficio> ofertaBeneficios) {
+		this.ofertaBeneficios = ofertaBeneficios;
+	}
+
+	public OfertaBeneficio addOfertaBeneficio(OfertaBeneficio ofertaBeneficio) {
+		getOfertaBeneficios().add(ofertaBeneficio);
+		ofertaBeneficio.setBeneficio(this);
+
+		return ofertaBeneficio;
+	}
+
+	public OfertaBeneficio removeOfertaBeneficio(OfertaBeneficio ofertaBeneficio) {
+		getOfertaBeneficios().remove(ofertaBeneficio);
+		ofertaBeneficio.setBeneficio(null);
+
+		return ofertaBeneficio;
 	}
 
 
-	//bi-directional one-to-one association to PostulanteBeneficio
-	@OneToOne(mappedBy="beneficio")
-	public PostulanteBeneficio getPostulanteBeneficio() {
-		return this.postulanteBeneficio;
+	//bi-directional many-to-one association to PostulanteBeneficio
+	@OneToMany(mappedBy="beneficio")
+	public List<PostulanteBeneficio> getPostulanteBeneficios() {
+		return this.postulanteBeneficios;
 	}
 
-	public void setPostulanteBeneficio(PostulanteBeneficio postulanteBeneficio) {
-		this.postulanteBeneficio = postulanteBeneficio;
+	public void setPostulanteBeneficios(List<PostulanteBeneficio> postulanteBeneficios) {
+		this.postulanteBeneficios = postulanteBeneficios;
+	}
+
+	public PostulanteBeneficio addPostulanteBeneficio(PostulanteBeneficio postulanteBeneficio) {
+		getPostulanteBeneficios().add(postulanteBeneficio);
+		postulanteBeneficio.setBeneficio(this);
+
+		return postulanteBeneficio;
+	}
+
+	public PostulanteBeneficio removePostulanteBeneficio(PostulanteBeneficio postulanteBeneficio) {
+		getPostulanteBeneficios().remove(postulanteBeneficio);
+		postulanteBeneficio.setBeneficio(null);
+
+		return postulanteBeneficio;
 	}
 
 }

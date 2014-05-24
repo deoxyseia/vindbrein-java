@@ -114,14 +114,17 @@ public class UsuarioManagedBean implements Serializable {
 				
 		Sucursal sucursal = new Sucursal();
 		sucursal.setDistrito(new Distrito());
+		sucursal.setSucuPrincipal((byte)1);
 		sucursal.setOrganizacion(organizacion);
 		
 		organizacion.setSucursales(new ArrayList<Sucursal>());	
 		organizacion.addSucursal(sucursal);
+		organizacion.setOrgaEstado("V");
 		
 		usuarioReclutador = new Usuario();
 		usuarioReclutador.setUsuaFlagActivo((byte)1);
 		usuarioReclutador.setReclutador(new Reclutador());
+		usuarioReclutador.getReclutador().setReclFlagMaestro((byte)1);
 		usuarioReclutador.getReclutador().setOrganizacion(organizacion);				
 		
 		//otros datos necesario

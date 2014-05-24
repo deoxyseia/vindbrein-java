@@ -1,37 +1,50 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
-    <h:head>
-        <title>Menu</title>        
-    </h:head>
-    <h:body>
-        <h:form>           
-            <p:menu style="width:93%" >   
-                               
-                    <c:if test="#{request.getUserPrincipal() != null}">
-                       <p:submenu label="Inicio">
-                           <p:menuitem value="Principal" action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
-                      </p:submenu>                                       
-                    </c:if>
-                    
-                    <c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
-                       <p:submenu label="Inicio">
-                           <p:menuitem value="Perfil" action="/pages/secured/postulante/postulante.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
-                      </p:submenu>                                       
-                    </c:if>
-                    
-                    <c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
-                       <p:submenu label="Inicio">
-                           <p:menuitem value="Manten Grado" action="/pages/secured/administrador/grado.xhtml?faces-redirect=true"  icon="ui-icon-home"/>                          
-                      </p:submenu>                                       
-                    </c:if>               
-                                       
-            </p:menu>
-        </h:form>
-    </h:body>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>Menu</title>
+</h:head>
+<h:body>
+	<h:form>
+		<p:menu style="width:93%">
+
+			<c:if test="#{request.getUserPrincipal() != null}">
+				<p:submenu label="Inicio">
+					<p:menuitem value="Principal"
+						action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"
+						icon="ui-icon-home" />
+				</p:submenu>
+			</c:if>
+
+			<c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
+				<p:submenu label="Información personals">
+					<p:menuitem value="Perfil"
+						action="/pages/secured/postulante/postulante.xhtml?faces-redirect=true"
+						icon="ui-icon-home" />
+				</p:submenu>
+			</c:if>
+
+			<c:if test="#{request.isUserInRole('ROLE_ADMIN')}">
+				<p:submenu label="Inicio">
+					<p:menuitem value="Manten Grado"
+						action="/pages/secured/administrador/grado.xhtml?faces-redirect=true"
+						icon="ui-icon-home" />
+				</p:submenu>
+			</c:if>
+
+			<c:if test="#{request.isUserInRole('ROLE_RECLUTADOR')}">
+				<p:submenu label="Organizacion">
+					<p:menuitem value="Oferta laboral"
+						action="/pages/secured/reclutador/ofertaLaboral.xhtml?faces-redirect=true"
+						icon="ui-icon-home" />
+				</p:submenu>
+			</c:if>
+
+		</p:menu>
+	</h:form>
+</h:body>
 </html>

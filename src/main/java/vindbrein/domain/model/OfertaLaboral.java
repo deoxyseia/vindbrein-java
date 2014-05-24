@@ -25,8 +25,8 @@ public class OfertaLaboral implements Serializable {
 	private int oflaTiempoExperiencia;
 	private String oflaTitulo;
 	private List<MatchResult> matchResults;
-	private List<Beneficio> beneficios;
-	private List<CentroEstudio> centroEstudios;
+	private List<OfertaBeneficio> ofertaBeneficios;
+	private List<OfertaCentroEstudio> ofertaCentroEstudios;
 	private List<OfertaConocimiento> ofertaConocimientos;
 	private List<OfertaCurso> ofertaCursos;
 	private List<OfertaEstudio> ofertaEstudios;
@@ -167,34 +167,53 @@ public class OfertaLaboral implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to Beneficio
-	@ManyToMany(mappedBy="ofertaLaborals")
-	public List<Beneficio> getBeneficios() {
-		return this.beneficios;
+	//bi-directional many-to-one association to OfertaBeneficio
+	@OneToMany(mappedBy="ofertaLaboral")
+	public List<OfertaBeneficio> getOfertaBeneficios() {
+		return this.ofertaBeneficios;
 	}
 
-	public void setBeneficios(List<Beneficio> beneficios) {
-		this.beneficios = beneficios;
+	public void setOfertaBeneficios(List<OfertaBeneficio> ofertaBeneficios) {
+		this.ofertaBeneficios = ofertaBeneficios;
+	}
+
+	public OfertaBeneficio addOfertaBeneficio(OfertaBeneficio ofertaBeneficio) {
+		getOfertaBeneficios().add(ofertaBeneficio);
+		ofertaBeneficio.setOfertaLaboral(this);
+
+		return ofertaBeneficio;
+	}
+
+	public OfertaBeneficio removeOfertaBeneficio(OfertaBeneficio ofertaBeneficio) {
+		getOfertaBeneficios().remove(ofertaBeneficio);
+		ofertaBeneficio.setOfertaLaboral(null);
+
+		return ofertaBeneficio;
 	}
 
 
-	//bi-directional many-to-many association to CentroEstudio
-	@ManyToMany
-	@JoinTable(
-		name="oferta_centro_estudios"
-		, joinColumns={
-			@JoinColumn(name="fk_ofla_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="fk_cees_id")
-			}
-		)
-	public List<CentroEstudio> getCentroEstudios() {
-		return this.centroEstudios;
+	//bi-directional many-to-one association to OfertaCentroEstudio
+	@OneToMany(mappedBy="ofertaLaboral")
+	public List<OfertaCentroEstudio> getOfertaCentroEstudios() {
+		return this.ofertaCentroEstudios;
 	}
 
-	public void setCentroEstudios(List<CentroEstudio> centroEstudios) {
-		this.centroEstudios = centroEstudios;
+	public void setOfertaCentroEstudios(List<OfertaCentroEstudio> ofertaCentroEstudios) {
+		this.ofertaCentroEstudios = ofertaCentroEstudios;
+	}
+
+	public OfertaCentroEstudio addOfertaCentroEstudio(OfertaCentroEstudio ofertaCentroEstudio) {
+		getOfertaCentroEstudios().add(ofertaCentroEstudio);
+		ofertaCentroEstudio.setOfertaLaboral(this);
+
+		return ofertaCentroEstudio;
+	}
+
+	public OfertaCentroEstudio removeOfertaCentroEstudio(OfertaCentroEstudio ofertaCentroEstudio) {
+		getOfertaCentroEstudios().remove(ofertaCentroEstudio);
+		ofertaCentroEstudio.setOfertaLaboral(null);
+
+		return ofertaCentroEstudio;
 	}
 
 

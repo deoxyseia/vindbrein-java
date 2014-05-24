@@ -1,0 +1,61 @@
+<ui:composition template="/pages/templates/layout.xhtml"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:c="http://java.sun.com/jsp/jstl/core">
+     
+     <ui:define name="title"> Ofertas laborales </ui:define>
+
+	<ui:define name="content">
+		<h:form id="formOfertaLaboral">
+			<p:dataTable id="dataTableOfertaLaboral" var="ofertaLaboral" emptyMessage="No hay ofertas laborales registradas" 
+				value="#{ofertaLaboralManagedBean.ofertasLaborales}" rowKey="#{ofertaLaboral.oflaId}"
+				paginator="true" rows="10"
+				selection="#{ofertaLaboralManagedBean.newOfertaLaboral}"
+				selectionMode="single"
+				paginatorPosition="top"
+				rowsPerPageTemplate="10,15,50">
+
+<!-- 				<p:ajax event="rowDblselect" update=":updateOfertaLaboralForm" -->
+<!-- 					oncomplete="updateOfertaLaboralDialog.show()" /> -->
+
+				<f:facet name="header">
+                    Lista de ofertas laborales
+                </f:facet>	
+                
+                <p:column sortBy="#{ofertaLaboral.oflaTitulo}">
+					<f:facet name="header">
+						<h:outputText value="Título" />
+					</f:facet>
+					<h:outputText value="#{ofertaLaboral.oflaTitulo}" />
+				</p:column>			
+				
+				
+			</p:dataTable>
+		</h:form>
+		
+		<!-- Dialog de confirmación de eliminación de ofertaLaboral-->
+
+		<p:dialog id="confirmDeleteOfertaLaboralDlg" header="Confirmación" 
+			hideEffect="explode" widgetVar="confirmDeleteOfertaLaboralDialog" resizable="false"
+			modal="true" appendToBody="true">
+			<h:form>
+				<p:panelGrid columns="1">
+					<h:outputText
+						value="¿Está seguro que desea eliminar este ofertaLaboral?" />
+					<f:facet name="footer">
+						<p:commandButton value="Sí"
+							actionListener="#{ofertaLaboralManagedBean.deleteOfertaLaboral}"
+							update=":formOfertaLaboral:dataTableOfertaLaboral"
+							oncomplete="confirmDeleteOfertaLaboralDialog.hide()" icon="ui-icon-check"/>
+						<p:commandButton value="No" onclick="confirmDeleteOfertaLaboralDialog.hide()"
+							type="button" icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

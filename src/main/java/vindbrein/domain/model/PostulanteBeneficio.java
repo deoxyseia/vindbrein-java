@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class PostulanteBeneficio implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private PostulanteBeneficioPK id;
+	private byte pobeObligatorio;
 	private Beneficio beneficio;
 	private Postulante postulante;
 
@@ -31,8 +32,18 @@ public class PostulanteBeneficio implements Serializable {
 	}
 
 
-	//bi-directional one-to-one association to Beneficio
-	@OneToOne
+	@Column(name="pobe_obligatorio")
+	public byte getPobeObligatorio() {
+		return this.pobeObligatorio;
+	}
+
+	public void setPobeObligatorio(byte pobeObligatorio) {
+		this.pobeObligatorio = pobeObligatorio;
+	}
+
+
+	//bi-directional many-to-one association to Beneficio
+	@ManyToOne
 	@JoinColumn(name="fk_bene_id", insertable=false, updatable=false)
 	public Beneficio getBeneficio() {
 		return this.beneficio;

@@ -66,70 +66,56 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 			</p:panel>
-
+			
 			<p:panel header="Preferencias">
-
-				<h:panelGrid columns="2">
-
-					<!-- Tipo de horario -->
-					<h:outputText value="Tipo de horario :" />
-					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.tipoHorario.tihoId}"
-						effect="fade" required="true"
-						requiredMessage="Elija el tipo de horario que prefiera">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems value="#{postulanteManagedBean.tiposHorario}"
-							var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
-							itemValue="#{tipoHorario.tihoId}" />
-					</p:selectOneMenu>
-
-					<!-- Nivel de puesto -->
-					<h:outputText value="Nivel de puesto :" />
-					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.nivelPuesto.nipuId}"
-						effect="fade" required="true"
-						requiredMessage="Elija el tipo nivel de puesto">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems value="#{postulanteManagedBean.nivelesPuesto}"
-							var="nivelPuesto" itemLabel="#{nivelPuesto.nipuNombre}"
-							itemValue="#{nivelPuesto.nipuId}" />
-					</p:selectOneMenu>
-
-					<!-- Dimensión de organización -->
-					<h:outputText value="Dimensión de organizacion :" />
-					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.dimensionOrganizacion.diorId}"
-						effect="fade" required="true"
-						requiredMessage="Elija la dimensión de la organización">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems
-							value="#{postulanteManagedBean.dimensionesOrganizacion}"
-							var="dimensionOrganizacion"
-							itemLabel="#{dimensionOrganizacion.diorNombre}"
-							itemValue="#{dimensionOrganizacion.diorId}" />
-					</p:selectOneMenu>
-
-					<!-- Sector de organización -->
-					<h:outputText value="Sector de organizacion :" />
-					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.sector.sectId}"
-						effect="fade">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-						<f:selectItems value="#{postulanteManagedBean.sectores}"
-							var="sector" itemLabel="#{sector.sectNombre}"
-							itemValue="#{sector.sectId}" />
-					</p:selectOneMenu>
-
-				</h:panelGrid>
-
+			
+				<!-- Tipo de horario -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.tipoHorario.tihoId}"
+					effect="fade" required="true" requiredMessage="Elija el tipo de horario que prefiera">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.tiposHorario}"
+						var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
+						itemValue="#{tipoHorario.tihoId}" />					
+				</p:selectOneMenu>
+				
+				<!-- Nivel de puesto -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.nivelPuesto.nipuId}"
+					effect="fade" required="true" requiredMessage="Elija el tipo nivel de puesto">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.nivelesPuesto}"
+						var="nivelPuesto" itemLabel="#{nivelPuesto.nipuNombre}"
+						itemValue="#{nivelPuesto.nipuId}" />					
+				</p:selectOneMenu>
+				
+				<!-- Dimensión de organización -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.dimensionOrganizacion.diorId}"
+					effect="fade" required="true" requiredMessage="Elija la dimensión de la organización">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.dimensionesOrganizacion}"
+						var="dimensionOrganizacion" itemLabel="#{dimensionOrganizacion.diorNombre}"
+						itemValue="#{dimensionOrganizacion.diorId}" />					
+				</p:selectOneMenu>
+				
+				<!-- Sector de organización -->
+				<p:selectOneMenu
+					value="#{postulanteManagedBean.postulante.sector.sectId}"
+					effect="fade">
+					<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+					<f:selectItems value="#{postulanteManagedBean.sectores}"
+						var="sector" itemLabel="#{sector.sectNombre}"
+						itemValue="#{sector.sectId}" />					
+				</p:selectOneMenu>
+				
 				<!-- beneficios-->
 
-				<p:dataTable id="dataTablePostulanteBeneficio"
-					var="postulanteBeneficio" rowKey="#{postulanteBeneficio.id}"
+				<p:dataTable id="dataTablePostulanteBeneficio" var="postulanteBeneficio"
+					rowKey="#{postulanteBeneficio.id}"
 					value="#{postulanteManagedBean.postulante.postulanteBeneficios}"
 					selection="#{postulanteManagedBean.newPostulanteBeneficio}"
-					emptyMessage="No tiene registrado beneficios"
-					selectionMode="single">
+					emptyMessage="No tiene registrado beneficios" selectionMode="single">
 
 					<f:facet name="header">
                     Lista de Beneficios
@@ -142,11 +128,10 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteBeneficio()}"
-							oncomplete="savePostulanteBeneficioDialog.show()"
-							immediate="true" update=":newPostulanteBeneficioForm"
-							icon="ui-icon-check">
+							oncomplete="savePostulanteBeneficioDialog.show()" immediate="true"
+							update=":newPostulanteBeneficioForm" icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar" immediate="true"
+						<p:commandButton value="Eliminar"
 							actionListener="#{postulanteManagedBean.deletePostulanteBeneficio()}"
 							update=":formPostulante:dataTablePostulanteBeneficio"
 							icon="ui-icon-trash">
@@ -155,7 +140,7 @@
 				</p:dataTable>
 
 				<!-- fin de beneficios -->
-
+				
 			</p:panel>
 
 
@@ -711,8 +696,8 @@
 		</p:dialog>
 
 		<!-- Fin Dialog nuevo postulante idioma -->
-
-
+	
+		
 		<!-- Dialog nuevo postulante Beneficio -->
 
 		<p:dialog id="savePostulanteBeneficioDlg" header="Nuevo beneficio"

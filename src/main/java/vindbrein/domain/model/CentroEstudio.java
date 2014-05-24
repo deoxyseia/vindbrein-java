@@ -6,7 +6,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the centro_estudios database table.
+ * The persistent class for the centro_estudio database table.
  * 
  */
 @Entity
@@ -22,7 +22,7 @@ public class CentroEstudio implements Serializable {
 	private List<CentroEstudio> centroEstudios;
 	private TipoCentroEstudio tipoCentroEstudio;
 	private List<Estudio> estudios;
-	private List<OfertaLaboral> ofertaLaborals;
+	private List<OfertaCentroEstudio> ofertaCentroEstudios;
 
 	public CentroEstudio() {
 	}
@@ -144,14 +144,28 @@ public class CentroEstudio implements Serializable {
 	}
 
 
-	//bi-directional many-to-many association to OfertaLaboral
-	@ManyToMany(mappedBy="centroEstudios")
-	public List<OfertaLaboral> getOfertaLaborals() {
-		return this.ofertaLaborals;
+	//bi-directional many-to-one association to OfertaCentroEstudio
+	@OneToMany(mappedBy="centroEstudio")
+	public List<OfertaCentroEstudio> getOfertaCentroEstudios() {
+		return this.ofertaCentroEstudios;
 	}
 
-	public void setOfertaLaborals(List<OfertaLaboral> ofertaLaborals) {
-		this.ofertaLaborals = ofertaLaborals;
+	public void setOfertaCentroEstudios(List<OfertaCentroEstudio> ofertaCentroEstudios) {
+		this.ofertaCentroEstudios = ofertaCentroEstudios;
+	}
+
+	public OfertaCentroEstudio addOfertaCentroEstudio(OfertaCentroEstudio ofertaCentroEstudio) {
+		getOfertaCentroEstudios().add(ofertaCentroEstudio);
+		ofertaCentroEstudio.setCentroEstudio(this);
+
+		return ofertaCentroEstudio;
+	}
+
+	public OfertaCentroEstudio removeOfertaCentroEstudio(OfertaCentroEstudio ofertaCentroEstudio) {
+		getOfertaCentroEstudios().remove(ofertaCentroEstudio);
+		ofertaCentroEstudio.setCentroEstudio(null);
+
+		return ofertaCentroEstudio;
 	}
 
 }

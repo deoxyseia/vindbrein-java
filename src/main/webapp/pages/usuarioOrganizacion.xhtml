@@ -14,17 +14,23 @@
 					<h:panelGrid columns="2">
 						<h:outputText value="Razón social :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.sucursal.organizacion.orgaRazonSocial}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaRazonSocial}"
 							required="true"
 							requiredMessage="La razón social de la org. es necesaria" />
+							
+						<h:outputText value="RUC:"></h:outputText>
+						<p:inputText
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaRuc}"
+							required="true"
+							requiredMessage="EL RUC de la organizacion es necesario" />	
 
 						<h:outputText value="Web :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.sucursal.organizacion.orgaWeb}" />
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaWeb}" />
 						
 						<h:outputText value="Sector :" />
 						<p:selectOneMenu
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.sucursal.organizacion.sector.sectId}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.sector.sectId}"
 							effect="fade" required="true" requiredMessage="Elija un sector">
 							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 							<f:selectItems value="#{usuarioManagedBean.sectores}"
@@ -34,7 +40,7 @@
 						
 						<h:outputText value="Dimensión de la organización :" />
 						<p:selectOneMenu
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.sucursal.organizacion.dimensionOrganizacion.diorId}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.dimensionOrganizacion.diorId}"
 							effect="fade" required="true"
 							requiredMessage="Elija un dimensión de la organización">
 							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
@@ -90,11 +96,11 @@
 					<h:panelGrid columns="2">
 						<h:outputText value="Dirección :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.sucursal.sucuDireccion}" />
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.sucursales[0].sucuDireccion}" />
 
 						<h:outputText value="Teléfono :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.sucursal.sucuTelefono}" />
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.sucursales[0].sucuTelefono}" />
 					</h:panelGrid>
 				</p:fieldset>
 				
@@ -102,25 +108,25 @@
 					<h:panelGrid columns="2">
 						<h:outputText value="Nombres :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.rerrNombres}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclNombres}"
 							required="true"
 							requiredMessage="Su nombre(s) es necesario" />
 							
 						<h:outputText value="Apellido paterno :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.rerrApellidoPaterno}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclApellidoPaterno}"
 							required="true"
 							requiredMessage="Su apellido paterno es necesario" />
 							
 						<h:outputText value="Apellido materno :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.rerrApellidoMaterno}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclApellidoMaterno}"
 							required="true"
 							requiredMessage="Su apellido materno es necesario" />
 						
 						<h:outputText value="Teléfono :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.respRrhh.rerrTelefono}"
+							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclTelefono}"
 							required="true"
 							requiredMessage="Su apellido materno es necesario" />										
 					</h:panelGrid>
@@ -131,15 +137,9 @@
 					<h:panelGrid columns="2">
 						<h:outputText value="E-mail :"></h:outputText>
 						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.usuaCorreo}"
+							value="#{usuarioManagedBean.usuarioReclutador.usuaCorreo}"
 							converterMessage="Ingrese un email válido" required="true"
 							requiredMessage="Su e-mail es necesario" />
-
-						<h:outputText value="Usuario :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioRespRrhh.usuaNombre}"
-							converterMessage="Ingrese un usuario válido" required="true"
-							requiredMessage="Su usuario es necesario" />
 
 						<h:outputText value="Contraseña :"></h:outputText>
 						<p:inputText value="#{usuarioManagedBean.newPassword}"

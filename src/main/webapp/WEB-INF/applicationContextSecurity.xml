@@ -19,9 +19,9 @@
         				login-page="/pages/login.jsf"         				
         				authentication-failure-url="/pages/login.jsf"/>
         	<intercept-url pattern="/pages/login.jsf*" access="ROLE_ANONYMOUS"/> 
-        	<intercept-url pattern="/pages/secured/principal/**" access="ROLE_ESTUDIANTE, ROLE_ORGANIZACION"/>  		
-        	<intercept-url pattern="/pages/secured/postulante/**" access="ROLE_ESTUDIANTE, ROLE_ORGANIZACION"/>
-        	<intercept-url pattern="/pages/secured/reclutador/**" access="ROLE_ORGANIZACION"/>   
+        	<intercept-url pattern="/pages/secured/principal/**" access="ROLE_ESTUDIANTE, ROLE_RECLUTADOR"/>  		
+        	<intercept-url pattern="/pages/secured/postulante/**" access="ROLE_ESTUDIANTE"/>
+        	<intercept-url pattern="/pages/secured/reclutador/**" access="ROLE_RECLUTADOR"/>   
         	<intercept-url pattern="/pages/secured/administrador/**" access="ROLE_ESTUDIANTE,ROLE_ADMIN"/>        	    	
         
         	<logout logout-success-url="/pages/login.jsf"/>        	
@@ -39,8 +39,8 @@
 									u.usua_correo AS username, 
 									CASE 
 									WHEN u.fk_post_id is not null THEN 'ROLE_ESTUDIANTE' 
-									WHEN u.fk_recl_id is not null THEN 'ROLE_ORGANIZACION'
-									WHEN (u.fk_recl_id is null and u.fk_post_id is null) THEN 'ROLE_ESTUDIANTE'
+									WHEN u.fk_recl_id is not null THEN 'ROLE_RECLUTADOR'
+									WHEN (u.fk_recl_id is null and u.fk_post_id is null) THEN 'ROLE_ADMIN'
 									END  AS authority 
 									FROM vindbrein.usuario u
 									WHERE u.usua_correo = ?" />        		
