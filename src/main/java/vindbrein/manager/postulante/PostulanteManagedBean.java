@@ -695,4 +695,6 @@ public class PostulanteManagedBean implements Serializable{
 	public void setNewPostulanteBeneficio(PostulanteBeneficio newPostulanteBeneficio) {
 		this.newPostulanteBeneficio = newPostulanteBeneficio;
 	}
+	
+	
 }

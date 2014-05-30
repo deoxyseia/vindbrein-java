@@ -13,16 +13,44 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 
+import vindbrein.domain.model.Beneficio;
+import vindbrein.domain.model.CentroEstudio;
+import vindbrein.domain.model.Conocimiento;
+import vindbrein.domain.model.DimensionOrganizacion;
 import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.EstadoCivil;
+import vindbrein.domain.model.EstudioGenerico;
+import vindbrein.domain.model.Idioma;
+import vindbrein.domain.model.NivelConocimiento;
+import vindbrein.domain.model.NivelIdioma;
+import vindbrein.domain.model.NivelPuesto;
+import vindbrein.domain.model.OfertaBeneficio;
+import vindbrein.domain.model.OfertaBeneficioPK;
+import vindbrein.domain.model.OfertaCentroEstudio;
+import vindbrein.domain.model.OfertaCentroEstudioPK;
+import vindbrein.domain.model.OfertaConocimiento;
+import vindbrein.domain.model.OfertaConocimientoPK;
+import vindbrein.domain.model.OfertaEstudio;
+import vindbrein.domain.model.OfertaEstudioPK;
+import vindbrein.domain.model.OfertaIdioma;
+import vindbrein.domain.model.OfertaIdiomaPK;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Puesto;
 import vindbrein.domain.model.Reclutador;
+import vindbrein.domain.model.Sector;
+import vindbrein.domain.model.Telefono;
 import vindbrein.domain.model.TipoHorario;
+import vindbrein.service.BeneficioService;
+import vindbrein.service.CentroEstudioService;
+import vindbrein.service.ConocimientoService;
+import vindbrein.service.EstudioGenericoService;
+import vindbrein.service.IdiomaService;
 import vindbrein.service.OfertaLaboralService;
+import vindbrein.service.PuestoService;
 import vindbrein.service.ReclutadorService;
+import vindbrein.service.TipoHorarioService;
 
 @Controller
 @Scope("session")
@@ -33,12 +61,20 @@ public class OfertaLaboralManagedBean implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
+	private ArrayList<OfertaLaboral> ofertasLaborales;
 	private OfertaLaboral newOfertaLaboral;
 	
 	private Reclutador reclutador;
 	private Organizacion organizacion;
 	
-	private ArrayList<OfertaLaboral> ofertasLaborales;
+	
+	//data de manejo
+	private OfertaCentroEstudio newOfertaCentroEstudio;
+	private OfertaEstudio newOfertaEstudio;
+	private OfertaBeneficio newOfertaBeneficio;
+	private OfertaConocimiento newOfertaConocimiento;
+	private OfertaIdioma newOfertaIdioma;
+	
 	
 	@Autowired
 	@Qualifier("reclutadorServiceImpl")
@@ -48,32 +84,77 @@ public class OfertaLaboralManagedBean implements Serializable{
 	@Qualifier("ofertaLaboralServiceImpl")
 	private OfertaLaboralService ofertaLaboralService;
 	
+	@Autowired
+	@Qualifier("idiomaServiceImpl")
+	private IdiomaService idiomaService;
+	
+	@Autowired
+	@Qualifier("tipoHorarioServiceImpl")
+	private TipoHorarioService tipoHorarioService;
+	
+	@Autowired
+	@Qualifier("conocimientoServiceImpl")
+	private ConocimientoService conocimientoService;
+	
+	@Autowired
+	@Qualifier("beneficioServiceImpl")
+	private BeneficioService beneficioService;
+	
+	@Autowired
+	@Qualifier("estudioGenericoServiceImpl")
+	private EstudioGenericoService estudioGenericoService;
+	
+	@Autowired
+	@Qualifier("centroEstudioServiceImpl")
+	private CentroEstudioService centroEstudioService;
+	
+	@Autowired
+	@Qualifier("puestoServiceImpl")
+	private PuestoService puestoService;
+	
+	//data maestra
+	private ArrayList<Idioma> idiomas;
+	private ArrayList<NivelIdioma> nivelesIdioma;
+	private ArrayList<TipoHorario> tiposHorario;	
+	private ArrayList<Conocimiento> conocimientos;
+	private ArrayList<NivelConocimiento> nivelesConocimiento;	
+	private ArrayList<Beneficio> beneficios;
+	private ArrayList<EstudioGenerico> estudiosGenericos;
+	private ArrayList<CentroEstudio> centrosEstudio;
+	private ArrayList<Puesto> puestos;
+	
 	@PostConstruct
 	public void init() {		
-		iniciarReclutador();
-		
 		iniciarDatosMaestros();
 	}
-	
-	private void iniciarReclutador(){
+			
+	private void iniciarDatosMaestros(){
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		
-		reclutador = reclutadorService.getReclutadorByCorreo(user.getUsername());		
-	}
-	
-	private void iniciarDatosMaestros(){
+		reclutador = reclutadorService.getReclutadorByCorreo(user.getUsername());
 		organizacion = reclutador.getOrganizacion();
 		
 		ofertasLaborales = ofertaLaboralService.getOfertasLaboralesByOrganizacion(organizacion);
+		
+		//////
+		idiomas = idiomaService.getIdiomas();
+		nivelesIdioma = idiomaService.getNivelesIdioma();
+		tiposHorario = tipoHorarioService.getTiposHorario();
+		conocimientos = conocimientoService.getConocimientos();
+		nivelesConocimiento = conocimientoService.getNivelesConocimiento();
+		beneficios = beneficioService.getBeneficios();
+		estudiosGenericos = estudioGenericoService.getEstudiosGenericos();
+		centrosEstudio = centroEstudioService.getCentrosEstudio();	
+		puestos = puestoService.getPuestos();
 	}
 	
-	private void recargarOfertaLaboral(){
+	public void recargarOfertaLaboral(){
 		
 		
 	}
 	
-	private void reiniciarNewOfertaLaboral(){
+	public void reiniciarNewOfertaLaboral(){
 		newOfertaLaboral = new OfertaLaboral();
 		
 		newOfertaLaboral.setOrganizacionPuesto(new OrganizacionPuesto());
@@ -83,7 +164,110 @@ public class OfertaLaboralManagedBean implements Serializable{
 		newOfertaLaboral.setDistrito(new Distrito());
 		newOfertaLaboral.setEstadoCivil(new EstadoCivil());
 		
+				
+		newOfertaLaboral.setOfertaCentroEstudios(new ArrayList<OfertaCentroEstudio>());
+		newOfertaLaboral.setOfertaBeneficios(new ArrayList<OfertaBeneficio>());
+		newOfertaLaboral.setOfertaConocimientos(new ArrayList<OfertaConocimiento>());
+		newOfertaLaboral.setOfertaEstudios(new ArrayList<OfertaEstudio>());
+		newOfertaLaboral.setOfertaIdiomas(new ArrayList<OfertaIdioma>());	
+		
+		reiniciarNewOfertaBeneficio();
+		reiniciarNewOfertaCentroEstudio();
+		reiniciarNewOfertaConocimiento();
+		reiniciarNewOfertaEstudio();
+		reiniciarNewOfertaIdioma();
 	}
+	
+	public void saveOfertaLaboral(){
+		ofertaLaboralService.addOfertaLaboral(newOfertaLaboral);
+	}
+	
+	// Oferta beneficio
+	public void reiniciarNewOfertaBeneficio() {
+		newOfertaBeneficio = new OfertaBeneficio();
+		newOfertaBeneficio.setOfertaLaboral(newOfertaLaboral);
+		newOfertaBeneficio.setBeneficio(new Beneficio());
+		newOfertaBeneficio.setId(new OfertaBeneficioPK());
+	}
+
+	public void saveOfertaBeneficio() {
+		newOfertaLaboral.addOfertaBeneficio(newOfertaBeneficio);
+	}
+
+	public void deleteOfertaBeneficio() {
+		
+	}
+	
+	// Oferta Centro estudio
+	public void reiniciarNewOfertaCentroEstudio() {
+		newOfertaCentroEstudio = new OfertaCentroEstudio();
+		newOfertaCentroEstudio.setOfertaLaboral(newOfertaLaboral);
+		newOfertaCentroEstudio.setCentroEstudio(new CentroEstudio());
+		newOfertaCentroEstudio.setId(new OfertaCentroEstudioPK());
+	}
+
+	public void saveOfertaCentroEstudio() {
+
+	}
+
+	public void deleteOfertaCentroEstudio() {
+
+	}
+	
+	// Oferta Conocimiento
+	public void reiniciarNewOfertaConocimiento() {
+		newOfertaConocimiento = new OfertaConocimiento();
+		newOfertaConocimiento.setOfertaLaboral(newOfertaLaboral);
+		newOfertaConocimiento.setConocimiento(new Conocimiento());
+		newOfertaConocimiento.setNivelConocimiento(new NivelConocimiento());
+		newOfertaConocimiento.setId(new OfertaConocimientoPK());
+	}
+
+	public void saveOfertaConocimiento() {
+		
+	}
+
+	public void deleteOfertaConocimiento() {
+
+	}
+	
+	
+	// Oferta Estudio
+	public void reiniciarNewOfertaEstudio() {
+		newOfertaEstudio = new OfertaEstudio();
+		newOfertaEstudio.setOfertaLaboral(newOfertaLaboral);
+		newOfertaEstudio.setEstudioGenerico(new EstudioGenerico());
+		newOfertaEstudio.setId(new OfertaEstudioPK());
+		
+	}
+
+	public void saveOfertaEstudio() {
+
+	}
+
+	public void deleteOfertaEstudio() {
+
+	}
+	
+	
+	// Oferta idioma
+	public void reiniciarNewOfertaIdioma() {
+		newOfertaIdioma = new OfertaIdioma();
+		newOfertaIdioma.setOfertaLaboral(newOfertaLaboral);
+		newOfertaIdioma.setIdioma(new Idioma());
+		newOfertaIdioma.setNivelIdioma(new NivelIdioma());
+		newOfertaIdioma.setId(new OfertaIdiomaPK());
+	}
+
+	public void saveOfertaIdioma() {
+
+	}
+
+	public void deleteOfertaIdioma() {
+
+	}
+			
+	//getters and setters
 
 	public Reclutador getReclutador() {
 		return reclutador;
@@ -116,4 +300,117 @@ public class OfertaLaboralManagedBean implements Serializable{
 	public void setNewOfertaLaboral(OfertaLaboral newOfertaLaboral) {
 		this.newOfertaLaboral = newOfertaLaboral;
 	}
+
+	public OfertaCentroEstudio getNewOfertaCentroEstudio() {
+		return newOfertaCentroEstudio;
+	}
+
+	public void setNewOfertaCentroEstudio(OfertaCentroEstudio newOfertaCentroEstudio) {
+		this.newOfertaCentroEstudio = newOfertaCentroEstudio;
+	}
+
+	public OfertaEstudio getNewOfertaEstudio() {
+		return newOfertaEstudio;
+	}
+
+	public void setNewOfertaEstudio(OfertaEstudio newOfertaEstudio) {
+		this.newOfertaEstudio = newOfertaEstudio;
+	}
+
+	public OfertaBeneficio getNewOfertaBeneficio() {
+		return newOfertaBeneficio;
+	}
+
+	public void setNewOfertaBeneficio(OfertaBeneficio newOfertaBeneficio) {
+		this.newOfertaBeneficio = newOfertaBeneficio;
+	}
+
+	public OfertaConocimiento getNewOfertaConocimiento() {
+		return newOfertaConocimiento;
+	}
+
+	public void setNewOfertaConocimiento(OfertaConocimiento newOfertaConocimiento) {
+		this.newOfertaConocimiento = newOfertaConocimiento;
+	}
+
+	public OfertaIdioma getNewOfertaIdioma() {
+		return newOfertaIdioma;
+	}
+
+	public void setNewOfertaIdioma(OfertaIdioma newOfertaIdioma) {
+		this.newOfertaIdioma = newOfertaIdioma;
+	}
+
+	public ArrayList<NivelIdioma> getNivelesIdioma() {
+		return nivelesIdioma;
+	}
+
+	public void setNivelesIdioma(ArrayList<NivelIdioma> nivelesIdioma) {
+		this.nivelesIdioma = nivelesIdioma;
+	}
+
+	public ArrayList<TipoHorario> getTiposHorario() {
+		return tiposHorario;
+	}
+
+	public void setTiposHorario(ArrayList<TipoHorario> tiposHorario) {
+		this.tiposHorario = tiposHorario;
+	}
+
+	public ArrayList<Idioma> getIdiomas() {
+		return idiomas;
+	}
+
+	public void setIdiomas(ArrayList<Idioma> idiomas) {
+		this.idiomas = idiomas;
+	}
+
+	public ArrayList<Beneficio> getBeneficios() {
+		return beneficios;
+	}
+
+	public void setBeneficios(ArrayList<Beneficio> beneficios) {
+		this.beneficios = beneficios;
+	}
+
+	public ArrayList<NivelConocimiento> getNivelesConocimiento() {
+		return nivelesConocimiento;
+	}
+
+	public void setNivelesConocimiento(
+			ArrayList<NivelConocimiento> nivelesConocimiento) {
+		this.nivelesConocimiento = nivelesConocimiento;
+	}
+
+	public ArrayList<EstudioGenerico> getEstudiosGenericos() {
+		return estudiosGenericos;
+	}
+
+	public void setEstudiosGenericos(ArrayList<EstudioGenerico> estudiosGenericos) {
+		this.estudiosGenericos = estudiosGenericos;
+	}
+
+	public ArrayList<CentroEstudio> getCentrosEstudio() {
+		return centrosEstudio;
+	}
+
+	public void setCentrosEstudio(ArrayList<CentroEstudio> centrosEstudio) {
+		this.centrosEstudio = centrosEstudio;
+	}
+
+	public ArrayList<Conocimiento> getConocimientos() {
+		return conocimientos;
+	}
+
+	public void setConocimientos(ArrayList<Conocimiento> conocimientos) {
+		this.conocimientos = conocimientos;
+	}
+
+	public ArrayList<Puesto> getPuestos() {
+		return puestos;
+	}
+
+	public void setPuestos(ArrayList<Puesto> puestos) {
+		this.puestos = puestos;
+	}	
 }

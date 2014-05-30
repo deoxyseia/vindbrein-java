@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vindbrein.dao.NivelPuestoDAO;
+import vindbrein.dao.OrganizacionPuestoDAO;
 import vindbrein.dao.PuestoDAO;
 import vindbrein.domain.model.NivelPuesto;
+import vindbrein.domain.model.Organizacion;
+import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Puesto;
 import vindbrein.service.PuestoService;
 
@@ -23,6 +26,9 @@ public class PuestoServiceImpl implements PuestoService, Serializable {
 	
 	@Autowired	
 	NivelPuestoDAO nivelPuestoDAO;
+	
+	@Autowired	
+	OrganizacionPuestoDAO organizacionPuestoDAO;
 		
 	@Transactional(readOnly = false)
 	public void addPuesto(Puesto puesto) {
@@ -45,6 +51,18 @@ public class PuestoServiceImpl implements PuestoService, Serializable {
 
 	public ArrayList<Puesto> getPuestos() {
 		return getPuestoDAO().getPuestos();
+	}
+	
+	public ArrayList<Puesto> getPuestosByOrganizacion(Organizacion organizacion) {
+		ArrayList<OrganizacionPuesto> organizacionPuestos = getOrganizacionPuestoDAO().getOrganizacionPuestosByOrganizacion(organizacion);
+		
+		ArrayList<Puesto> puestos = new ArrayList<Puesto>();
+		
+		for (OrganizacionPuesto organizacionPuesto : organizacionPuestos) {
+			puestos.add(organizacionPuesto.getPuesto());
+		}
+		
+		return puestos;
 	}
 	
 	public void addNivelPuesto(NivelPuesto nivelPuesto) {
@@ -83,5 +101,13 @@ public class PuestoServiceImpl implements PuestoService, Serializable {
 
 	public void setNivelPuestoDAO(NivelPuestoDAO nivelPuestoDAO) {
 		this.nivelPuestoDAO = nivelPuestoDAO;
-	}	
+	}
+
+	public OrganizacionPuestoDAO getOrganizacionPuestoDAO() {
+		return organizacionPuestoDAO;
+	}
+
+	public void setOrganizacionPuestoDAO(OrganizacionPuestoDAO organizacionPuestoDAO) {
+		this.organizacionPuestoDAO = organizacionPuestoDAO;
+	}
 }

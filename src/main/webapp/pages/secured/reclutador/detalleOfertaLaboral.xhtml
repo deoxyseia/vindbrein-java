@@ -18,26 +18,39 @@
 			<p:panel header="Información básica">
 
 				<h:panelGrid columns="2">
+
+					<!-- Puesto -->
+					<h:outputText value="Puestos :" />
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaLaboral.organizacionPuesto.puesto.puesId}"
+						effect="fade" required="true"
+						requiredMessage="Elija el puesto">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.puestos}"
+							var="puesto" itemLabel="#{puesto.puesNombre}"
+							itemValue="#{puesto.puesId}" />
+					</p:selectOneMenu>
+
 					<h:outputText value="Título :"></h:outputText>
 					<p:inputText
 						value="#{ofertaLaboralManagedBean.newOfertaLaboral.oflaTitulo}"
 						required="true" requiredMessage="El título es necesario" />
 
-					<h:outputText value="Título :"></h:outputText>
+					<h:outputText value="Descripción :"></h:outputText>
 					<p:inputTextarea
 						value="#{ofertaLaboralManagedBean.newOfertaLaboral.oflaDescripcion}"
 						required="true" requiredMessage="Escriba una descripción" />
 
 					<h:outputText value="Salario :"></h:outputText>
-					<p:inputTextarea
+					<p:inputText
 						value="#{ofertaLaboralManagedBean.newOfertaLaboral.oflaSalario}" />
 
 					<h:outputText value="Edad :"></h:outputText>
-					<p:inputTextarea
+					<p:inputText
 						value="#{ofertaLaboralManagedBean.newOfertaLaboral.oflaEdad}" />
 
 					<h:outputText value="Tiempo de experiencia :"></h:outputText>
-					<p:inputTextarea
+					<p:inputText
 						value="#{ofertaLaboralManagedBean.newOfertaLaboral.oflaTiempoExperiencia}" />
 
 					<h:outputText value="Sexo :" />
@@ -63,52 +76,193 @@
 								var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
 								itemValue="#{tipoHorario.tihoId}" />
 						</p:selectOneMenu>
-
-						<!-- Nivel de puesto -->
-						<h:outputText value="Nivel de puesto :" />
-						<p:selectOneMenu
-							value="#{ofertaLaboralManagedBean.postulante.nivelPuesto.nipuId}"
-							effect="fade" required="true"
-							requiredMessage="Elija el tipo nivel de puesto">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems value="#{ofertaLaboralManagedBean.nivelesPuesto}"
-								var="nivelPuesto" itemLabel="#{nivelPuesto.nipuNombre}"
-								itemValue="#{nivelPuesto.nipuId}" />
-						</p:selectOneMenu>
-
-						<!-- Dimensión de organización -->
-						<h:outputText value="Dimensión de organizacion :" />
-						<p:selectOneMenu
-							value="#{ofertaLaboralManagedBean.postulante.dimensionOrganizacion.diorId}"
-							effect="fade" required="true"
-							requiredMessage="Elija la dimensión de la organización">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems
-								value="#{ofertaLaboralManagedBean.dimensionesOrganizacion}"
-								var="dimensionOrganizacion"
-								itemLabel="#{dimensionOrganizacion.diorNombre}"
-								itemValue="#{dimensionOrganizacion.diorId}" />
-						</p:selectOneMenu>
-
-						<!-- Sector de organización -->
-						<h:outputText value="Sector de organizacion :" />
-						<p:selectOneMenu
-							value="#{ofertaLaboralManagedBean.postulante.sector.sectId}"
-							effect="fade">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems value="#{ofertaLaboralManagedBean.sectores}"
-								var="sector" itemLabel="#{sector.sectNombre}"
-								itemValue="#{sector.sectId}" />
-						</p:selectOneMenu>
-
 					</h:panelGrid>
-
-
-
 				</h:panelGrid>
 			</p:panel>
 
-			<p:panel header="Preferencias">
+			<p:panel header="Características">
+			
+				<!-- beneficios-->
+
+				<p:dataTable id="dataTableOfertaBeneficio"
+					var="ofertaBeneficio" rowKey="#{ofertaBeneficio.id}"
+					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaBeneficios}"
+					selection="#{ofertaLaboralManagedBean.newOfertaBeneficio}"
+					emptyMessage="No tiene registrado beneficios"
+					selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Beneficios
+                	</f:facet>
+
+					<p:column headerText="beneficio">
+						<h:outputText value="#{ofertaBeneficio.beneficio.beneNombre}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaBeneficio()}"
+							oncomplete="saveOfertaBeneficioDialog.show()"
+							immediate="true" update=":newOfertaBeneficioForm"
+							icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar" immediate="true"
+							actionListener="#{ofertaLaboralManagedBean.deleteOfertaBeneficio()}"
+							update=":formOfertaLaboral:dataTableOfertaBeneficio"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de beneficios -->
+				
+				<!-- Oferta Idioma-->
+
+				<p:dataTable id="dataTableOfertaIdioma" var="ofertaIdioma"
+					rowKey="#{ofertaIdioma.id}"
+					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaIdiomas}"
+					selection="#{ofertaLaboralManagedBean.newOfertaIdioma}"
+					emptyMessage="No tiene registrado idiomas" selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Idiomas
+                	</f:facet>
+
+					<p:column headerText="Idioma">
+						<h:outputText value="#{ofertaIdioma.idioma.idioNombre}" />
+					</p:column>
+
+					<p:column headerText="Nivel de Conocimiento">
+						<h:outputText value="#{ofertaIdioma.nivelIdioma.niidNombre}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaIdioma()}"
+							oncomplete="saveOfertaIdiomaDialog.show()" immediate="true"
+							update=":newOfertaIdiomaForm" icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar"
+							actionListener="#{ofertaLaboralManagedBean.deleteOfertaIdioma()}"
+							update=":formOfertaLaboral:dataTableOfertaIdioma"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de oferta idioma -->
+				
+				<!-- oferta Conocimiento -->
+
+				<p:dataTable id="dataTableOfertaConocimiento"
+					var="ofertaConocimiento" rowKey="#{ofertaConocimiento.id}"
+					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaConocimientos}"
+					selection="#{ofertaLaboralManagedBean.newOfertaConocimiento}"
+					emptyMessage="No tiene registrado conocimientos"
+					selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Conocimientos
+                	</f:facet>
+
+					<p:column headerText="Conocimiento">
+						<h:outputText
+							value="#{ofertaConocimiento.conocimiento.conoNombre}" />
+					</p:column>
+
+					<p:column headerText="Nivel de conocimiento">
+						<h:outputText
+							value="#{ofertaConocimiento.nivelConocimiento.nicoNombre}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaConocimiento()}"
+							oncomplete="saveOfertaConocimientoDialog.show()"
+							immediate="true" update=":newOfertaConocimientoForm"
+							icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar"
+							actionListener="#{ofertaLaboralManagedBean.deleteOfertaConocimiento()}"
+							update=":formOfertaLaboral:dataTableOfertaConocimiento"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de oferta conocimiento -->
+				
+				<!-- Estudio-->
+
+				<p:dataTable id="dataTableOfertaEstudio"
+					var="ofertaEstudio" rowKey="#{ofertaEstudio.id}"
+					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaEstudios}"
+					selection="#{ofertaLaboralManagedBean.newOfertaEstudio}"
+					emptyMessage="No tiene estudios de preferencia"
+					selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Beneficios
+                	</f:facet>
+
+					<p:column headerText="Estudio">
+						<h:outputText value="#{ofertaEstudio.estudio.estuNombre}" />
+					</p:column>
+					
+					<p:column headerText="Centro de estudios">
+						<h:outputText value="#{ofertaEstudio.estudio.centroEstudio.ceesNombre}" />
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaEstudio()}"
+							oncomplete="saveOfertaEstudioDialog.show()"
+							immediate="true" update=":newOfertaEstudioForm"
+							icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar" immediate="true"
+							actionListener="#{ofertaLaboralManagedBean.deleteOfertaEstudio()}"
+							update=":formOfertaLaboral:dataTableOfertaEstudio"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de estudios -->
+				
+				<!-- Centro de estudio -->
+
+				<p:dataTable id="dataTableOfertaCentroEstudio"
+					var="ofertaCentroEstudio" rowKey="#{ofertaCentroEstudio.id}"
+					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaCentroEstudios}"
+					selection="#{ofertaLaboralManagedBean.newOfertaCentroEstudio}"
+					emptyMessage="No tiene centros de estudio"
+					selectionMode="single">
+
+					<f:facet name="header">
+                    Lista de Centros de estudio
+                	</f:facet>
+
+					<p:column headerText="Centro de estudio">
+						<h:outputText value="#{ofertaCentroEstudio.centroEstudio.ceesNombre}" />
+					</p:column>
+					
+					<f:facet name="footer">
+						<p:commandButton value="Nuevo"
+							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaCentroEstudio()}"
+							oncomplete="saveOfertaCentroEstudioDialog.show()"
+							immediate="true" update=":newOfertaCentroEstudioForm"
+							icon="ui-icon-check">
+						</p:commandButton>
+						<p:commandButton value="Eliminar" immediate="true"
+							actionListener="#{ofertaLaboralManagedBean.deleteOfertaCentroEstudio()}"
+							update=":formOfertaLaboral:dataTableOfertaCentroEstudio"
+							icon="ui-icon-trash">
+						</p:commandButton>
+					</f:facet>
+				</p:dataTable>
+
+				<!-- fin de centros de estudio -->
 
 
 
@@ -118,26 +272,207 @@
 			<p:panel>
 				<f:facet name="footer">
 					<p:commandButton value="Guardar"
-						actionListener="#{postulanteManagedBean.savePostulante()}"
-						update=":formPostulante" icon="ui-icon-check" />
+						actionListener="#{ofertaLaboralManagedBean.saveOfertaLaboral()}"
+						update=":formOfertaLaboral" icon="ui-icon-check" />
 					<p:commandButton value="Cancelar"
-						actionListener="#{postulanteManagedBean.cancelSavePostulante()}"
-						update=":formPostulante" icon="ui-icon-close" />
+						actionListener="#{ofertaLaboralManagedBean.cancelSaveOfertaLaboral()}"
+						update=":formOfertaLaboral" icon="ui-icon-close" />
 				</f:facet>
 			</p:panel>
 		</h:form>
+		
+		
+		<!-- Dialog nuevo oferta Beneficio -->
 
+		<p:dialog id="saveOfertaBeneficioDlg" header="Nuevo beneficio"
+			hideEffect="explode" widgetVar="saveOfertaBeneficioDialog"
+			resizable="false" modal="true" appendTo="@(body)">
 
+			<h:form id="newOfertaBeneficioForm">
+				<p:panelGrid columns="2">
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaBeneficio.beneficio}" converter="omnifaces.SelectItemsConverter"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.beneficios}"
+							var="beneficio" itemLabel="#{beneficio.beneNombre}"
+							itemValue="#{beneficio}" />
+					</p:selectOneMenu>
 
-		<p:panel header="Información detallada">
-			<h:form id="formPostulanteDetalle">
-
-
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{ofertaLaboralManagedBean.saveOfertaBeneficio()}"
+							oncomplete="saveOfertaBeneficioDialog.hide()"
+							update=":formOfertaLaboral:dataTableOfertaBeneficio"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveOfertaBeneficioDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
 			</h:form>
+		</p:dialog>
 
-		</p:panel>
+		<!-- Fin Dialog nuevo oferta beneficio -->
+		
+		<!-- Dialog nuevo oferta Idioma -->
 
+		<p:dialog id="saveOfertaIdiomaDlg" header="Nuevo idioma"
+			hideEffect="explode" widgetVar="saveOfertaIdiomaDialog"
+			resizable="false" modal="true" appendTo="@(body)">
 
+			<h:form id="newOfertaIdiomaForm">
+				<p:panelGrid columns="2">
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaIdioma.idioma.idioId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.idiomas}"
+							var="idioma" itemLabel="#{idioma.idioNombre}"
+							itemValue="#{idioma.idioId}" />
+					</p:selectOneMenu>
+
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaIdioma.nivelIdioma.niidId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.nivelesIdioma}"
+							var="nivelIdioma" itemLabel="#{nivelIdioma.niidNombre}"
+							itemValue="#{nivelIdioma.niidId}" />
+					</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{ofertaLaboralManagedBean.saveOfertaIdioma()}"
+							oncomplete="saveOfertaIdiomaDialog.hide()"
+							update=":formOfertaLaboral:dataTableOfertaIdioma"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveOfertaIdiomaDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<!-- Fin Dialog nuevo oferta idioma -->
+		
+		<!-- Dialog nuevo oferta conocimiento -->
+		
+		<p:dialog id="saveOfertaConocimientoDlg" header="Nuevo Conocimiento"
+			hideEffect="explode" widgetVar="saveOfertaConocimientoDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+
+			<h:form id="newOfertaConocimientoForm">
+				<p:panelGrid columns="2">
+					<h:outputText value="Conocimiento :" />
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaConocimiento.conocimiento.conoId}"
+						effect="fade" required="true" requiredMessage="Elija Conocimiento">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.conocimientos}"
+							var="conocimiento" itemLabel="#{conocimiento.conoNombre}"
+							itemValue="#{conocimiento.conoId}" />
+					</p:selectOneMenu>
+
+					<h:outputText value="Nivel de Conocimiento :" />
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaConocimiento.nivelConocimiento.nicoId}"
+						effect="fade" required="true"
+						requiredMessage="Elija el nivel de conocimiento">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems
+							value="#{ofertaLaboralManagedBean.nivelesConocimiento}"
+							var="nivelConocimiento"
+							itemLabel="#{nivelConocimiento.nicoNombre}"
+							itemValue="#{nivelConocimiento.nicoId}" />
+					</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{ofertaLaboralManagedBean.saveOfertaConocimiento()}"
+							oncomplete="saveOfertaConocimientoDialog.hide()"
+							update=":formOfertaLaboral:dataTableOfertaConocimiento"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveOfertaConocimientoDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		<!-- Fin Dialog nuevo oferta conocimiento -->
+		
+		<!-- Dialog nuevo oferta estudio -->
+		
+		<p:dialog id="saveOfertaEstudioDlg" header="Nuevo Estudio"
+			hideEffect="explode" widgetVar="saveOfertaEstudioDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+
+			<h:form id="newOfertaEstudioForm">
+				<p:panelGrid columns="2">
+					<h:outputText value="Estudio :" />
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaEstudio.estudioGenerico.esgeId}"
+						effect="fade" required="true" requiredMessage="Elija el estudio">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.estudiosGenericos}"
+							var="estudioGenerico" itemLabel="#{estudioGenerico.esgeNombre}"
+							itemValue="#{estudioGenerico.esgeId}" />
+					</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{ofertaLaboralManagedBean.saveOfertaEstudio()}"
+							oncomplete="saveOfertaEstudioDialog.hide()"
+							update=":formOfertaLaboral:dataTableOfertaEstudio"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveOfertaEstudioDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<!-- Fin Dialog nuevo oferta estudio -->
+		
+		<!-- Dialog nuevo oferta Centro estudio -->
+		
+		<p:dialog id="saveOfertaCentroEstudioDlg" header="Nuevo Centro de Estudio"
+			hideEffect="explode" widgetVar="saveOfertaCentroEstudioDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+
+			<h:form id="newOfertaCentroEstudioForm">
+				<p:panelGrid columns="2">
+				
+					<h:outputText value="Centro de estudio :" />
+					<p:selectOneMenu
+						value="#{ofertaLaboralManagedBean.newOfertaCentroEstudio.centroEstudio.ceesId}"
+						effect="fade" required="true" requiredMessage="Elija el estudio">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{ofertaLaboralManagedBean.centrosEstudio}"
+							var="centroEstudio" itemLabel="#{centroEstudio.ceesNombre}"
+							itemValue="#{centroEstudio.ceesId}" />
+					</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{ofertaLaboralManagedBean.saveOfertaCentroEstudio()}"
+							oncomplete="saveOfertaCentroEstudioDialog.hide()"
+							update=":formOfertaLaboral:dataTableOfertaCentroEstudio"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="saveOfertaCentroEstudioDialog.hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+		
+		<!-- Fin Dialog nuevo centro de estudio -->
+
+		
 
 
 

@@ -63,5 +63,15 @@ public class OrganizacionPuestoDAO {
 				.createQuery("from OrganizacionPuesto order by conoNombre asc")
 				.list();
 		return list;
-	}	
+	}
+	
+	public ArrayList<OrganizacionPuesto> getOrganizacionPuestosByOrganizacion(
+			Organizacion organizacion) {
+		ArrayList<OrganizacionPuesto> list = (ArrayList<OrganizacionPuesto>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery(
+						"from OrganizacionPuesto where organizacion.orgaId=? norder by conoNombre asc")
+				.setParameter(0, organizacion.getOrgaId()).list();
+		return list;
+	}
 }

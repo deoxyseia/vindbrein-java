@@ -30,13 +30,26 @@
 						<h:outputText value="Título" />
 					</f:facet>
 					<h:outputText value="#{ofertaLaboral.oflaTitulo}" />
-				</p:column>			
-				
-				
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Registrar nueva oferta laboral" ajax="false"
+						immediate="true"
+						actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaLaboral()}"
+						action="/pages/secured/reclutador/detalleOfertaLaboral.xhtml?faces-redirect=true"
+						type="submit" icon="ui-icon-check">
+					</p:commandButton>
+					
+					<p:commandButton value="Eliminar oferta laboral"
+						oncomplete="confirmDeleteOfertaLaboralDialog.show()"
+						icon="ui-icon-trash" />
+				</f:facet>
+
+
 			</p:dataTable>
 		</h:form>
 		
-		<!-- Dialog de confirmación de eliminación de ofertaLaboral-->
+		<!-- Dialog de confirmación de eliminación de oferta Laboral-->
 
 		<p:dialog id="confirmDeleteOfertaLaboralDlg" header="Confirmación" 
 			hideEffect="explode" widgetVar="confirmDeleteOfertaLaboralDialog" resizable="false"
