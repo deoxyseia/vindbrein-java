@@ -1,0 +1,7 @@
+@CHARSET "UTF-8";
+
+.ui-datatable{
+	width: 400px;
+	padding: 20px;
+	margin: 0 auto;
+}

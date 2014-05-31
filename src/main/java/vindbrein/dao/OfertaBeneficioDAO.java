@@ -60,8 +60,17 @@ public class OfertaBeneficioDAO {
 	public ArrayList<OfertaBeneficio> getOfertaBeneficios() {
 		ArrayList<OfertaBeneficio> list = (ArrayList<OfertaBeneficio>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from OfertaBeneficio order by beneficio.benNombre asc")
+				.createQuery("from OfertaBeneficio order by beneficio.beneNombre asc")
 				.list();
+		return list;
+	}
+	
+	public ArrayList<OfertaBeneficio> getOfertaBeneficiosByOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		ArrayList<OfertaBeneficio> list = (ArrayList<OfertaBeneficio>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery("from OfertaBeneficio where ofertaLaboral.oflaId=? order by beneficio.beneNombre asc")
+				.setParameter(0, ofertaLaboral.getOflaId()).list();
+		
 		return list;
 	}
 }

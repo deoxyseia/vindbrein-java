@@ -16,14 +16,10 @@ import org.springframework.stereotype.Controller;
 import vindbrein.domain.model.Beneficio;
 import vindbrein.domain.model.CentroEstudio;
 import vindbrein.domain.model.Conocimiento;
-import vindbrein.domain.model.DimensionOrganizacion;
-import vindbrein.domain.model.Distrito;
-import vindbrein.domain.model.EstadoCivil;
 import vindbrein.domain.model.EstudioGenerico;
 import vindbrein.domain.model.Idioma;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.NivelIdioma;
-import vindbrein.domain.model.NivelPuesto;
 import vindbrein.domain.model.OfertaBeneficio;
 import vindbrein.domain.model.OfertaBeneficioPK;
 import vindbrein.domain.model.OfertaCentroEstudio;
@@ -37,10 +33,9 @@ import vindbrein.domain.model.OfertaIdiomaPK;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.OrganizacionPuesto;
+import vindbrein.domain.model.OrganizacionPuestoPK;
 import vindbrein.domain.model.Puesto;
 import vindbrein.domain.model.Reclutador;
-import vindbrein.domain.model.Sector;
-import vindbrein.domain.model.Telefono;
 import vindbrein.domain.model.TipoHorario;
 import vindbrein.service.BeneficioService;
 import vindbrein.service.CentroEstudioService;
@@ -66,16 +61,14 @@ public class OfertaLaboralManagedBean implements Serializable{
 	
 	private Reclutador reclutador;
 	private Organizacion organizacion;
-	
-	
+		
 	//data de manejo
 	private OfertaCentroEstudio newOfertaCentroEstudio;
 	private OfertaEstudio newOfertaEstudio;
 	private OfertaBeneficio newOfertaBeneficio;
 	private OfertaConocimiento newOfertaConocimiento;
 	private OfertaIdioma newOfertaIdioma;
-	
-	
+		
 	@Autowired
 	@Qualifier("reclutadorServiceImpl")
 	private ReclutadorService reclutadorService;
@@ -129,6 +122,8 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 			
 	private void iniciarDatosMaestros(){
+		logger.info("iniciando datos maestros");
+		
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		
@@ -136,8 +131,7 @@ public class OfertaLaboralManagedBean implements Serializable{
 		organizacion = reclutador.getOrganizacion();
 		
 		ofertasLaborales = ofertaLaboralService.getOfertasLaboralesByOrganizacion(organizacion);
-		
-		//////
+				
 		idiomas = idiomaService.getIdiomas();
 		nivelesIdioma = idiomaService.getNivelesIdioma();
 		tiposHorario = tipoHorarioService.getTiposHorario();
@@ -155,16 +149,15 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 	
 	public void reiniciarNewOfertaLaboral(){
+		logger.info("reiniciando oferta laboral");
+		
 		newOfertaLaboral = new OfertaLaboral();
 		
 		newOfertaLaboral.setOrganizacionPuesto(new OrganizacionPuesto());
 		newOfertaLaboral.getOrganizacionPuesto().setOrganizacion(organizacion);
 		newOfertaLaboral.getOrganizacionPuesto().setPuesto(new Puesto());
-		newOfertaLaboral.setTipoHorario(new TipoHorario());
-		newOfertaLaboral.setDistrito(new Distrito());
-		newOfertaLaboral.setEstadoCivil(new EstadoCivil());
-		
-				
+		newOfertaLaboral.getOrganizacionPuesto().setId(new OrganizacionPuestoPK());
+					
 		newOfertaLaboral.setOfertaCentroEstudios(new ArrayList<OfertaCentroEstudio>());
 		newOfertaLaboral.setOfertaBeneficios(new ArrayList<OfertaBeneficio>());
 		newOfertaLaboral.setOfertaConocimientos(new ArrayList<OfertaConocimiento>());
@@ -179,11 +172,15 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 	
 	public void saveOfertaLaboral(){
-		ofertaLaboralService.addOfertaLaboral(newOfertaLaboral);
+		logger.info("guardando la oferta laboral");
+		
+		ofertaLaboralService.saveOrUpdateOfertaLaboral(newOfertaLaboral);
 	}
 	
 	// Oferta beneficio
 	public void reiniciarNewOfertaBeneficio() {
+		logger.info("reiniciando oferta beneficio");
+		
 		newOfertaBeneficio = new OfertaBeneficio();
 		newOfertaBeneficio.setOfertaLaboral(newOfertaLaboral);
 		newOfertaBeneficio.setBeneficio(new Beneficio());
@@ -191,11 +188,31 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 
 	public void saveOfertaBeneficio() {
-		newOfertaLaboral.addOfertaBeneficio(newOfertaBeneficio);
+		logger.info("guardando oferta beneficio");
+		
+		boolean agregar = true;
+		
+		for (OfertaBeneficio ofertaBeneficio : newOfertaLaboral.getOfertaBeneficios()) {
+			if(ofertaBeneficio.getBeneficio().getBeneId() == newOfertaBeneficio.getBeneficio().getBeneId()){
+				agregar = false;
+				break;
+			}
+		}
+		
+		if(agregar){
+			newOfertaLaboral.addOfertaBeneficio(newOfertaBeneficio);			
+		}				
 	}
 
 	public void deleteOfertaBeneficio() {
+		logger.info("eliminando beneficio");
 		
+		for (OfertaBeneficio ofertaBeneficio : newOfertaLaboral.getOfertaBeneficios()) {
+			if(ofertaBeneficio.getBeneficio().getBeneId() == newOfertaBeneficio.getBeneficio().getBeneId()){
+				newOfertaLaboral.removeOfertaBeneficio(ofertaBeneficio);				
+				break;
+			}
+		}
 	}
 	
 	// Oferta Centro estudio
@@ -207,11 +224,31 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 
 	public void saveOfertaCentroEstudio() {
-
+		logger.info("guardando oferta centro de estudio");
+		
+		boolean agregar = true;
+		
+		for (OfertaCentroEstudio ofertaCentroEstudio : newOfertaLaboral.getOfertaCentroEstudios()) {
+			if(ofertaCentroEstudio.getCentroEstudio().getCeesId() == newOfertaCentroEstudio.getCentroEstudio().getCeesId()){
+				agregar = false;
+				break;
+			}
+		}
+		
+		if(agregar){
+			newOfertaLaboral.addOfertaCentroEstudio(newOfertaCentroEstudio);		
+		}
 	}
 
 	public void deleteOfertaCentroEstudio() {
-
+		logger.info("eliminando centro de estudio");
+		
+		for (OfertaCentroEstudio ofertaCentroEstudio : newOfertaLaboral.getOfertaCentroEstudios()) {
+			if(ofertaCentroEstudio.getCentroEstudio().getCeesId() == newOfertaCentroEstudio.getCentroEstudio().getCeesId()){
+				newOfertaLaboral.removeOfertaCentroEstudio(ofertaCentroEstudio);			
+				break;
+			}
+		}
 	}
 	
 	// Oferta Conocimiento
@@ -224,13 +261,32 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 
 	public void saveOfertaConocimiento() {
+		logger.info("guardando oferta conocimiento");
 		
+		boolean agregar = true;
+		
+		for (OfertaConocimiento ofertaConocimiento : newOfertaLaboral.getOfertaConocimientos()) {
+			if(ofertaConocimiento.getConocimiento().getConoId() == newOfertaConocimiento.getConocimiento().getConoId()){
+				agregar = false;
+				break;
+			}
+		}
+		
+		if(agregar){
+			newOfertaLaboral.addOfertaConocimiento(newOfertaConocimiento);		
+		}
 	}
 
 	public void deleteOfertaConocimiento() {
-
-	}
-	
+		logger.info("eliminando Conocimiento");
+		
+		for (OfertaConocimiento ofertaConocimiento : newOfertaLaboral.getOfertaConocimientos()) {
+			if(ofertaConocimiento.getConocimiento().getConoId() == newOfertaConocimiento.getConocimiento().getConoId()){
+				newOfertaLaboral.removeOfertaConocimiento(ofertaConocimiento);		
+				break;
+			}
+		}
+	}	
 	
 	// Oferta Estudio
 	public void reiniciarNewOfertaEstudio() {
@@ -242,11 +298,31 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 
 	public void saveOfertaEstudio() {
-
+		logger.info("guardando oferta estudio");
+		
+		boolean agregar = true;
+		
+		for (OfertaEstudio ofertaEstudio : newOfertaLaboral.getOfertaEstudios()) {
+			if(ofertaEstudio.getEstudioGenerico().getEsgeId() == newOfertaEstudio.getEstudioGenerico().getEsgeId()){
+				agregar = false;
+				break;
+			}
+		}
+		
+		if(agregar){
+			newOfertaLaboral.addOfertaEstudio(newOfertaEstudio);	
+		}
 	}
 
 	public void deleteOfertaEstudio() {
-
+		logger.info("eliminando oferta estudio");
+		
+		for (OfertaEstudio ofertaEstudio : newOfertaLaboral.getOfertaEstudios()) {
+			if(ofertaEstudio.getEstudioGenerico().getEsgeId() == newOfertaEstudio.getEstudioGenerico().getEsgeId()){
+				newOfertaLaboral.removeOfertaEstudio(ofertaEstudio);	
+				break;
+			}
+		}
 	}
 	
 	
@@ -260,11 +336,31 @@ public class OfertaLaboralManagedBean implements Serializable{
 	}
 
 	public void saveOfertaIdioma() {
-
+		logger.info("guardando oferta idioma");
+		
+		boolean agregar = true;
+		
+		for (OfertaIdioma ofertaIdioma : newOfertaLaboral.getOfertaIdiomas()) {
+			if(ofertaIdioma.getIdioma().getIdioId() == newOfertaIdioma.getIdioma().getIdioId()){
+				agregar = false;
+				break;
+			}
+		}
+		
+		if(agregar){
+			newOfertaLaboral.addOfertaIdioma(newOfertaIdioma);		
+		}
 	}
 
 	public void deleteOfertaIdioma() {
-
+		logger.info("eliminando oferta idioma");
+		
+		for (OfertaIdioma ofertaIdioma : newOfertaLaboral.getOfertaIdiomas()) {
+			if(ofertaIdioma.getIdioma().getIdioId() == newOfertaIdioma.getIdioma().getIdioId()){
+				newOfertaLaboral.removeOfertaIdioma(ofertaIdioma);
+				break;
+			}
+		}
 	}
 			
 	//getters and setters

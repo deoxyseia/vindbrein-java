@@ -29,7 +29,7 @@
 						<f:selectItems value="#{ofertaLaboralManagedBean.puestos}"
 							var="puesto" itemLabel="#{puesto.puesNombre}"
 							itemValue="#{puesto.puesId}" />
-					</p:selectOneMenu>
+					</p:selectOneMenu>					
 
 					<h:outputText value="Título :"></h:outputText>
 					<p:inputText
@@ -68,13 +68,12 @@
 						<!-- Tipo de horario -->
 						<h:outputText value="Tipo de horario :" />
 						<p:selectOneMenu
-							value="#{ofertaLaboralManagedBean.newOfertaLaboral.tipoHorario.tihoId}"
-							effect="fade" required="true"
-							requiredMessage="Elija el tipo de horario que prefiera">
+							value="#{ofertaLaboralManagedBean.newOfertaLaboral.tipoHorario}"
+							effect="fade"  converter="omnifaces.SelectItemsConverter">
 							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 							<f:selectItems value="#{ofertaLaboralManagedBean.tiposHorario}"
 								var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
-								itemValue="#{tipoHorario.tihoId}" />
+								itemValue="#{tipoHorario}" />
 						</p:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
@@ -84,13 +83,13 @@
 			
 				<!-- beneficios-->
 
-				<p:dataTable id="dataTableOfertaBeneficio"
-					var="ofertaBeneficio" rowKey="#{ofertaBeneficio.id}"
+				<p:dataTable id="dataTableOfertaBeneficio" 
+					var="ofertaBeneficio" rowKey="#{ofertaBeneficio.beneficio.beneId}"
 					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaBeneficios}"
 					selection="#{ofertaLaboralManagedBean.newOfertaBeneficio}"
 					emptyMessage="No tiene registrado beneficios"
 					selectionMode="single">
-
+					
 					<f:facet name="header">
                     Lista de Beneficios
                 	</f:facet>
@@ -102,11 +101,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaBeneficio()}"
-							oncomplete="saveOfertaBeneficioDialog.show()"
-							immediate="true" update=":newOfertaBeneficioForm"
+							update=":newOfertaBeneficioForm"
+							oncomplete="saveOfertaBeneficioDialog.show()"							
 							icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar" immediate="true"
+						<p:commandButton value="Eliminar"
 							actionListener="#{ofertaLaboralManagedBean.deleteOfertaBeneficio()}"
 							update=":formOfertaLaboral:dataTableOfertaBeneficio"
 							icon="ui-icon-trash">
@@ -119,7 +118,7 @@
 				<!-- Oferta Idioma-->
 
 				<p:dataTable id="dataTableOfertaIdioma" var="ofertaIdioma"
-					rowKey="#{ofertaIdioma.id}"
+					rowKey="#{ofertaIdioma.idioma.idioId}"
 					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaIdiomas}"
 					selection="#{ofertaLaboralManagedBean.newOfertaIdioma}"
 					emptyMessage="No tiene registrado idiomas" selectionMode="single">
@@ -155,7 +154,7 @@
 				<!-- oferta Conocimiento -->
 
 				<p:dataTable id="dataTableOfertaConocimiento"
-					var="ofertaConocimiento" rowKey="#{ofertaConocimiento.id}"
+					var="ofertaConocimiento" rowKey="#{ofertaConocimiento.conocimiento.conoId}"
 					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaConocimientos}"
 					selection="#{ofertaLaboralManagedBean.newOfertaConocimiento}"
 					emptyMessage="No tiene registrado conocimientos"
@@ -195,7 +194,7 @@
 				<!-- Estudio-->
 
 				<p:dataTable id="dataTableOfertaEstudio"
-					var="ofertaEstudio" rowKey="#{ofertaEstudio.id}"
+					var="ofertaEstudio" rowKey="#{ofertaEstudio.estudioGenerico.esgeId}"
 					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaEstudios}"
 					selection="#{ofertaLaboralManagedBean.newOfertaEstudio}"
 					emptyMessage="No tiene estudios de preferencia"
@@ -206,13 +205,9 @@
                 	</f:facet>
 
 					<p:column headerText="Estudio">
-						<h:outputText value="#{ofertaEstudio.estudio.estuNombre}" />
+						<h:outputText value="#{ofertaEstudio.estudioGenerico.esgeNombre}" />
 					</p:column>
 					
-					<p:column headerText="Centro de estudios">
-						<h:outputText value="#{ofertaEstudio.estudio.centroEstudio.ceesNombre}" />
-					</p:column>
-
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaEstudio()}"
@@ -233,7 +228,7 @@
 				<!-- Centro de estudio -->
 
 				<p:dataTable id="dataTableOfertaCentroEstudio"
-					var="ofertaCentroEstudio" rowKey="#{ofertaCentroEstudio.id}"
+					var="ofertaCentroEstudio" rowKey="#{ofertaCentroEstudio.centroEstudio.ceesId}"
 					value="#{ofertaLaboralManagedBean.newOfertaLaboral.ofertaCentroEstudios}"
 					selection="#{ofertaLaboralManagedBean.newOfertaCentroEstudio}"
 					emptyMessage="No tiene centros de estudio"
@@ -263,12 +258,8 @@
 				</p:dataTable>
 
 				<!-- fin de centros de estudio -->
-
-
-
 			</p:panel>
-
-
+			
 			<p:panel>
 				<f:facet name="footer">
 					<p:commandButton value="Guardar"
@@ -279,20 +270,19 @@
 						update=":formOfertaLaboral" icon="ui-icon-close" />
 				</f:facet>
 			</p:panel>
-		</h:form>
-		
+		</h:form>		
 		
 		<!-- Dialog nuevo oferta Beneficio -->
 
 		<p:dialog id="saveOfertaBeneficioDlg" header="Nuevo beneficio"
 			hideEffect="explode" widgetVar="saveOfertaBeneficioDialog"
-			resizable="false" modal="true" appendTo="@(body)">
+			resizable="false" modal="true" appendToBody="true">
 
 			<h:form id="newOfertaBeneficioForm">
 				<p:panelGrid columns="2">
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaBeneficio.beneficio}" converter="omnifaces.SelectItemsConverter"
-						effect="fade">
+						value="#{ofertaLaboralManagedBean.newOfertaBeneficio.beneficio}" 
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{ofertaLaboralManagedBean.beneficios}"
 							var="beneficio" itemLabel="#{beneficio.beneNombre}"
@@ -319,26 +309,26 @@
 
 		<p:dialog id="saveOfertaIdiomaDlg" header="Nuevo idioma"
 			hideEffect="explode" widgetVar="saveOfertaIdiomaDialog"
-			resizable="false" modal="true" appendTo="@(body)">
+			resizable="false" modal="true" appendToBody="true">
 
 			<h:form id="newOfertaIdiomaForm">
 				<p:panelGrid columns="2">
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaIdioma.idioma.idioId}"
-						effect="fade">
+						value="#{ofertaLaboralManagedBean.newOfertaIdioma.idioma}"
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{ofertaLaboralManagedBean.idiomas}"
 							var="idioma" itemLabel="#{idioma.idioNombre}"
-							itemValue="#{idioma.idioId}" />
+							itemValue="#{idioma}" />
 					</p:selectOneMenu>
 
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaIdioma.nivelIdioma.niidId}"
-						effect="fade">
+						value="#{ofertaLaboralManagedBean.newOfertaIdioma.nivelIdioma}"
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{ofertaLaboralManagedBean.nivelesIdioma}"
 							var="nivelIdioma" itemLabel="#{nivelIdioma.niidNombre}"
-							itemValue="#{nivelIdioma.niidId}" />
+							itemValue="#{nivelIdioma}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -361,31 +351,32 @@
 		
 		<p:dialog id="saveOfertaConocimientoDlg" header="Nuevo Conocimiento"
 			hideEffect="explode" widgetVar="saveOfertaConocimientoDialog"
-			resizable="false" modal="true" appendTo="@(body)">
+			resizable="false" modal="true" appendToBody="true">
 
 			<h:form id="newOfertaConocimientoForm">
 				<p:panelGrid columns="2">
 					<h:outputText value="Conocimiento :" />
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaConocimiento.conocimiento.conoId}"
-						effect="fade" required="true" requiredMessage="Elija Conocimiento">
+						value="#{ofertaLaboralManagedBean.newOfertaConocimiento.conocimiento}"
+						effect="fade" required="true" requiredMessage="Elija Conocimiento" 
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{ofertaLaboralManagedBean.conocimientos}"
 							var="conocimiento" itemLabel="#{conocimiento.conoNombre}"
-							itemValue="#{conocimiento.conoId}" />
+							itemValue="#{conocimiento}" />
 					</p:selectOneMenu>
 
 					<h:outputText value="Nivel de Conocimiento :" />
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaConocimiento.nivelConocimiento.nicoId}"
-						effect="fade" required="true"
+						value="#{ofertaLaboralManagedBean.newOfertaConocimiento.nivelConocimiento}"
+						effect="fade" required="true" converter="omnifaces.SelectItemsConverter"
 						requiredMessage="Elija el nivel de conocimiento">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems
 							value="#{ofertaLaboralManagedBean.nivelesConocimiento}"
 							var="nivelConocimiento"
 							itemLabel="#{nivelConocimiento.nicoNombre}"
-							itemValue="#{nivelConocimiento.nicoId}" />
+							itemValue="#{nivelConocimiento}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -407,18 +398,19 @@
 		
 		<p:dialog id="saveOfertaEstudioDlg" header="Nuevo Estudio"
 			hideEffect="explode" widgetVar="saveOfertaEstudioDialog"
-			resizable="false" modal="true" appendTo="@(body)">
+			resizable="false" modal="true" appendToBody="true">
 
 			<h:form id="newOfertaEstudioForm">
 				<p:panelGrid columns="2">
 					<h:outputText value="Estudio :" />
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaEstudio.estudioGenerico.esgeId}"
-						effect="fade" required="true" requiredMessage="Elija el estudio">
+						value="#{ofertaLaboralManagedBean.newOfertaEstudio.estudioGenerico}"
+						effect="fade" required="true" requiredMessage="Elija el estudio"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{ofertaLaboralManagedBean.estudiosGenericos}"
 							var="estudioGenerico" itemLabel="#{estudioGenerico.esgeNombre}"
-							itemValue="#{estudioGenerico.esgeId}" />
+							itemValue="#{estudioGenerico}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -441,19 +433,20 @@
 		
 		<p:dialog id="saveOfertaCentroEstudioDlg" header="Nuevo Centro de Estudio"
 			hideEffect="explode" widgetVar="saveOfertaCentroEstudioDialog"
-			resizable="false" modal="true" appendTo="@(body)">
+			resizable="false" modal="true" appendToBody="true">
 
 			<h:form id="newOfertaCentroEstudioForm">
 				<p:panelGrid columns="2">
 				
 					<h:outputText value="Centro de estudio :" />
 					<p:selectOneMenu
-						value="#{ofertaLaboralManagedBean.newOfertaCentroEstudio.centroEstudio.ceesId}"
-						effect="fade" required="true" requiredMessage="Elija el estudio">
+						value="#{ofertaLaboralManagedBean.newOfertaCentroEstudio.centroEstudio}"
+						effect="fade" required="true" requiredMessage="Elija el estudio"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{ofertaLaboralManagedBean.centrosEstudio}"
 							var="centroEstudio" itemLabel="#{centroEstudio.ceesNombre}"
-							itemValue="#{centroEstudio.ceesId}" />
+							itemValue="#{centroEstudio}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -471,10 +464,5 @@
 		</p:dialog>
 		
 		<!-- Fin Dialog nuevo centro de estudio -->
-
-		
-
-
-
 	</ui:define>
 </ui:composition>

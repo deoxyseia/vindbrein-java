@@ -34,6 +34,10 @@ public class OfertaLaboralDAO {
 	public void updateOfertaLaboral(OfertaLaboral ofertaLaboral) {
 		getSessionFactory().getCurrentSession().update(ofertaLaboral);		
 	}
+	
+	public void saveOrUpdateOfertaLaboral(OfertaLaboral ofertaLaboral){
+		getSessionFactory().getCurrentSession().saveOrUpdate(ofertaLaboral);
+	}
 
 	public void deleteOfertaLaboral(OfertaLaboral ofertaLaboral) {
 		getSessionFactory().getCurrentSession().delete(ofertaLaboral);		

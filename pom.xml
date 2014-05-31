@@ -81,8 +81,9 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>4.0</version>
+			<version>3.5</version>
 		</dependency>
+
 		
             
 		<!-- JSF library -->

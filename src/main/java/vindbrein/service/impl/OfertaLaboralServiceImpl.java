@@ -8,9 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vindbrein.dao.OfertaBeneficioDAO;
+import vindbrein.dao.OfertaCentroEstudioDAO;
+import vindbrein.dao.OfertaConocimientoDAO;
+import vindbrein.dao.OfertaEstudioDAO;
+import vindbrein.dao.OfertaIdiomaDAO;
 import vindbrein.dao.OfertaLaboralDAO;
 import vindbrein.dao.OrganizacionPuestoDAO;
 import vindbrein.domain.model.OfertaBeneficio;
+import vindbrein.domain.model.OfertaCentroEstudio;
+import vindbrein.domain.model.OfertaConocimiento;
+import vindbrein.domain.model.OfertaEstudio;
+import vindbrein.domain.model.OfertaIdioma;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.service.OfertaLaboralService;
@@ -20,93 +28,130 @@ import vindbrein.service.OfertaLaboralService;
 public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializable {
 	
 	private static final long serialVersionUID = 1L;
-	@Autowired	
-	OfertaLaboralDAO ofertaLaboralDAO;
 	
 	@Autowired	
-	OrganizacionPuestoDAO organizacionPuestoDAO;
+	private OfertaLaboralDAO ofertaLaboralDAO;
 	
 	@Autowired	
-	OfertaBeneficioDAO ofertaBeneficioDAO;
+	private OrganizacionPuestoDAO organizacionPuestoDAO;
+	
+	@Autowired	
+	private OfertaBeneficioDAO ofertaBeneficioDAO;
+	
+	@Autowired	
+	private OfertaIdiomaDAO ofertaIdiomaDAO;
+	
+	@Autowired	
+	private OfertaConocimientoDAO ofertaConocimientoDAO;
+	
+	@Autowired	
+	private OfertaEstudioDAO ofertaEstudioDAO;
+	
+	@Autowired	
+	private OfertaCentroEstudioDAO ofertaCentroEstudioDAO;
 	
 	@Transactional(readOnly = false)
 	public void addOfertaLaboral(OfertaLaboral ofertaLaboral) {	
-				
-		if(ofertaLaboral.getDistrito().getDistId() == 0){
-			ofertaLaboral.setDistrito(null);
-		}
-		
-		if(ofertaLaboral.getTipoHorario().getTihoId() == 0){
-			ofertaLaboral.setTipoHorario(null);
-		}
-		
-		if(ofertaLaboral.getEstadoCivil().getEsciId() == 0){
-			ofertaLaboral.setEstadoCivil(null);
-		}
-		
-		ofertaLaboral.setOrganizacionPuesto(getOrganizacionPuestoDAO().getOrganizacionPuestoById(
-				ofertaLaboral.getOrganizacionPuesto()
-					.getOrganizacion(),
-				ofertaLaboral.getOrganizacionPuesto()
-					.getPuesto()));
-		
-		getOfertaLaboralDAO().addOfertaLaboral(ofertaLaboral);
-		
-		
-		
-		for (OfertaBeneficio ofertaBeneficio : ofertaLaboral.getOfertaBeneficios()) {
-			ofertaBeneficio.getId().setFkBeneId(ofertaBeneficio.getBeneficio().getBeneId());
-			ofertaBeneficio.getId().setFkOflaId(ofertaBeneficio.getOfertaLaboral().getOflaId());
-			
-			getOfertaBeneficioDAO().addOfertaBeneficio(ofertaBeneficio);
-		}				
+					
 	}
 	
 	@Transactional(readOnly = false)
 	public void updateOfertaLaboral(OfertaLaboral ofertaLaboral) {
-		getOfertaLaboralDAO().updateOfertaLaboral(ofertaLaboral);		
+		ofertaLaboralDAO.updateOfertaLaboral(ofertaLaboral);		
+	}
+	
+	@Transactional(readOnly = false)
+	public void saveOrUpdateOfertaLaboral(OfertaLaboral ofertaLaboral) {
+		// obtiene el puesto de la organizacion y lo inserta en la oferta
+//		ofertaLaboral
+//				.setOrganizacionPuesto(organizacionPuestoDAO.getOrganizacionPuestoById(
+//										ofertaLaboral.getOrganizacionPuesto()
+//											.getOrganizacion(),
+//										ofertaLaboral.getOrganizacionPuesto()
+//											.getPuesto()));
+		ofertaLaboral.getOrganizacionPuesto().getId().setFkPuesId(ofertaLaboral.getOrganizacionPuesto().getPuesto().getPuesId());
+		ofertaLaboral.getOrganizacionPuesto().getId().setFkOrgaId(ofertaLaboral.getOrganizacionPuesto().getOrganizacion().getOrgaId());
+
+		// guarda la oferta laboral
+		ofertaLaboralDAO.saveOrUpdateOfertaLaboral(ofertaLaboral);	
+		
+		//beneficio 
+		for (OfertaBeneficio ofertaBeneficio : ofertaBeneficioDAO.getOfertaBeneficiosByOfertaLaboral(ofertaLaboral)) {
+			ofertaBeneficioDAO.deleteOfertaBeneficio(ofertaBeneficio);
+		}
+
+		for (OfertaBeneficio ofertaBeneficio : ofertaLaboral.getOfertaBeneficios()) {
+			ofertaBeneficio.getId().setFkBeneId(ofertaBeneficio.getBeneficio().getBeneId());
+			ofertaBeneficio.getId().setFkOflaId(ofertaBeneficio.getOfertaLaboral().getOflaId());
+
+			ofertaBeneficioDAO.addOfertaBeneficio(ofertaBeneficio);
+		}
+		
+		//idioma
+		for (OfertaIdioma ofertaIdioma : ofertaIdiomaDAO.getOfertaIdiomasByOfertaLaboral(ofertaLaboral)) {
+			ofertaIdiomaDAO.deleteOfertaIdioma(ofertaIdioma);
+		}
+		
+		for (OfertaIdioma ofertaIdioma : ofertaLaboral.getOfertaIdiomas()) {
+			ofertaIdioma.getId().setFkIdioId(ofertaIdioma.getIdioma().getIdioId());
+			ofertaIdioma.getId().setFkNiidId(ofertaIdioma.getNivelIdioma().getNiidId());
+			ofertaIdioma.getId().setFkOflaId(ofertaIdioma.getOfertaLaboral().getOflaId());
+			
+			ofertaIdiomaDAO.addOfertaIdioma(ofertaIdioma);
+		}
+		
+		//conocimiento
+		for (OfertaConocimiento ofertaConocimiento : ofertaConocimientoDAO.getOfertaConocimientosByOfertaLaboral(ofertaLaboral)) {
+			ofertaConocimientoDAO.deleteOfertaConocimiento(ofertaConocimiento);
+		}
+		
+		for (OfertaConocimiento ofertaConocimiento : ofertaLaboral.getOfertaConocimientos()) {
+			ofertaConocimiento.getId().setFkConoId(ofertaConocimiento.getConocimiento().getConoId());
+			ofertaConocimiento.getId().setFkNicoId(ofertaConocimiento.getNivelConocimiento().getNicoId());
+			ofertaConocimiento.getId().setFkOflaId(ofertaConocimiento.getOfertaLaboral().getOflaId());
+			
+			ofertaConocimientoDAO.addOfertaConocimiento(ofertaConocimiento);
+		}
+		
+		//estudio genérico
+		for (OfertaEstudio ofertaEstudio : ofertaEstudioDAO.getOfertaEstudiosByOfertaLaboral(ofertaLaboral)) {
+			ofertaEstudioDAO.deleteOfertaEstudio(ofertaEstudio);
+		}
+		
+		for (OfertaEstudio ofertaEstudio : ofertaLaboral.getOfertaEstudios()) {
+			ofertaEstudio.getId().setFkEsgeId(ofertaEstudio.getEstudioGenerico().getEsgeId());
+			ofertaEstudio.getId().setFkOflaId(ofertaEstudio.getOfertaLaboral().getOflaId());
+			
+			ofertaEstudioDAO.addOfertaEstudio(ofertaEstudio);
+		}
+		
+		//centro de estudio
+		for (OfertaCentroEstudio ofertaCentroEstudio : ofertaCentroEstudioDAO.getOfertaCentroEstudiosByOfertaLaboral(ofertaLaboral)) {
+			ofertaCentroEstudioDAO.deleteOfertaCentroEstudio(ofertaCentroEstudio);
+		}
+		
+		for (OfertaCentroEstudio ofertaCentroEstudio : ofertaLaboral.getOfertaCentroEstudios()) {
+			ofertaCentroEstudio.getId().setFkCeesId(ofertaCentroEstudio.getCentroEstudio().getCeesId());
+			ofertaCentroEstudio.getId().setFkOflaId(ofertaCentroEstudio.getOfertaLaboral().getOflaId());;
+			
+			ofertaCentroEstudioDAO.addOfertaCentroEstudio(ofertaCentroEstudio);
+		}
 	}
 	
 	@Transactional(readOnly = false)
 	public void deleteOfertaLaboral(OfertaLaboral ofertaLaboral) {
-		getOfertaLaboralDAO().deleteOfertaLaboral(ofertaLaboral);		
+		ofertaLaboralDAO.deleteOfertaLaboral(ofertaLaboral);		
 	}
 
 	public OfertaLaboral getOfertaLaboralById(int id) {
-		return getOfertaLaboralDAO().getOfertaLaboralById(id);
+		return ofertaLaboralDAO.getOfertaLaboralById(id);
 	}
 
 	public ArrayList<OfertaLaboral> getOfertasLaborales() {
-		return getOfertaLaboralDAO().getOfertasLaborales();
+		return ofertaLaboralDAO.getOfertasLaborales();
 	}	
 	
 	public ArrayList<OfertaLaboral> getOfertasLaboralesByOrganizacion(Organizacion organizacion){
-		return getOfertaLaboralDAO().getOfertasLaboralesByOrganizacion(organizacion);
-	}
-	
-	//getters and setters
-	
-	public OfertaLaboralDAO getOfertaLaboralDAO() {
-		return ofertaLaboralDAO;
-	}
-
-	public void setOfertaLaboralDAO(OfertaLaboralDAO ofertaLaboralDAO) {
-		this.ofertaLaboralDAO = ofertaLaboralDAO;
-	}
-
-	public OrganizacionPuestoDAO getOrganizacionPuestoDAO() {
-		return organizacionPuestoDAO;
-	}
-
-	public void setOrganizacionPuestoDAO(OrganizacionPuestoDAO organizacionPuestoDAO) {
-		this.organizacionPuestoDAO = organizacionPuestoDAO;
-	}
-
-	public OfertaBeneficioDAO getOfertaBeneficioDAO() {
-		return ofertaBeneficioDAO;
-	}
-
-	public void setOfertaBeneficioDAO(OfertaBeneficioDAO ofertaBeneficioDAO) {
-		this.ofertaBeneficioDAO = ofertaBeneficioDAO;
+		return ofertaLaboralDAO.getOfertasLaboralesByOrganizacion(organizacion);
 	}	
 }

@@ -10,6 +10,8 @@ public interface OfertaLaboralService {
 	public void addOfertaLaboral(OfertaLaboral ofertaLaboral);
 
 	public void updateOfertaLaboral(OfertaLaboral ofertaLaboral);
+	
+	public void saveOrUpdateOfertaLaboral(OfertaLaboral ofertaLaboral);
 
 	public void deleteOfertaLaboral(OfertaLaboral ofertaLaboral);
 
