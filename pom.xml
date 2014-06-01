@@ -7,7 +7,8 @@
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring.version>3.1.1.RELEASE</spring.version>
+    <spring.version>4.0.5.RELEASE</spring.version>
+    <spring.security.version>3.2.4.RELEASE</spring.security.version>
   </properties>
   
   
@@ -31,7 +32,7 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
-    
+       
     <!-- Spring 3 dependencies -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -68,6 +69,12 @@
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        
+        <dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>1.5.0.RELEASE</version>
+		</dependency>
         
 <!--         pool de conecciones -->
 <!--         <dependency> -->
@@ -150,19 +157,19 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
  
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
  
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 
 		<dependency>

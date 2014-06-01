@@ -63,12 +63,7 @@ public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializa
 	@Transactional(readOnly = false)
 	public void saveOrUpdateOfertaLaboral(OfertaLaboral ofertaLaboral) {
 		// obtiene el puesto de la organizacion y lo inserta en la oferta
-//		ofertaLaboral
-//				.setOrganizacionPuesto(organizacionPuestoDAO.getOrganizacionPuestoById(
-//										ofertaLaboral.getOrganizacionPuesto()
-//											.getOrganizacion(),
-//										ofertaLaboral.getOrganizacionPuesto()
-//											.getPuesto()));
+
 		ofertaLaboral.getOrganizacionPuesto().getId().setFkPuesId(ofertaLaboral.getOrganizacionPuesto().getPuesto().getPuesId());
 		ofertaLaboral.getOrganizacionPuesto().getId().setFkOrgaId(ofertaLaboral.getOrganizacionPuesto().getOrganizacion().getOrgaId());
 
