@@ -699,11 +699,5 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setNewPostulanteBeneficio(PostulanteBeneficio newPostulanteBeneficio) {
 		this.newPostulanteBeneficio = newPostulanteBeneficio;
-	}
-	
-	public void run(){
-		mongoService.run();
-	}
-	
-	
+	}	
 }
