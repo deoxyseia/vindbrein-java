@@ -50,6 +50,7 @@ import vindbrein.service.EstadoCivilService;
 import vindbrein.service.EstudioService;
 import vindbrein.service.ExperienciaLaboralService;
 import vindbrein.service.IdiomaService;
+import vindbrein.service.MongoService;
 import vindbrein.service.OrganizacionService;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.ProvinciaService;
@@ -147,6 +148,10 @@ public class PostulanteManagedBean implements Serializable{
 	@Autowired
 	@Qualifier("sectorServiceImpl")
 	private SectorService sectorService;
+	
+	@Autowired
+	@Qualifier("mongoServiceImpl")
+	private MongoService mongoService;
 	
 	
 	// datos maestros	
@@ -694,6 +699,10 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setNewPostulanteBeneficio(PostulanteBeneficio newPostulanteBeneficio) {
 		this.newPostulanteBeneficio = newPostulanteBeneficio;
+	}
+	
+	public void run(){
+		mongoService.run();
 	}
 	
 	

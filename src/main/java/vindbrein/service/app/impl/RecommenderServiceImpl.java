@@ -2,6 +2,7 @@ package vindbrein.service.app.impl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -176,7 +177,13 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			//Remove alternatives
 			pivote.remove(maxIndex);			
 			
-			alternatives = (Profile[])pivote.toArray();
+			alternatives = new Profile[pivote.size()];
+			
+			pivote.toArray();
+			
+			for (int i = 0; i < pivote.size(); i++) {
+				alternatives[i] = (Profile)pivote.get(i);
+			}
 			
 			maxIncrease = new BigDecimal(-1);			
 		}
@@ -198,31 +205,45 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	
 	//Intern methods	
 	private BigDecimal cosineSimilarity(BigDecimal[] vecA, BigDecimal[] vecB){
-		BigDecimal valor = scalarProduct(vecA, vecB).divide(vecMagnitude(vecA).multiply(vecMagnitude(vecB)));
+		BigDecimal valor = scalarProduct(vecA, vecB).divide(vecMagnitude(vecA).multiply(vecMagnitude(vecB)), 5, RoundingMode.HALF_UP);
+				
+		System.out.println("cosineSimilarity");
+		System.out.println(valor);
 		
 		return valor;
-		
 	}
 	
+	
+	//validado
 	private BigDecimal scalarProduct(BigDecimal[] vecA, BigDecimal[] vecB){
 		BigDecimal product = new BigDecimal(0);
 		
-		for (int i = 0; i < vecA.length; i++) {
-			product = product.add(vecA[i].multiply(vecB[i]));
-		}
+		if(vecA.length == vecB.length){
+			for (int i = 0; i < vecA.length; i++) {
+				product = product.add(vecA[i].multiply(vecB[i]));
+			}
+		}else{
+			throw new IllegalArgumentException("La longitud de los parametros no es la misma");
+		}		
 		
-		return product;
-		
+		System.out.println("scalarProduct");
+		System.out.println(product);
+		return product;		
 	}
 	
+	//validado
 	private BigDecimal vecMagnitude(BigDecimal[] vec){
 		BigDecimal sum = new BigDecimal(0);
 		
 		for (int i = 0; i < vec.length; i++) {
 			sum = sum.add(vec[i].multiply(vec[i]));
-		}
+		}		
+		
+		System.out.println("vecMagnitude");
+		System.out.println(BigDecimal.valueOf(Math.sqrt(sum.doubleValue())));
 		
 		return BigDecimal.valueOf(Math.sqrt(sum.doubleValue()));
+		
 	}
 	
 	private BigDecimal evalFunction(Profile profile, ArrayList<Profile> set){
