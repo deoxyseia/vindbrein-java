@@ -157,7 +157,7 @@
 					<center>
 						<p:commandButton value="Guardar"
 							actionListener="#{usuarioManagedBean.verifiedSaveUsuarioOrganizacion()}"
-							oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){confirmSaveUsuarioOrganizacionDialog.show()}"
+							oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){PF('confirmSaveUsuarioOrganizacionDialog').show()}"
 							icon="ui-icon-check" style="margin:0">
 						</p:commandButton>
 						<p:commandButton value="Cancelar" ajax="false" immediate="true"
@@ -173,7 +173,7 @@
 
 		<p:dialog id="confirmSaveUsuarioOrganizacionDlg" header="Confirmación"
 			hideEffect="explode" widgetVar="confirmSaveUsuarioOrganizacionDialog" resizable="false"
-			modal="true" appendToBody="true">
+			modal="true" appendTo="@(body)">
 			<h:form>
 				<p:panelGrid columns="1">
 					<h:outputText
@@ -182,8 +182,8 @@
 						<p:commandButton value="Sí"						
 							actionListener="#{usuarioManagedBean.saveUsuarioOrganizacion()}"
 							action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"						
-							oncomplete="confirmSaveUsuarioOrganizacionDialog.hide()" icon="ui-icon-check"/>
-						<p:commandButton value="No" onclick="confirmSaveUsuarioOrganizacionDialog.hide()"
+							oncomplete="PF('confirmSaveUsuarioOrganizacionDialog').hide()" icon="ui-icon-check"/>
+						<p:commandButton value="No" onclick="PF('confirmSaveUsuarioOrganizacionDialog').hide()"
 							type="button" icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>

@@ -142,7 +142,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteBeneficio()}"
-							oncomplete="savePostulanteBeneficioDialog.show()"
+							oncomplete="PF('savePostulanteBeneficioDialog').show()"							
 							immediate="true" update=":newPostulanteBeneficioForm"
 							icon="ui-icon-check">
 						</p:commandButton>
@@ -157,7 +157,6 @@
 				<!-- fin de beneficios -->
 
 			</p:panel>
-
 
 			<p:panel>
 				<f:facet name="footer">
@@ -202,7 +201,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewTelefono()}"
-							oncomplete="saveTelefonoDialog.show()" immediate="true"
+							oncomplete="PF('saveTelefonoDialog').show()" immediate="true"
 							update=":newTelefonoForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -243,7 +242,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewResidencia()}"
-							oncomplete="saveResidenciaDialog.show()" immediate="true"
+							oncomplete="PF('saveResidenciaDialog').show()" immediate="true"
 							update=":newResidenciaForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -265,9 +264,6 @@
 					emptyMessage="No tiene registrado conocimientos"
 					selectionMode="single">
 
-					<!-- 				<p:ajax event="rowDblselect" update=":newPostulanteConocimientoForm" -->
-					<!-- 					oncomplete="savePostulanteConocimientoDialog.show()" /> -->
-
 					<f:facet name="header">
                     Lista de Conocimientos
                 	</f:facet>
@@ -285,7 +281,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteConocimiento()}"
-							oncomplete="savePostulanteConocimientoDialog.show()"
+							oncomplete="PF('savePostulanteConocimientoDialog').show()"
 							immediate="true" update=":newPostulanteConocimientoForm"
 							icon="ui-icon-check">
 						</p:commandButton>
@@ -333,7 +329,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewExperienciaLaboral()}"
-							oncomplete="saveExperienciaLaboralDialog.show()" immediate="true"
+							oncomplete="PF('saveExperienciaLaboralDialog').show()" immediate="true"
 							update=":newExperienciaLaboralForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -379,7 +375,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewActividadAcademica()}"
-							oncomplete="saveActividadAcademicaDialog.show()" immediate="true"
+							oncomplete="PF('saveActividadAcademicaDialog').show()" immediate="true"
 							update=":newActividadAcademicaForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -415,7 +411,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewPostulanteIdioma()}"
-							oncomplete="savePostulanteIdiomaDialog.show()" immediate="true"
+							oncomplete="PF('savePostulanteIdiomaDialog').show()" immediate="true"
 							update=":newPostulanteIdiomaForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -438,7 +434,7 @@
 		<!-- Dialog nuevo telefono -->
 		<p:dialog id="saveTelefonoDlg" header="Nuevo teléfono"
 			hideEffect="explode" widgetVar="saveTelefonoDialog" resizable="false"
-			modal="true" appendToBody="true">
+			modal="true" appendTo="@(body)">
 
 			<h:form id="newTelefonoForm">
 				<p:panelGrid columns="2">
@@ -450,11 +446,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.saveTelefono()}"
-							oncomplete="saveTelefonoDialog.hide()"
+							oncomplete="PF('saveTelefonoDialog').hide()"
 							update=":formPostulanteDetalle:dataTableTelefono"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveTelefonoDialog.hide()" type="button"
+							onclick="PF('saveTelefonoDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -465,7 +461,7 @@
 		<!-- Dialog nueva residencia -->
 		<p:dialog id="saveResidenciaDlg" header="Nueva residencia"
 			hideEffect="explode" widgetVar="saveResidenciaDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newResidenciaForm">
 				<p:panelGrid columns="2">
@@ -516,11 +512,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.saveResidencia()}"
-							oncomplete="if (!args.validationFailed){saveResidenciaDialog.hide()}"
+							oncomplete="if (!args.validationFailed){PF('saveResidenciaDialog').hide()}"
 							update=":formPostulanteDetalle:dataTableResidencia"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveResidenciaDialog.hide()" type="button"
+							onclick="PF('saveResidenciaDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -531,7 +527,7 @@
 		<!-- Dialog nuevo postulante conocimiento -->
 		<p:dialog id="savePostulanteConocimientoDlg" header="Nuevo teléfono"
 			hideEffect="explode" widgetVar="savePostulanteConocimientoDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newPostulanteConocimientoForm">
 				<p:panelGrid columns="2">
@@ -561,11 +557,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.savePostulanteConocimiento()}"
-							oncomplete="savePostulanteConocimientoDialog.hide()"
+							oncomplete="PF('savePostulanteConocimientoDialog').hide()"
 							update=":formPostulanteDetalle:dataTablePostulanteConocimiento"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="savePostulanteConocimientoDialog.hide()" type="button"
+							onclick="PF('savePostulanteConocimientoDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -578,7 +574,7 @@
 		<p:dialog id="saveExperienciaLaboralDlg"
 			header="Nueva experiencia laboral" hideEffect="explode"
 			widgetVar="saveExperienciaLaboralDialog" resizable="false"
-			modal="true" appendToBody="true">
+			modal="true" appendTo="@(body)">
 
 			<h:form id="newExperienciaLaboralForm">
 				<p:panelGrid columns="2">
@@ -613,11 +609,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.saveExperienciaLaboral()}"
-							oncomplete="saveExperienciaLaboralDialog.hide()"
+							oncomplete="PF('saveExperienciaLaboralDialog').hide()"
 							update=":formPostulanteDetalle:dataTableExperienciaLaboral"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveExperienciaLaboralDialog.hide()" type="button"
+							onclick="PF('saveExperienciaLaboralDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -631,7 +627,7 @@
 		<p:dialog id="saveActividadAcademicaDlg"
 			header="Nueva experiencia laboral" hideEffect="explode"
 			widgetVar="saveActividadAcademicaDialog" resizable="false"
-			modal="true" appendToBody="true">
+			modal="true" appendTo="@(body)">
 
 			<h:form id="newActividadAcademicaForm">
 				<p:panelGrid columns="2">
@@ -657,7 +653,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.saveActividadAcademica()}"
-							oncomplete="saveActividadAcademicaDialog.hide()"
+							oncomplete="PF('saveActividadAcademicaDialog').hide()"
 							update=":formPostulanteDetalle:dataTableActividadAcademica"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
@@ -674,7 +670,7 @@
 
 		<p:dialog id="savePostulanteIdiomaDlg" header="Nuevo idioma"
 			hideEffect="explode" widgetVar="savePostulanteIdiomaDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newPostulanteIdiomaForm">
 				<p:panelGrid columns="2">
@@ -699,11 +695,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.savePostulanteIdioma()}"
-							oncomplete="savePostulanteIdiomaDialog.hide()"
+							oncomplete="PF('savePostulanteIdiomaDialog').hide()"
 							update=":formPostulanteDetalle:dataTablePostulanteIdioma"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="savePostulanteIdiomaDialog.hide()" type="button"
+							onclick="PF('savePostulanteIdiomaDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -717,7 +713,7 @@
 
 		<p:dialog id="savePostulanteBeneficioDlg" header="Nuevo beneficio"
 			hideEffect="explode" widgetVar="savePostulanteBeneficioDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newPostulanteBeneficioForm">
 				<p:panelGrid columns="2">
@@ -733,11 +729,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.savePostulanteBeneficio()}"
-							oncomplete="savePostulanteBeneficioDialog.hide()"
+							oncomplete="PF('savePostulanteBeneficioDialog').hide()"
 							update=":formPostulante:dataTablePostulanteBeneficio"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="savePostulanteBeneficioDialog.hide()" type="button"
+							onclick="PF('savePostulanteBeneficioDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>

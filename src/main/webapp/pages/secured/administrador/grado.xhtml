@@ -44,7 +44,7 @@
 					<p:commandButton value="Nuevo Grado"
 						actionListener="#{gradoManagedBean.reiniciarNewGrado()}"
 						update=":newGradoForm" 
-						oncomplete="saveGradoDialog.show()"
+						oncomplete="PF('saveGradoDialog').show()"
 						icon="ui-icon-star" />
 					<p:commandButton value="Eliminar Grado"
 						actionListener="#{gradoManagedBean.deleteGrado}"
@@ -58,7 +58,7 @@
 		<!-- Dialog nuevo grado -->
 		<p:dialog id="saveGradoDlg" header="Nuevo grado"
 			widgetVar="saveGradoDialog" resizable="false"
-			modal="true" appendToBody="true">
+			modal="true" appendTo="@(body)">
 
 			<h:form id="newGradoForm">
 				<p:panelGrid columns="2">

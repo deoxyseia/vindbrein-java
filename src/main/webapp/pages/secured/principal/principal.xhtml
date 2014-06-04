@@ -7,8 +7,17 @@
      xmlns:c="http://java.sun.com/jsp/jstl/core">
      
     <ui:define name="content">
-        <h:form>        
-          
-        </h:form>
+    <c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
+     	<ui:insert>
+     		<ui:include src="/pages/secured/postulante/buscadorOferta.xhtml" />
+     	</ui:insert>
+    </c:if>
+    
+    <c:if test="#{request.isUserInRole('ROLE_RECLUTADOR')}">
+     	<ui:insert>
+     		<ui:include src="/pages/secured/reclutador/buscadorPostulante.xhtml" />
+     	</ui:insert>
+    </c:if>
+       
      </ui:define>
 </ui:composition>

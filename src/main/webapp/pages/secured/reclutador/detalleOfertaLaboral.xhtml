@@ -102,7 +102,7 @@
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaBeneficio()}"
 							update=":newOfertaBeneficioForm"
-							oncomplete="saveOfertaBeneficioDialog.show()"							
+							oncomplete="PF('saveOfertaBeneficioDialog').show()"							
 							icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -138,7 +138,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaIdioma()}"
-							oncomplete="saveOfertaIdiomaDialog.show()" immediate="true"
+							oncomplete="PF('saveOfertaIdiomaDialog').show()" immediate="true"
 							update=":newOfertaIdiomaForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
@@ -177,7 +177,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaConocimiento()}"
-							oncomplete="saveOfertaConocimientoDialog.show()"
+							oncomplete="PF('saveOfertaConocimientoDialog').show()"
 							immediate="true" update=":newOfertaConocimientoForm"
 							icon="ui-icon-check">
 						</p:commandButton>
@@ -211,7 +211,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaEstudio()}"
-							oncomplete="saveOfertaEstudioDialog.show()"
+							oncomplete="PF('saveOfertaEstudioDialog').show()"
 							immediate="true" update=":newOfertaEstudioForm"
 							icon="ui-icon-check">
 						</p:commandButton>
@@ -245,7 +245,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{ofertaLaboralManagedBean.reiniciarNewOfertaCentroEstudio()}"
-							oncomplete="saveOfertaCentroEstudioDialog.show()"
+							oncomplete="PF('saveOfertaCentroEstudioDialog').show()"
 							immediate="true" update=":newOfertaCentroEstudioForm"
 							icon="ui-icon-check">
 						</p:commandButton>
@@ -276,7 +276,7 @@
 
 		<p:dialog id="saveOfertaBeneficioDlg" header="Nuevo beneficio"
 			hideEffect="explode" widgetVar="saveOfertaBeneficioDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newOfertaBeneficioForm">
 				<p:panelGrid columns="2">
@@ -292,11 +292,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{ofertaLaboralManagedBean.saveOfertaBeneficio()}"
-							oncomplete="saveOfertaBeneficioDialog.hide()"
+							oncomplete="PF('saveOfertaBeneficioDialog').hide()"
 							update=":formOfertaLaboral:dataTableOfertaBeneficio"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveOfertaBeneficioDialog.hide()" type="button"
+							onclick="PF('saveOfertaBeneficioDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -309,7 +309,7 @@
 
 		<p:dialog id="saveOfertaIdiomaDlg" header="Nuevo idioma"
 			hideEffect="explode" widgetVar="saveOfertaIdiomaDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newOfertaIdiomaForm">
 				<p:panelGrid columns="2">
@@ -334,11 +334,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{ofertaLaboralManagedBean.saveOfertaIdioma()}"
-							oncomplete="saveOfertaIdiomaDialog.hide()"
+							oncomplete="PF('saveOfertaIdiomaDialog').hide()"
 							update=":formOfertaLaboral:dataTableOfertaIdioma"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveOfertaIdiomaDialog.hide()" type="button"
+							onclick="PF('saveOfertaIdiomaDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -351,7 +351,7 @@
 		
 		<p:dialog id="saveOfertaConocimientoDlg" header="Nuevo Conocimiento"
 			hideEffect="explode" widgetVar="saveOfertaConocimientoDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newOfertaConocimientoForm">
 				<p:panelGrid columns="2">
@@ -382,11 +382,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{ofertaLaboralManagedBean.saveOfertaConocimiento()}"
-							oncomplete="saveOfertaConocimientoDialog.hide()"
+							oncomplete="PF('saveOfertaConocimientoDialog').hide()"
 							update=":formOfertaLaboral:dataTableOfertaConocimiento"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveOfertaConocimientoDialog.hide()" type="button"
+							onclick="PF('saveOfertaConocimientoDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -398,7 +398,7 @@
 		
 		<p:dialog id="saveOfertaEstudioDlg" header="Nuevo Estudio"
 			hideEffect="explode" widgetVar="saveOfertaEstudioDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newOfertaEstudioForm">
 				<p:panelGrid columns="2">
@@ -416,11 +416,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{ofertaLaboralManagedBean.saveOfertaEstudio()}"
-							oncomplete="saveOfertaEstudioDialog.hide()"
+							oncomplete="PF('saveOfertaEstudioDialog').hide()"
 							update=":formOfertaLaboral:dataTableOfertaEstudio"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveOfertaEstudioDialog.hide()" type="button"
+							onclick="PF('saveOfertaEstudioDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -433,7 +433,7 @@
 		
 		<p:dialog id="saveOfertaCentroEstudioDlg" header="Nuevo Centro de Estudio"
 			hideEffect="explode" widgetVar="saveOfertaCentroEstudioDialog"
-			resizable="false" modal="true" appendToBody="true">
+			resizable="false" modal="true" appendTo="@(body)">
 
 			<h:form id="newOfertaCentroEstudioForm">
 				<p:panelGrid columns="2">
@@ -452,11 +452,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{ofertaLaboralManagedBean.saveOfertaCentroEstudio()}"
-							oncomplete="saveOfertaCentroEstudioDialog.hide()"
+							oncomplete="PF('saveOfertaCentroEstudioDialog').hide()"
 							update=":formOfertaLaboral:dataTableOfertaCentroEstudio"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveOfertaCentroEstudioDialog.hide()" type="button"
+							onclick="PF('saveOfertaCentroEstudioDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>

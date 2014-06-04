@@ -46,7 +46,7 @@
 	  
 	  <!-- Welcome Page -->
 	  <welcome-file-list>
-	    <welcome-file>/pages/secured/principal/adminHome.jsf</welcome-file>
+	    <welcome-file>/pages/secured/principal/principal.jsf</welcome-file>
 	  </welcome-file-list>
 	  
 	  <!-- JSF Servlet is defined to container -->
