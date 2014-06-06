@@ -20,4 +20,8 @@ public interface OfertaLaboralService {
 	public ArrayList<OfertaLaboral> getOfertasLaborales();
 	
 	public ArrayList<OfertaLaboral> getOfertasLaboralesByOrganizacion(Organizacion organizacion);
+	
+	public ArrayList<OfertaLaboral> getOfertasLaboralesCompletas();
+	
+	public OfertaLaboral getOfertaLaboralCompleta(OfertaLaboral ofertaLaboral);
 }

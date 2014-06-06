@@ -149,4 +149,28 @@ public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializa
 	public ArrayList<OfertaLaboral> getOfertasLaboralesByOrganizacion(Organizacion organizacion){
 		return ofertaLaboralDAO.getOfertasLaboralesByOrganizacion(organizacion);
 	}	
+	
+	public ArrayList<OfertaLaboral> getOfertasLaboralesCompletas(){
+		ArrayList<OfertaLaboral> ofertas = getOfertasLaborales();
+		
+		for (int i = 0; i < ofertas.size(); i++) {
+			ofertas.get(i).setOfertaBeneficios(ofertaBeneficioDAO.getOfertaBeneficiosByOfertaLaboral(ofertas.get(i)));
+			ofertas.get(i).setOfertaCentroEstudios(ofertaCentroEstudioDAO.getOfertaCentroEstudiosByOfertaLaboral(ofertas.get(i)));
+			ofertas.get(i).setOfertaConocimientos(ofertaConocimientoDAO.getOfertaConocimientosByOfertaLaboral(ofertas.get(i)));
+			ofertas.get(i).setOfertaEstudios(ofertaEstudioDAO.getOfertaEstudiosByOfertaLaboral(ofertas.get(i)));
+			ofertas.get(i).setOfertaIdiomas(ofertaIdiomaDAO.getOfertaIdiomasByOfertaLaboral(ofertas.get(i)));
+		}
+		
+		return ofertas;
+	}
+	
+	public OfertaLaboral getOfertaLaboralCompleta(OfertaLaboral ofertaLaboral){
+		ofertaLaboral.setOfertaBeneficios(ofertaBeneficioDAO.getOfertaBeneficiosByOfertaLaboral(ofertaLaboral));
+		ofertaLaboral.setOfertaCentroEstudios(ofertaCentroEstudioDAO.getOfertaCentroEstudiosByOfertaLaboral(ofertaLaboral));
+		ofertaLaboral.setOfertaConocimientos(ofertaConocimientoDAO.getOfertaConocimientosByOfertaLaboral(ofertaLaboral));
+		ofertaLaboral.setOfertaEstudios(ofertaEstudioDAO.getOfertaEstudiosByOfertaLaboral(ofertaLaboral));
+		ofertaLaboral.setOfertaIdiomas(ofertaIdiomaDAO.getOfertaIdiomasByOfertaLaboral(ofertaLaboral));
+		
+		return ofertaLaboral;
+	}
 }

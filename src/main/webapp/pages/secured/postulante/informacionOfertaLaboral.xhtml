@@ -1,0 +1,167 @@
+<ui:composition template="/pages/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title"> Oferta laboral </ui:define>
+
+	<ui:define name="content">
+
+		<!--Oferta laboral -->
+
+		<p:messages showDetail="true" autoUpdate="true" closable="true" />
+
+		<h:form id="formOfertaLaboral">
+			<p:panel header="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaTitulo}">
+
+				<h:panelGrid columns="2">
+
+					<!-- Puesto -->
+					<h:outputText value="Descripción :" />
+					<h:outputText value="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaDescripcion}" />					
+
+					<h:outputText value="Salario :"></h:outputText>
+					<h:outputText value="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaSalario}"></h:outputText>
+					
+					<h:outputText value="Edad: "></h:outputText>
+					<h:outputText value="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaEdad}"></h:outputText>
+					
+					<h:outputText value="Tiempo de experiencia :"></h:outputText>
+					<h:outputText value="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaTiempoExperiencia}"></h:outputText>
+					
+					<h:outputText value="Sexo :"></h:outputText>
+					<h:outputText value="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaSexo}"></h:outputText>
+					
+					<h:outputText value="Tipo de horario :"></h:outputText>
+					<h:outputText value="#{buscarOfertaManagedBean.selectedOfertaLaboral.tipoHorario.tihoNombre}"></h:outputText>
+					
+				</h:panelGrid>
+			</p:panel>
+
+			<p:panel header="Características">
+			
+				<!-- beneficios-->
+
+				<p:dataTable id="dataTableOfertaBeneficio" 
+					var="ofertaBeneficio" rowKey="#{ofertaBeneficio.beneficio.beneId}" 
+					value="#{buscarOfertaManagedBean.selectedOfertaLaboral.ofertaBeneficios}"
+					disabledSelection="true" >
+					
+					<f:facet name="header">
+                    Lista de Beneficios
+                	</f:facet>
+
+					<p:column headerText="beneficio">
+						<h:outputText value="#{ofertaBeneficio.beneficio.beneNombre}" />
+					</p:column>
+					
+				</p:dataTable>
+
+				<!-- fin de beneficios -->
+				
+				<!-- Oferta Idioma-->
+
+				<p:dataTable id="dataTableOfertaIdioma" 
+					var="ofertaIdioma" rowKey="#{ofertaIdioma.idioma.idioId}"
+					value="#{buscarOfertaManagedBean.selectedOfertaLaboral.ofertaIdiomas}"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Idiomas
+                	</f:facet>
+
+					<p:column headerText="Idioma">
+						<h:outputText value="#{ofertaIdioma.idioma.idioNombre}" />
+					</p:column>
+
+					<p:column headerText="Nivel de idioma">
+						<h:outputText value="#{ofertaIdioma.nivelIdioma.niidNombre}" />
+					</p:column>					
+				</p:dataTable>
+
+				<!-- fin de oferta idioma -->
+				
+				<!-- oferta Conocimiento -->
+
+				<p:dataTable id="dataTableOfertaConocimiento"
+					var="ofertaConocimiento" rowKey="#{ofertaConocimiento.conocimiento.conoId}"
+					value="#{buscarOfertaManagedBean.selectedOfertaLaboral.ofertaConocimientos}"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Conocimientos
+                	</f:facet>
+
+					<p:column headerText="Conocimiento">
+						<h:outputText
+							value="#{ofertaConocimiento.conocimiento.conoNombre}" />
+					</p:column>
+
+					<p:column headerText="Nivel de conocimiento">
+						<h:outputText
+							value="#{ofertaConocimiento.nivelConocimiento.nicoNombre}" />
+					</p:column>
+				</p:dataTable>
+
+				<!-- fin de oferta conocimiento -->
+				
+				<!-- Estudio-->
+
+				<p:dataTable id="dataTableOfertaEstudio"
+					var="ofertaEstudio" rowKey="#{ofertaEstudio.estudioGenerico.esgeId}"
+					value="#{buscarOfertaManagedBean.selectedOfertaLaboral.ofertaEstudios}"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Beneficios
+                	</f:facet>
+
+					<p:column headerText="Estudio">
+						<h:outputText value="#{ofertaEstudio.estudioGenerico.esgeNombre}" />
+					</p:column>
+					
+				</p:dataTable>
+
+				<!-- fin de estudios -->
+				
+				<!-- Centro de estudio -->
+
+				<p:dataTable id="dataTableOfertaCentroEstudio"
+					var="ofertaCentroEstudio" rowKey="#{ofertaCentroEstudio.centroEstudio.ceesId}"
+					value="#{buscarOfertaManagedBean.selectedOfertaLaboral.ofertaCentroEstudios}"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Centros de estudio
+                	</f:facet>
+
+					<p:column headerText="Centro de estudio">
+						<h:outputText value="#{ofertaCentroEstudio.centroEstudio.ceesNombre}" />
+					</p:column>					
+				</p:dataTable>
+
+				<!-- fin de centros de estudio -->
+			</p:panel>
+			
+			<p:panel>
+				<f:facet name="footer">
+					<p:commandButton value="Postular" 
+								ajax="false" immediate="true"
+								actionListener="#{}"
+								action="/pages/usuarioPostulante.xhtml?faces-redirect=true"
+								type="submit" icon="ui-icon-check">
+							  </p:commandButton>
+					<p:commandButton value="Guardar"
+						actionListener="#{ofertaLaboralManagedBean.saveOfertaLaboral()}"
+						update=":formOfertaLaboral" icon="ui-icon-check" />
+					<p:commandButton value="Cancelar"
+						actionListener="#{ofertaLaboralManagedBean.cancelSaveOfertaLaboral()}"
+						update=":formOfertaLaboral" icon="ui-icon-close" />
+				</f:facet>
+			</p:panel>
+		</h:form>			
+	</ui:define>
+</ui:composition>
