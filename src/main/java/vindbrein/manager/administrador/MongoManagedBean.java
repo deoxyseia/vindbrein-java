@@ -47,37 +47,37 @@ public class MongoManagedBean implements Serializable{
 		
 	}
 	
-	public void run(){
-		PostulantHistorical postulantHistorical = new PostulantHistorical();
-		
-		HashMap<String, Integer> valores = new HashMap<String, Integer>();
-		
-		valores.put("SABE", 1);
-		valores.put("MELASUDA", 0);
-		
-		postulantHistorical.setValues(valores);
-		
-		mongoService.addPostulantHistorical(postulantHistorical);
-		
-		List<PostulantHistorical> r = mongoService.listPostulantHistorical();
-		
-		for (int i = 0; i < r.size(); i++) {
-			System.out.println("id: "+r.get(i).getId());
-			System.out.println("Items");
-			
-			
-			for (Map.Entry<String, Integer> entry : r.get(i).getValues().entrySet()) {
-			   System.out.println("key: "+entry.getKey());
-			   System.out.print("value: "+entry.getValue());
-			}
-			
-		}
-		
-		postulantHistorical.getValues().put("SABE",3);
-		
-		mongoService.updatePostulantHistorical(postulantHistorical);
-		
-	}
+//	public void run(){
+//		PostulantHistorical postulantHistorical = new PostulantHistorical();
+//		
+//		HashMap<String, Integer> valores = new HashMap<String, Integer>();
+//		
+//		valores.put("SABE", 1);
+//		valores.put("MELASUDA", 0);
+//		
+//		postulantHistorical.setValues(valores);
+//		
+//		mongoService.addPostulantHistorical(postulantHistorical);
+//		
+//		List<PostulantHistorical> r = mongoService.listPostulantHistorical();
+//		
+//		for (int i = 0; i < r.size(); i++) {
+//			System.out.println("id: "+r.get(i).getId());
+//			System.out.println("Items");
+//			
+//			
+//			for (Map.Entry<String, Integer> entry : r.get(i).getValues().entrySet()) {
+//			   System.out.println("key: "+entry.getKey());
+//			   System.out.print("value: "+entry.getValue());
+//			}
+//			
+//		}
+//		
+//		postulantHistorical.getValues().put("SABE",3);
+//		
+//		mongoService.updatePostulantHistorical(postulantHistorical);
+//		
+//	}
 	
 	public void rec(){
 		Profile perfil_puesto = new Profile();		

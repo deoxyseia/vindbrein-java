@@ -10,11 +10,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 
 import vindbrein.domain.model.OfertaConocimiento;
 import vindbrein.domain.model.OfertaLaboral;
+import vindbrein.domain.model.Postulante;
 import vindbrein.service.OfertaLaboralService;
+import vindbrein.service.PostulanteService;
+import vindbrein.service.app.CoreService;
 
 @Controller
 @Scope("session")
@@ -28,6 +33,14 @@ public class BuscarOfertaManagedBean implements Serializable{
 	@Autowired
 	@Qualifier("ofertaLaboralServiceImpl")
 	OfertaLaboralService ofertaLaboralService;
+
+	@Autowired
+	@Qualifier("postulanteServiceImpl")
+	PostulanteService postulanteService;
+	
+	@Autowired
+	@Qualifier("coreServiceImpl")
+	CoreService coreService;
 	
 	
 	private ArrayList<OfertaLaboral> ofertasLaborales;
@@ -64,11 +77,7 @@ public class BuscarOfertaManagedBean implements Serializable{
 		}
 		
 		return encontrados;
-	}
-	
-	public void cargarOfertaLaboralSeleccionada(){
-		selectedOfertaLaboral = ofertaLaboralService.getOfertaLaboralCompleta(selectedOfertaLaboral);
-	}
+	}	
 	
 	public void realizarBusqueda(){
 		logger.info("realizando busqueda");
@@ -90,6 +99,28 @@ public class BuscarOfertaManagedBean implements Serializable{
 				}
 			}
 		}		
+	}
+	
+	public void visitarOfertaLaboral(){
+		logger.info("visitando oferta laboral");
+		
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		
+		Postulante postulante = postulanteService.getPostulanteByCorreo(user.getUsername());
+						
+		coreService.visitarOfertaLaboral(selectedOfertaLaboral, postulante);
+	}
+	
+	public void postularOfertaLaboral(){
+		logger.info("postulando a oferta laboral");
+		
+		User user = (User) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		
+		Postulante postulante = postulanteService.getPostulanteByCorreo(user.getUsername());
+		
+		coreService.postularOfertaLaboral(selectedOfertaLaboral, postulante);
 	}
 	
 	//getters and setters
@@ -115,7 +146,11 @@ public class BuscarOfertaManagedBean implements Serializable{
 	}
 
 	public void setSelectedOfertaLaboral(OfertaLaboral selectedOfertaLaboral) {
+		selectedOfertaLaboral = ofertaLaboralService.getOfertaLaboralCompleta(selectedOfertaLaboral);
+			
 		this.selectedOfertaLaboral = selectedOfertaLaboral;
+		
+		visitarOfertaLaboral();
 	}
 
 	public String getCadenaBusqueda() {

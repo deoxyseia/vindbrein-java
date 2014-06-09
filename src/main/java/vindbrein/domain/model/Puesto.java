@@ -120,7 +120,7 @@ public class Puesto implements Serializable {
 
 	//bi-directional many-to-one association to NivelPuesto
 	@ManyToOne
-	@JoinColumn(name="fk_tipu_id")
+	@JoinColumn(name="fk_nipu_id")
 	public NivelPuesto getNivelPuesto() {
 		return this.nivelPuesto;
 	}

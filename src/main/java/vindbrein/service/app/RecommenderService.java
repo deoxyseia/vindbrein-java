@@ -13,5 +13,4 @@ public interface RecommenderService {
 	public ArrayList<Result> recommenderCollaborativeBased(Profile profile, Profile[] alternatives, int sizeResults);
 	
 	public ArrayList<Result> recommenderReciprocityBased(Profile profile, Profile[] alternatives, int sizeResults);
-
 }

@@ -190,9 +190,7 @@ public class PostulanteManagedBean implements Serializable{
 		
 		postulante = postulanteService.getPostulanteByCorreo(user.getUsername());
 		
-		recargarPostulante();
-		
-		
+		recargarPostulante();		
 	}
 	
 	private void recargarPostulante(){

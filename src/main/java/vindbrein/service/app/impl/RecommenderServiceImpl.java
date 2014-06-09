@@ -7,18 +7,54 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vindbrein.dao.app.CoreDAO;
 import vindbrein.domain.app.Profile;
 import vindbrein.domain.app.Result;
+import vindbrein.domain.model.OfertaLaboral;
+import vindbrein.domain.model.Postulante;
 import vindbrein.service.app.RecommenderService;
+import vindbrein.util.RecommenderType;
 
 @Service
 @Transactional(readOnly = true)
 public class RecommenderServiceImpl implements RecommenderService, Serializable {
 	
+	@Autowired
+	CoreDAO coreDAO;
+	
 	private static final long serialVersionUID = 1L;
+	
+	
+	public ArrayList<OfertaLaboral> recomendarOfertasLaboralesToPostulante(Postulante postulante, int size, RecommenderType recommenderType){		
+		ArrayList<OfertaLaboral> results = new ArrayList<OfertaLaboral>();
+				
+		Profile profile = new Profile();
+		
+		profile.setId(postulante.getPostId());
+		profile.setRecNumber(size);
+	
+		switch (recommenderType) {
+		case CONTENT_BASED:
+			
+			break;
+		case COLLABORATIVE_BASED:
+			
+			break;
+		case RECIPROCITY_BASED:
+			
+			break;
+		case FUSION_BASED:	
+			
+		default:
+			break;
+		}
+		
+		return results;
+	}
 
 	
 	public ArrayList<Result> recommenderContentBased(Profile profile, Profile[] alternatives, int sizeResults){

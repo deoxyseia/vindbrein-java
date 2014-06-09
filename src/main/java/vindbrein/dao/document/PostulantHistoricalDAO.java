@@ -1,7 +1,6 @@
 package vindbrein.dao.document;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -38,7 +37,18 @@ public class PostulantHistoricalDAO {
 
 	public void updatePostulantHistorical(PostulantHistorical postulantHistorical) {			
 		mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(postulantHistorical.getId())), 
-						Update.update("items", postulantHistorical.getValues()), PostulantHistorical.class, COLLECTION_NAME);
+						Update.update("values", postulantHistorical.getValues()), PostulantHistorical.class, COLLECTION_NAME);
 	}
-
+	
+	public PostulantHistorical getPostulantHistoricalById(String id){
+		Query query = new Query(Criteria.where("_id").is(id));
+		
+		List<PostulantHistorical> list = mongoTemplate.find(query, PostulantHistorical.class, COLLECTION_NAME);
+				
+		if(list.size()!=0){
+			return (PostulantHistorical)list.get(0);
+		} else {
+			return null;
+		}
+	}
 }

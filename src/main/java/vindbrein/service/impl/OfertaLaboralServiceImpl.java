@@ -2,7 +2,9 @@ package vindbrein.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,11 @@ import vindbrein.dao.OfertaEstudioDAO;
 import vindbrein.dao.OfertaIdiomaDAO;
 import vindbrein.dao.OfertaLaboralDAO;
 import vindbrein.dao.OrganizacionPuestoDAO;
+import vindbrein.dao.app.CoreDAO;
+import vindbrein.dao.document.OfferPreferenceDAO;
+import vindbrein.dao.document.OfferSelfDescriptionDAO;
+import vindbrein.domain.document.OfferPreference;
+import vindbrein.domain.document.OfferSelfDescription;
 import vindbrein.domain.model.OfertaBeneficio;
 import vindbrein.domain.model.OfertaCentroEstudio;
 import vindbrein.domain.model.OfertaConocimiento;
@@ -21,6 +28,7 @@ import vindbrein.domain.model.OfertaEstudio;
 import vindbrein.domain.model.OfertaIdioma;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Organizacion;
+import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.service.OfertaLaboralService;
 
 @Service
@@ -50,6 +58,15 @@ public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializa
 	@Autowired	
 	private OfertaCentroEstudioDAO ofertaCentroEstudioDAO;
 	
+	@Autowired	
+	private CoreDAO coreDAO;
+	
+	@Autowired	
+	private OfferPreferenceDAO offerPreferenceDAO;
+	
+	@Autowired	
+	private OfferSelfDescriptionDAO offerSelfDescriptionDAO;
+	
 	@Transactional(readOnly = false)
 	public void addOfertaLaboral(OfertaLaboral ofertaLaboral) {	
 					
@@ -63,9 +80,19 @@ public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializa
 	@Transactional(readOnly = false)
 	public void saveOrUpdateOfertaLaboral(OfertaLaboral ofertaLaboral) {
 		// obtiene el puesto de la organizacion y lo inserta en la oferta
-
-		ofertaLaboral.getOrganizacionPuesto().getId().setFkPuesId(ofertaLaboral.getOrganizacionPuesto().getPuesto().getPuesId());
-		ofertaLaboral.getOrganizacionPuesto().getId().setFkOrgaId(ofertaLaboral.getOrganizacionPuesto().getOrganizacion().getOrgaId());
+				
+		OrganizacionPuesto organizacionPuesto = organizacionPuestoDAO.getOrganizacionPuestoById(ofertaLaboral.getOrganizacionPuesto().getOrganizacion(), 
+				ofertaLaboral.getOrganizacionPuesto().getPuesto());
+		
+		if( organizacionPuesto != null){
+			ofertaLaboral.setOrganizacionPuesto(organizacionPuesto);
+		}else{
+			ofertaLaboral.getOrganizacionPuesto().getId().setFkPuesId(ofertaLaboral.getOrganizacionPuesto().getPuesto().getPuesId());
+			ofertaLaboral.getOrganizacionPuesto().getId().setFkOrgaId(ofertaLaboral.getOrganizacionPuesto().getOrganizacion().getOrgaId());
+			ofertaLaboral.getOrganizacionPuesto().setOrpuEstado("V");
+			
+			organizacionPuestoDAO.addOrganizacionPuesto(ofertaLaboral.getOrganizacionPuesto());			
+		}
 
 		// guarda la oferta laboral
 		ofertaLaboralDAO.saveOrUpdateOfertaLaboral(ofertaLaboral);	
@@ -131,6 +158,50 @@ public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializa
 			
 			ofertaCentroEstudioDAO.addOfertaCentroEstudio(ofertaCentroEstudio);
 		}
+		//////////////////
+		LinkedHashMap<String, Integer> vectorPreferencia = coreDAO.getVectorOfferPreference(ofertaLaboral);
+		
+		if(ofertaLaboral.getOflaIdP() != null){
+			OfferPreference offerPreference = offerPreferenceDAO.getOfferPreferenceById(ofertaLaboral.getOflaIdP());
+			offerPreference.setValues(vectorPreferencia);
+			
+			offerPreferenceDAO.updateOfferPreference(offerPreference);			
+		}else{
+			ObjectId objectId = new ObjectId();
+			
+			OfferPreference offerPreference = new OfferPreference();
+			offerPreference.setId(objectId.toString());
+			offerPreference.setValues(vectorPreferencia);
+			
+			offerPreferenceDAO.addOfferPreference(offerPreference);
+			
+			//BD
+			ofertaLaboral.setOflaIdP(objectId.toString());
+			ofertaLaboralDAO.updateOfertaLaboral(ofertaLaboral);
+		}	
+		
+		/////////////////
+		
+		LinkedHashMap<String, Integer> vectorAutodescripcion = coreDAO.getVectorOfferSelfDescription(ofertaLaboral);
+		
+		if(ofertaLaboral.getOflaIdS() != null){
+			OfferSelfDescription offerSelfDescription = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ofertaLaboral.getOflaIdS());
+			offerSelfDescription.setValues(vectorAutodescripcion);
+			
+			offerSelfDescriptionDAO.updateOfferSelfDescription(offerSelfDescription);			
+		}else{
+			ObjectId objectId = new ObjectId();
+			
+			OfferSelfDescription offerSelfDescription = new OfferSelfDescription();
+			offerSelfDescription.setId(objectId.toString());
+			offerSelfDescription.setValues(vectorAutodescripcion);
+			
+			offerSelfDescriptionDAO.addOfferSelfDescription(offerSelfDescription);
+			
+			//BD
+			ofertaLaboral.setOflaIdS(objectId.toString());
+			ofertaLaboralDAO.updateOfertaLaboral(ofertaLaboral);
+		}	
 	}
 	
 	@Transactional(readOnly = false)

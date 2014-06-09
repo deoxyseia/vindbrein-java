@@ -17,9 +17,9 @@ public class OfertaLaboral implements Serializable {
 	private int oflaId;
 	private String oflaDescripcion;
 	private int oflaEdad;
-	private int oflaIdPuestoH;
-	private int oflaIdPuestoP;
-	private int oflaIdPuestoS;
+	private String oflaIdH;
+	private String oflaIdP;
+	private String oflaIdS;
 	private int oflaSalario;
 	private String oflaSexo;
 	private int oflaTiempoExperiencia;
@@ -72,33 +72,33 @@ public class OfertaLaboral implements Serializable {
 	}
 
 
-	@Column(name="ofla_id_puesto_h")
-	public int getOflaIdPuestoH() {
-		return this.oflaIdPuestoH;
+	@Column(name="ofla_id_h")
+	public String getOflaIdH() {
+		return this.oflaIdH;
 	}
 
-	public void setOflaIdPuestoH(int oflaIdPuestoH) {
-		this.oflaIdPuestoH = oflaIdPuestoH;
-	}
-
-
-	@Column(name="ofla_id_puesto_p")
-	public int getOflaIdPuestoP() {
-		return this.oflaIdPuestoP;
-	}
-
-	public void setOflaIdPuestoP(int oflaIdPuestoP) {
-		this.oflaIdPuestoP = oflaIdPuestoP;
+	public void setOflaIdH(String oflaIdH) {
+		this.oflaIdH = oflaIdH;
 	}
 
 
-	@Column(name="ofla_id_puesto_s")
-	public int getOflaIdPuestoS() {
-		return this.oflaIdPuestoS;
+	@Column(name="ofla_id_p")
+	public String getOflaIdP() {
+		return this.oflaIdP;
 	}
 
-	public void setOflaIdPuestoS(int oflaIdPuestoS) {
-		this.oflaIdPuestoS = oflaIdPuestoS;
+	public void setOflaIdP(String oflaIdP) {
+		this.oflaIdP = oflaIdP;
+	}
+
+
+	@Column(name="ofla_id_s")
+	public String getOflaIdS() {
+		return this.oflaIdS;
+	}
+
+	public void setOflaIdS(String oflaIdS) {
+		this.oflaIdS = oflaIdS;
 	}
 
 

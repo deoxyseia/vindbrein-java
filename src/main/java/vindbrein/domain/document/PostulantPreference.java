@@ -1,13 +1,12 @@
 package vindbrein.domain.document;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class PostulantHistorical {
+public class PostulantPreference {
 
 	@Id
 	private String id;

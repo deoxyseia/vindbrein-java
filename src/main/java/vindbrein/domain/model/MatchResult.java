@@ -16,11 +16,14 @@ public class MatchResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private MatchResultPK id;
 	private Date mareFecha;
-	private byte mareFlagRecomendado;
-	private byte mareFlagSeleccionado;
-	private byte mareFlagVisitado;
-	private Postulante postulante;
+	private byte mareFlagOfertaRecomendada;
+	private byte mareFlagOfertaSeleccionada;
+	private byte mareFlagOfertaVisitada;
+	private byte mareFlagPostulanteRecomendado;
+	private byte mareFlagPostulanteSeleccionado;
+	private byte mareFlagPostulanteVisitado;
 	private OfertaLaboral ofertaLaboral;
+	private Postulante postulante;
 
 	public MatchResult() {
 	}
@@ -47,45 +50,63 @@ public class MatchResult implements Serializable {
 	}
 
 
-	@Column(name="mare_flag_recomendado")
-	public byte getMareFlagRecomendado() {
-		return this.mareFlagRecomendado;
+	@Column(name="mare_flag_oferta_recomendada")
+	public byte getMareFlagOfertaRecomendada() {
+		return this.mareFlagOfertaRecomendada;
 	}
 
-	public void setMareFlagRecomendado(byte mareFlagRecomendado) {
-		this.mareFlagRecomendado = mareFlagRecomendado;
-	}
-
-
-	@Column(name="mare_flag_seleccionado")
-	public byte getMareFlagSeleccionado() {
-		return this.mareFlagSeleccionado;
-	}
-
-	public void setMareFlagSeleccionado(byte mareFlagSeleccionado) {
-		this.mareFlagSeleccionado = mareFlagSeleccionado;
+	public void setMareFlagOfertaRecomendada(byte mareFlagOfertaRecomendada) {
+		this.mareFlagOfertaRecomendada = mareFlagOfertaRecomendada;
 	}
 
 
-	@Column(name="mare_flag_visitado")
-	public byte getMareFlagVisitado() {
-		return this.mareFlagVisitado;
+	@Column(name="mare_flag_oferta_seleccionada")
+	public byte getMareFlagOfertaSeleccionada() {
+		return this.mareFlagOfertaSeleccionada;
 	}
 
-	public void setMareFlagVisitado(byte mareFlagVisitado) {
-		this.mareFlagVisitado = mareFlagVisitado;
+	public void setMareFlagOfertaSeleccionada(byte mareFlagOfertaSeleccionada) {
+		this.mareFlagOfertaSeleccionada = mareFlagOfertaSeleccionada;
 	}
 
 
-	//bi-directional many-to-one association to Postulante
-	@ManyToOne
-	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
-	public Postulante getPostulante() {
-		return this.postulante;
+	@Column(name="mare_flag_oferta_visitada")
+	public byte getMareFlagOfertaVisitada() {
+		return this.mareFlagOfertaVisitada;
 	}
 
-	public void setPostulante(Postulante postulante) {
-		this.postulante = postulante;
+	public void setMareFlagOfertaVisitada(byte mareFlagOfertaVisitada) {
+		this.mareFlagOfertaVisitada = mareFlagOfertaVisitada;
+	}
+
+
+	@Column(name="mare_flag_postulante_recomendado")
+	public byte getMareFlagPostulanteRecomendado() {
+		return this.mareFlagPostulanteRecomendado;
+	}
+
+	public void setMareFlagPostulanteRecomendado(byte mareFlagPostulanteRecomendado) {
+		this.mareFlagPostulanteRecomendado = mareFlagPostulanteRecomendado;
+	}
+
+
+	@Column(name="mare_flag_postulante_seleccionado")
+	public byte getMareFlagPostulanteSeleccionado() {
+		return this.mareFlagPostulanteSeleccionado;
+	}
+
+	public void setMareFlagPostulanteSeleccionado(byte mareFlagPostulanteSeleccionado) {
+		this.mareFlagPostulanteSeleccionado = mareFlagPostulanteSeleccionado;
+	}
+
+
+	@Column(name="mare_flag_postulante_visitado")
+	public byte getMareFlagPostulanteVisitado() {
+		return this.mareFlagPostulanteVisitado;
+	}
+
+	public void setMareFlagPostulanteVisitado(byte mareFlagPostulanteVisitado) {
+		this.mareFlagPostulanteVisitado = mareFlagPostulanteVisitado;
 	}
 
 
@@ -98,6 +119,18 @@ public class MatchResult implements Serializable {
 
 	public void setOfertaLaboral(OfertaLaboral ofertaLaboral) {
 		this.ofertaLaboral = ofertaLaboral;
+	}
+
+
+	//bi-directional many-to-one association to Postulante
+	@ManyToOne
+	@JoinColumn(name="fk_post_id", insertable=false, updatable=false)
+	public Postulante getPostulante() {
+		return this.postulante;
+	}
+
+	public void setPostulante(Postulante postulante) {
+		this.postulante = postulante;
 	}
 
 }

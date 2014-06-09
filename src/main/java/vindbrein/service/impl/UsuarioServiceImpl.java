@@ -1,8 +1,10 @@
 package vindbrein.service.impl;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,11 @@ import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.ReclutadorDAO;
 import vindbrein.dao.SucursalDAO;
 import vindbrein.dao.UsuarioDAO;
+import vindbrein.dao.app.CoreDAO;
+import vindbrein.dao.document.PostulantPreferenceDAO;
+import vindbrein.dao.document.PostulantSelfDescriptionDAO;
+import vindbrein.domain.document.PostulantPreference;
+import vindbrein.domain.document.PostulantSelfDescription;
 import vindbrein.domain.model.Usuario;
 import vindbrein.service.UsuarioService;
 
@@ -38,6 +45,14 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	@Autowired
 	ReclutadorDAO reclutadorDAO;
 	
+	@Autowired
+	PostulantPreferenceDAO postulantPreferenceDAO;
+	
+	@Autowired
+	PostulantSelfDescriptionDAO postulantSelfDescriptionDAO;	
+	
+	@Autowired
+	CoreDAO coreDAO;
 	
 	@Transactional(readOnly = false)
 	public void addUsuario(Usuario usuario) {
@@ -73,6 +88,34 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	public void addUsuarioPostulante(Usuario usuario){
 		getPostulanteDAO().addPostulante(usuario.getPostulante());
 		getUsuarioDAO().addUsuario(usuario);
+		
+		//Guardando información autodescriptiva
+		LinkedHashMap<String, Integer> vectorAutodescripcion = coreDAO.getVectorPostulantSelfDescription(usuario.getPostulante());
+		
+		ObjectId objectIdS = new ObjectId();
+		
+		PostulantSelfDescription postulantSelfDescription = new PostulantSelfDescription();
+		postulantSelfDescription.setId(objectIdS.toString());
+		postulantSelfDescription.setValues(vectorAutodescripcion);
+		
+		postulantSelfDescriptionDAO.addPostulantSelfDescription(postulantSelfDescription);
+		
+		// Guardando información preferencia
+		LinkedHashMap<String, Integer> vectorPreferencia = coreDAO.getVectorPostulantPreference(usuario.getPostulante());
+
+		ObjectId objectIdP = new ObjectId();
+
+		PostulantPreference postulantPreference = new PostulantPreference();
+		postulantPreference.setId(objectIdP.toString());
+		postulantPreference.setValues(vectorPreferencia);
+
+		postulantPreferenceDAO.addPostulantPreference(postulantPreference);
+		
+		//actualizando postulante
+		usuario.getPostulante().setPostIdS(objectIdS.toString());
+		usuario.getPostulante().setPostIdP(objectIdP.toString());
+				
+		postulanteDAO.updatePostulante(usuario.getPostulante());
 	}
 	
 	@Transactional(readOnly = false)

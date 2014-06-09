@@ -23,9 +23,9 @@ public class Postulante implements Serializable {
 	private String postDni;
 	private int postEdad;
 	private Date postFechaNacimiento;
-	private int postIdProfH;
-	private int postIdProfP;
-	private int postIdProfS;
+	private String postIdH;
+	private String postIdP;
+	private String postIdS;
 	private String postNombres;
 	private int postSalario;
 	private String postSexo;
@@ -122,33 +122,33 @@ public class Postulante implements Serializable {
 	}
 
 
-	@Column(name="post_id_prof_h")
-	public int getPostIdProfH() {
-		return this.postIdProfH;
+	@Column(name="post_id_h")
+	public String getPostIdH() {
+		return this.postIdH;
 	}
 
-	public void setPostIdProfH(int postIdProfH) {
-		this.postIdProfH = postIdProfH;
-	}
-
-
-	@Column(name="post_id_prof_p")
-	public int getPostIdProfP() {
-		return this.postIdProfP;
-	}
-
-	public void setPostIdProfP(int postIdProfP) {
-		this.postIdProfP = postIdProfP;
+	public void setPostIdH(String postIdH) {
+		this.postIdH = postIdH;
 	}
 
 
-	@Column(name="post_id_prof_s")
-	public int getPostIdProfS() {
-		return this.postIdProfS;
+	@Column(name="post_id_p")
+	public String getPostIdP() {
+		return this.postIdP;
 	}
 
-	public void setPostIdProfS(int postIdProfS) {
-		this.postIdProfS = postIdProfS;
+	public void setPostIdP(String postIdP) {
+		this.postIdP = postIdP;
+	}
+
+
+	@Column(name="post_id_s")
+	public String getPostIdS() {
+		return this.postIdS;
+	}
+
+	public void setPostIdS(String postIdS) {
+		this.postIdS = postIdS;
 	}
 
 

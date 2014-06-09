@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Organizacion;
-import vindbrein.domain.model.Provincia;
 
 @Repository
 public class OfertaLaboralDAO {

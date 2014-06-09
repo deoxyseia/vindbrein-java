@@ -15,6 +15,8 @@ import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.PostulanteIdiomaDAO;
 import vindbrein.dao.ResidenciaDAO;
 import vindbrein.dao.TelefonoDAO;
+import vindbrein.dao.document.PostulantPreferenceDAO;
+import vindbrein.dao.document.PostulantSelfDescriptionDAO;
 import vindbrein.domain.model.Postulante;
 import vindbrein.service.PostulanteService;
 
@@ -47,13 +49,21 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	@Autowired	
 	PostulanteBeneficioDAO postulanteBeneficioDAO;
 	
+	@Autowired	
+	PostulantSelfDescriptionDAO postulantSelfDescriptionDAO;
+	
+	@Autowired	
+	PostulantPreferenceDAO postulantPreferenceDAO;
+	
+	
+	
 	@Transactional(readOnly = false)
 	public void addPostulante(Postulante postulante) {
 		getPostulanteDAO().addPostulante(postulante);		
 	}
 	
 	@Transactional(readOnly = false)
-	public void updatePostulante(Postulante postulante) {
+	public void updatePostulante(Postulante postulante) {		
 		getPostulanteDAO().updatePostulante(postulante);		
 	}
 

@@ -148,18 +148,17 @@
 			
 			<p:panel>
 				<f:facet name="footer">
-					<p:commandButton value="Postular" 
-								ajax="false" immediate="true"
-								actionListener="#{}"
-								action="/pages/usuarioPostulante.xhtml?faces-redirect=true"
-								type="submit" icon="ui-icon-check">
-							  </p:commandButton>
-					<p:commandButton value="Guardar"
-						actionListener="#{ofertaLaboralManagedBean.saveOfertaLaboral()}"
-						update=":formOfertaLaboral" icon="ui-icon-check" />
+					<p:commandButton value="Postular" ajax="false" immediate="true"
+						actionListener="#{buscarOfertaManagedBean.postularOfertaLaboral()}"
+						action="/pages/secured/postulante/buscarOferta.xhtml?faces-redirect=true"
+						type="submit" icon="ui-icon-check">
+					</p:commandButton>
 					<p:commandButton value="Cancelar"
-						actionListener="#{ofertaLaboralManagedBean.cancelSaveOfertaLaboral()}"
-						update=":formOfertaLaboral" icon="ui-icon-close" />
+					     action="/pages/secured/postulante/buscarOferta.xhtml?faces-redirect=true"
+					     immediate="true"
+					     ajax="false"
+					     type="submit"
+						 icon="ui-icon-close" />
 				</f:facet>
 			</p:panel>
 		</h:form>			
