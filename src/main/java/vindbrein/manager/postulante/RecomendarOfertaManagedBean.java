@@ -55,10 +55,7 @@ public class RecomendarOfertaManagedBean implements Serializable{
 		postulante = postulanteService.getPostulanteByCorreo(user.getUsername());
 	}
 	
-	public void recomendarOfertasLaborales(){
-		
-		
-		
+	public void recomendarOfertasLaborales(){	
 		
 		switch (tipoRecomendacion) {
 		case 1:

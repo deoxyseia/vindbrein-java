@@ -491,7 +491,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(0.1), 5, RoundingMode.HALF_UP)
 							.multiply(reciprocity(profile, set.get(i))));
 				}else{
-					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(set.get(i).getRecNumber()))
+					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(set.get(i).getRecNumber()), 5, RoundingMode.HALF_UP)
 							.multiply(reciprocity(profile, set.get(i))));
 				}
 				

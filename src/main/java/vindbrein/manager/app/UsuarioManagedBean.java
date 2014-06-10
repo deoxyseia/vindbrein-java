@@ -2,7 +2,6 @@ package vindbrein.manager.app;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -20,21 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 
-import vindbrein.domain.model.Departamento;
-import vindbrein.domain.model.DimensionOrganizacion;
-import vindbrein.domain.model.Distrito;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.Postulante;
-import vindbrein.domain.model.Provincia;
 import vindbrein.domain.model.Reclutador;
-import vindbrein.domain.model.Sector;
-import vindbrein.domain.model.Sucursal;
 import vindbrein.domain.model.Usuario;
-import vindbrein.service.DepartamentoService;
-import vindbrein.service.DistritoService;
-import vindbrein.service.OrganizacionService;
-import vindbrein.service.ProvinciaService;
-import vindbrein.service.SectorService;
 import vindbrein.service.UsuarioService;
 import vindbrein.util.Util;
 
@@ -54,83 +42,36 @@ public class UsuarioManagedBean implements Serializable {
 	//datos para registro
 	private Usuario usuarioReclutador;		
 	private Usuario usuarioPostulante;
-	
-	//datos maestros
-	private ArrayList<Sector> sectores;	
-	private ArrayList<DimensionOrganizacion> dimensionesOrganizacion;
-	private ArrayList<Departamento> departamentos;
-	private ArrayList<Provincia> provincias;
-	private ArrayList<Distrito> distritos;
-	
-	private Departamento selectedDepartamento;
-	private Provincia selectedProvincia;
-	private Distrito selectedDistrito;
+		
 		
 	@Autowired
 	@Qualifier("usuarioServiceImpl")
-	UsuarioService usuarioService;
-	
-	@Autowired
-	@Qualifier("sectorServiceImpl")
-	SectorService sectorService;
-	
-	@Autowired
-	@Qualifier("organizacionServiceImpl")
-	OrganizacionService organizacionService;
-	
-	@Autowired
-	@Qualifier("departamentoServiceImpl")
-	DepartamentoService departamentoService;
-	
-	@Autowired
-	@Qualifier("provinciaServiceImpl")
-	ProvinciaService provinciaService;
-	
-	@Autowired
-	@Qualifier("distritoServiceImpl")
-	DistritoService distritoService;
-	
+	private UsuarioService usuarioService;
+		
 	@PostConstruct
-	public void init() {
-		selectedDepartamento = new Departamento();
-		selectedProvincia = new Provincia();
-		selectedDistrito = new Distrito();
+	public void init() {	
 		
-		iniciarDatosUsuarioPostulante();
+		reiniciarDatosUsuarioPostulante();
 		
-		iniciarDatosUsuarioOrganizacion();
+		reiniciarDatosUsuarioOrganizacion();
 	}
 	
-	public void iniciarDatosUsuarioPostulante(){
+	public void reiniciarDatosUsuarioPostulante(){
 		usuarioPostulante = new Usuario();
 		usuarioPostulante.setUsuaFlagActivo((byte)1);
 		usuarioPostulante.setPostulante(new Postulante());			
 	}
 	
-	public void iniciarDatosUsuarioOrganizacion(){
+	public void reiniciarDatosUsuarioOrganizacion(){
 		Organizacion organizacion = new Organizacion();
-		organizacion.setDimensionOrganizacion(new DimensionOrganizacion());
-		organizacion.setSector(new Sector());
 				
-		Sucursal sucursal = new Sucursal();
-		sucursal.setDistrito(new Distrito());
-		sucursal.setSucuPrincipal((byte)1);
-		sucursal.setOrganizacion(organizacion);
-		
-		organizacion.setSucursales(new ArrayList<Sucursal>());	
-		organizacion.addSucursal(sucursal);
 		organizacion.setOrgaEstado("V");
 		
 		usuarioReclutador = new Usuario();
 		usuarioReclutador.setUsuaFlagActivo((byte)1);
 		usuarioReclutador.setReclutador(new Reclutador());
 		usuarioReclutador.getReclutador().setReclFlagMaestro((byte)1);
-		usuarioReclutador.getReclutador().setOrganizacion(organizacion);				
-		
-		//otros datos necesario
-		sectores = getSectorService().getSectores();		
-		dimensionesOrganizacion = organizacionService.getDimensionesOrganizacion();
-		departamentos = getDepartamentoService().getDepartamentos();
+		usuarioReclutador.getReclutador().setOrganizacion(organizacion);	
 	}
 		
 	public void verifiedSaveUsuarioPostulante(){
@@ -149,7 +90,7 @@ public class UsuarioManagedBean implements Serializable {
 	public void saveUsuarioPostulante(){
 		logger.info("Agregando nuevo usuario de postulante");				
 		
-		getUsuarioService().addUsuarioPostulante(usuarioPostulante);
+		usuarioService.addUsuarioPostulante(usuarioPostulante);
 				
 		Util.lanzarMensaje("INFO", "GLOBAL","Se ha creado un nuevo usuario");	
 	}
@@ -169,25 +110,11 @@ public class UsuarioManagedBean implements Serializable {
 	
 	public void saveUsuarioOrganizacion(){
 		logger.info("Agregando nuevo usuario reclutador");	
-		
-		usuarioReclutador.getReclutador().getOrganizacion().getSucursales().get(0).setDistrito(selectedDistrito);
 				
-		getUsuarioService().addUsuarioOrganizacion(usuarioReclutador);
+		usuarioService.addUsuarioOrganizacion(usuarioReclutador);
 				
-		Util.lanzarMensaje("INFO", "GLOBAL","Se ha creado un nuevo usuario");	
-	}
-	
-	public void chargeProvincias(){
-		logger.info("Cargando pronvincias");
-		
-		provincias = getProvinciaService().getProvinciasByDepartamento(selectedDepartamento);
-	}
-	
-	public void chargeDistritos(){
-		logger.info("Cargando distritos");
-		
-		distritos = getDistritoService().getDistritosByProvincia(selectedProvincia);
-	}
+		Util.lanzarMensaje("INFO", "GLOBAL","Se ha creado una nueva organización");	
+	}	
 
 	public void login() throws IOException, ServletException {
 		ExternalContext context = FacesContext.getCurrentInstance()
@@ -232,10 +159,10 @@ public class UsuarioManagedBean implements Serializable {
 		User user = (User) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
 		
-		Usuario usuario = getUsuarioService().getUsuarioByUsername(user.getUsername());
+		Usuario usuario = usuarioService.getUsuarioByUsername(user.getUsername());
 		usuario.setUsuaContrasenia(getNewPassword());
 		
-		getUsuarioService().updateUsuario(usuario);
+		usuarioService.updateUsuario(usuario);
 		
 		Util.lanzarMensaje("INFO", "GLOBAL","Se ha cambiado la contraseña correctamente");
 	}
@@ -248,11 +175,7 @@ public class UsuarioManagedBean implements Serializable {
 		newPasswordReload = "";
 	}
 	
-	//getters and setters		
-	public UsuarioService getUsuarioService() {
-		return usuarioService;
-	}	
-
+	//getters and setters	
 	public Usuario getUsuarioReclutador() {
 		return usuarioReclutador;
 	}
@@ -261,16 +184,12 @@ public class UsuarioManagedBean implements Serializable {
 		this.usuarioReclutador = usuarioReclutador;
 	}
 
-	public Usuario getUsuarioPostulante() {
-		return usuarioPostulante;
-	}
-
 	public void setUsuarioPostulante(Usuario usuarioPostulante) {
 		this.usuarioPostulante = usuarioPostulante;
 	}
-
-	public void setUsuarioService(UsuarioService usuarioService) {
-		this.usuarioService = usuarioService;
+	
+	public Usuario getUsuarioPostulante(){
+		return usuarioPostulante;
 	}	
 	
 	public String getOldPassword() {
@@ -295,102 +214,5 @@ public class UsuarioManagedBean implements Serializable {
 
 	public void setNewPasswordReload(String newPasswordReload) {
 		this.newPasswordReload = newPasswordReload;
-	}	
-
-	public ArrayList<Sector> getSectores() {
-		return sectores;
-	}
-
-	public void setSectores(ArrayList<Sector> sectores) {
-		this.sectores = sectores;
-	}
-
-	public SectorService getSectorService() {
-		return sectorService;
-	}
-
-	public void setSectorService(SectorService sectorService) {
-		this.sectorService = sectorService;
-	}
-
-	public ArrayList<DimensionOrganizacion> getDimensionesOrganizacion() {
-		return dimensionesOrganizacion;
-	}
-
-	public void setDimensionesOrganizacion(
-			ArrayList<DimensionOrganizacion> dimensionesOrganizacion) {
-		this.dimensionesOrganizacion = dimensionesOrganizacion;
-	}	
-
-	public ArrayList<Departamento> getDepartamentos() {
-		return departamentos;
-	}
-
-	public void setDepartamentos(ArrayList<Departamento> departamentos) {
-		this.departamentos = departamentos;
-	}
-
-	public ArrayList<Provincia> getProvincias() {
-		return provincias;
-	}
-
-	public void setProvincias(ArrayList<Provincia> provincias) {
-		this.provincias = provincias;
-	}
-
-	public ArrayList<Distrito> getDistritos() {
-		return distritos;
-	}
-
-	public void setDistritos(ArrayList<Distrito> distritos) {
-		this.distritos = distritos;
-	}
-
-	public Departamento getSelectedDepartamento() {
-		return selectedDepartamento;
-	}
-
-	public void setSelectedDepartamento(Departamento selectedDepartamento) {
-		this.selectedDepartamento = selectedDepartamento;
-	}
-
-	public Provincia getSelectedProvincia() {
-		return selectedProvincia;
-	}
-
-	public void setSelectedProvincia(Provincia selectedProvincia) {
-		this.selectedProvincia = selectedProvincia;
-	}
-
-	public Distrito getSelectedDistrito() {
-		return selectedDistrito;
-	}
-
-	public void setSelectedDistrito(Distrito selectedDistrito) {
-		this.selectedDistrito = selectedDistrito;
-	}
-
-	public DepartamentoService getDepartamentoService() {
-		return departamentoService;
-	}
-
-	public void setDepartamentoService(DepartamentoService departamentoService) {
-		this.departamentoService = departamentoService;
-	}
-
-	public ProvinciaService getProvinciaService() {
-		return provinciaService;
-	}
-
-	public void setProvinciaService(ProvinciaService provinciaService) {
-		this.provinciaService = provinciaService;
-	}
-
-	public DistritoService getDistritoService() {
-		return distritoService;
-	}
-
-	public void setDistritoService(DistritoService distritoService) {
-		this.distritoService = distritoService;
 	}	
 }

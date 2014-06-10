@@ -8,187 +8,88 @@
 	<ui:define name="title">Registro de Organización</ui:define>
 
 	<ui:define name="content">
+		<center>
 		<h:form id="formUsuarioOrganizacion">		
 			<p:panel header="Registro de Organización">
-				<p:fieldset legend="Organización">
-					<h:panelGrid columns="2">
-						<h:outputText value="Razón social :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaRazonSocial}"
-							required="true"
-							requiredMessage="La razón social de la org. es necesaria" />
-							
-						<h:outputText value="RUC:"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaRuc}"
-							required="true"
-							requiredMessage="EL RUC de la organizacion es necesario" />	
 
-						<h:outputText value="Web :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaWeb}" />
-						
-						<h:outputText value="Sector :" />
-						<p:selectOneMenu
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.sector.sectId}"
-							effect="fade" required="true" requiredMessage="Elija un sector">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems value="#{usuarioManagedBean.sectores}"
-								var="sector" itemLabel="#{sector.sectNombre}"
-								itemValue="#{sector.sectId}" />
-						</p:selectOneMenu>
-						
-						<h:outputText value="Dimensión de la organización :" />
-						<p:selectOneMenu
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.dimensionOrganizacion.diorId}"
-							effect="fade" required="true"
-							requiredMessage="Elija un dimensión de la organización">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems
-								value="#{usuarioManagedBean.dimensionesOrganizacion}"
-								var="dimension" itemLabel="#{dimension.diorNombre}"
-								itemValue="#{dimension.diorId}" />
-						</p:selectOneMenu>
-						
-						<h:outputText value="Departamento :" />
-						<p:selectOneMenu
-							value="#{usuarioManagedBean.selectedDepartamento.depaId}"
-							effect="fade" required="true"
-							requiredMessage="Elija departamento">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems
-								value="#{usuarioManagedBean.departamentos}"
-								var="departamento" itemLabel="#{departamento.depaNombre}"
-								itemValue="#{departamento.depaId}" />
-							 <p:ajax event="change" listener="#{usuarioManagedBean.chargeProvincias}"
-							 			update=":formUsuarioOrganizacion:provinciaSelectOneMenu" />	
-						</p:selectOneMenu>
-						
-						<h:outputText value="Provincia :" />
-						<p:selectOneMenu id="provinciaSelectOneMenu"
-							value="#{usuarioManagedBean.selectedProvincia.provId}"
-							effect="fade" required="true"
-							requiredMessage="Elija provincia">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems
-								value="#{usuarioManagedBean.provincias}"
-								var="provincia" itemLabel="#{provincia.provNombre}"
-								itemValue="#{provincia.provId}" />
-							<p:ajax event="change" listener="#{usuarioManagedBean.chargeDistritos}"
-							 			update=":formUsuarioOrganizacion:distritoSelectOneMenu" />	
-						</p:selectOneMenu>
-						
-						<h:outputText value="Distrito :" />
-						<p:selectOneMenu id="distritoSelectOneMenu"
-							value="#{usuarioManagedBean.selectedDistrito.distId}"
-							effect="fade" required="true"
-							requiredMessage="Elija distrito">
-							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
-							<f:selectItems
-								value="#{usuarioManagedBean.distritos}"
-								var="distrito" itemLabel="#{distrito.distNombre}"
-								itemValue="#{distrito.distId}" />						
-						</p:selectOneMenu>						
-					</h:panelGrid>
-				</p:fieldset>
+				<h:panelGrid columns="2">
+					<h:outputText value="Razón social de la Organización:"></h:outputText>
+					<p:inputText
+						value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.orgaRazonSocial}"
+						required="true"
+						requiredMessage="La razón social de la org. es necesaria" />
+				</h:panelGrid>		
 
-				<p:fieldset legend="Sede principal">
-					<h:panelGrid columns="2">
-						<h:outputText value="Dirección :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.sucursales[0].sucuDireccion}" />
+					<p:fieldset legend="Responsable de la organización">
+						<h:panelGrid columns="2">
+							<h:outputText value="Nombres :"></h:outputText>
+							<p:inputText
+								value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclNombres}"
+								required="true" requiredMessage="Su nombre(s) es necesario" />
 
-						<h:outputText value="Teléfono :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.organizacion.sucursales[0].sucuTelefono}" />
-					</h:panelGrid>
-				</p:fieldset>
-				
-				<p:fieldset legend="Responsable de RRHH">
-					<h:panelGrid columns="2">
-						<h:outputText value="Nombres :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclNombres}"
-							required="true"
-							requiredMessage="Su nombre(s) es necesario" />
-							
-						<h:outputText value="Apellido paterno :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclApellidoPaterno}"
-							required="true"
-							requiredMessage="Su apellido paterno es necesario" />
-							
-						<h:outputText value="Apellido materno :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclApellidoMaterno}"
-							required="true"
-							requiredMessage="Su apellido materno es necesario" />
-						
-						<h:outputText value="Teléfono :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclTelefono}"
-							required="true"
-							requiredMessage="Su apellido materno es necesario" />										
-					</h:panelGrid>
-				</p:fieldset>
+							<h:outputText value="Apellido paterno :"></h:outputText>
+							<p:inputText
+								value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclApellidoPaterno}"
+								required="true"
+								requiredMessage="Su apellido paterno es necesario" />
+
+							<h:outputText value="Apellido materno :"></h:outputText>
+							<p:inputText
+								value="#{usuarioManagedBean.usuarioReclutador.reclutador.reclApellidoMaterno}"
+								required="true"
+								requiredMessage="Su apellido materno es necesario" />		
 								
+							<h:outputText value="E-mail :"></h:outputText>
+							<p:inputText
+								value="#{usuarioManagedBean.usuarioReclutador.usuaCorreo}"
+								converterMessage="Ingrese un email válido" required="true"
+								requiredMessage="Su e-mail es necesario" />
 
-				<p:fieldset legend="Usuario">
-					<h:panelGrid columns="2">
-						<h:outputText value="E-mail :"></h:outputText>
-						<p:inputText
-							value="#{usuarioManagedBean.usuarioReclutador.usuaCorreo}"
-							converterMessage="Ingrese un email válido" required="true"
-							requiredMessage="Su e-mail es necesario" />
+							<h:outputText value="Contraseña :"></h:outputText>
+							<p:password id="idPassword"
+								value="#{usuarioManagedBean.newPassword}" feedback="true"
+								promptLabel="Seguridad" required="true"
+								requiredMessage="La contraseña es necesaria"
+								converterMessage="Ingrese un valor válido" weakLabel="Débil"
+								goodLabel="Buena" strongLabel="Muy buena" />
 
-						<h:outputText value="Contraseña :"></h:outputText>
-						<p:inputText value="#{usuarioManagedBean.newPassword}"
-							converterMessage="Ingrese un valor válido" required="true"
-							requiredMessage="La contraseña es necesaria" />
-
-						<h:outputText value="Repita contraseña :"></h:outputText>
-						<p:inputText value="#{usuarioManagedBean.newPasswordReload}"
-							converterMessage="Ingrese un valor válido" required="true"
-							requiredMessage="Repita la contraseña" />
-					</h:panelGrid>
-				</p:fieldset>
-
-				<f:facet name="footer">
-					<center>
-						<p:commandButton value="Guardar"
-							actionListener="#{usuarioManagedBean.verifiedSaveUsuarioOrganizacion()}"
-							oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){PF('confirmSaveUsuarioOrganizacionDialog').show()}"
-							icon="ui-icon-check" style="margin:0">
-						</p:commandButton>
-						<p:commandButton value="Cancelar" ajax="false" immediate="true"
-							action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"
-							type="submit" icon="ui-icon-close">
-						</p:commandButton>
-					</center>
-				</f:facet>
+							<h:outputText value="Repita contraseña :"></h:outputText>
+							<p:password id="idPasswordReload"
+								value="#{usuarioManagedBean.newPasswordReload}" required="true"
+								requiredMessage="La contraseña es necesaria"
+								converterMessage="Ingrese un valor válido" />					
+						</h:panelGrid>
+					</p:fieldset>
+					<f:facet name="footer">
+						<center>
+							<p:commandButton value="Guardar" styleClass="ui-priority-primary"
+								actionListener="#{usuarioManagedBean.verifiedSaveUsuarioOrganizacion()}"
+								oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){PF('confirmDialogUsuarioOrganizacion').show()}"
+								icon="ui-icon-check" style="margin:0">
+							</p:commandButton>
+							<p:commandButton value="Cancelar" ajax="false" immediate="true"
+								action="/pages/secured/principal/principal.xhtml?faces-redirect=true"
+								type="submit" icon="ui-icon-close">
+							</p:commandButton>
+						</center>
+					</f:facet>
 			</p:panel>			
 		</h:form>
+	</center>	
 		
 <!-- Dialog de confirmación de guardado de usuario organizacion -->
 
-		<p:dialog id="confirmSaveUsuarioOrganizacionDlg" header="Confirmación"
-			hideEffect="explode" widgetVar="confirmSaveUsuarioOrganizacionDialog" resizable="false"
-			modal="true" appendTo="@(body)">
-			<h:form>
-				<p:panelGrid columns="1">
-					<h:outputText
-						value="¿Está seguro que desea guardar la información?" />
-					<f:facet name="footer">
-						<p:commandButton value="Sí"						
-							actionListener="#{usuarioManagedBean.saveUsuarioOrganizacion()}"
-							action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"						
-							oncomplete="PF('confirmSaveUsuarioOrganizacionDialog').hide()" icon="ui-icon-check"/>
-						<p:commandButton value="No" onclick="PF('confirmSaveUsuarioOrganizacionDialog').hide()"
-							type="button" icon="ui-icon-close" />
-					</f:facet>
-				</p:panelGrid>
-			</h:form>
-		</p:dialog>	
+		<p:confirmDialog message="Estás seguro que desea guardar la información?" header="Confirmación"
+			severity="info" appendTo="@(body)"
+			widgetVar="confirmDialogUsuarioOrganizacion">
+			<p:commandButton value="Sí"
+			actionListener="#{usuarioManagedBean.saveUsuarioOrganizacion()}"
+				action="/pages/secured/principal/principal.xhtml?faces-redirect=true"
+				oncomplete="PF('confirmDialogUsuarioOrganizacion').hide()" />
+			<p:commandButton value="No"
+				onclick="PF('confirmDialogUsuarioOrganizacion').hide();" type="button" />
+		</p:confirmDialog>
+		
 <!-- Fin Dialog de confirmación de guardado de usuario organizacion -->
 	</ui:define>
 </ui:composition>

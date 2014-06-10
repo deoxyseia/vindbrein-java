@@ -44,66 +44,55 @@
 						<p:calendar
 							value="#{usuarioManagedBean.usuarioPostulante.postulante.postFechaNacimiento}"
 							showOn="button" />
+					
+						<h:outputText value="E-mail :"></h:outputText>
+						<p:inputText
+							value="#{usuarioManagedBean.usuarioPostulante.usuaCorreo}"
+							converterMessage="Ingrese un valor válido" required="true"
+							requiredMessage="Su e-mail es necesario" />
+
+						<h:outputText value="Contraseña :"></h:outputText>
+						<p:password id="idPassword" value="#{usuarioManagedBean.newPassword}"
+							feedback="true" promptLabel="Seguridad" required="true"
+							requiredMessage="La contraseña es necesaria"
+							converterMessage="Ingrese un valor válido"
+							weakLabel="Débil" goodLabel="Buena" strongLabel="Muy buena" />
+
+						<h:outputText value="Repita contraseña :"></h:outputText>						
+						<p:password id="idPasswordReload" 
+							value="#{usuarioManagedBean.newPasswordReload}"
+							required="true" requiredMessage="La contraseña es necesaria"
+							converterMessage="Ingrese un valor válido"
+							/>	
 					</h:panelGrid>
-					<p:fieldset legend="Datos de de autenticación">
-						<h:panelGrid columns="2">
-							<h:outputText value="E-mail :"></h:outputText>
-							<p:inputText
-								value="#{usuarioManagedBean.usuarioPostulante.usuaCorreo}"
-								converterMessage="Ingrese un valor válido" required="true"
-								requiredMessage="Su e-mail es necesario" />
-
-							<h:outputText value="Contraseña :"></h:outputText>
-							<p:inputText value="#{usuarioManagedBean.newPassword}"
-								converterMessage="Ingrese un valor válido" required="true"
-								requiredMessage="La contraseña es necesaria" />
-
-							<h:outputText value="Repita contraseña :"></h:outputText>
-							<p:inputText value="#{usuarioManagedBean.newPasswordReload}"
-								converterMessage="Ingrese un valor válido" required="true"
-								requiredMessage="Repita la contraseña" />
-						</h:panelGrid>
-					</p:fieldset>
 
 					<f:facet name="footer">
 						<center>
-							<p:commandButton value="Guardar"
-								actionListener="#{usuarioManagedBean.verifiedSaveUsuarioPostulante()}"
-								oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){PF('confirmSaveUsuarioPostulanteDialog').show()}"
+							<p:commandButton value="Guardar" styleClass="ui-priority-primary"
+								actionListener="#{usuarioManagedBean.verifiedSaveUsuarioPostulante()}"								
+								oncomplete="if (!args.validationFailed &amp;&amp; args.verificado){PF('confirmDialogUsuarioPostulante').show()}"
 								icon="ui-icon-check" style="margin:0">
 							</p:commandButton>
 							<p:commandButton value="Cancelar" ajax="false" immediate="true"
-								action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"
+								action="/pages/secured/principal/principal.xhtml?faces-redirect=true"
 								type="submit" icon="ui-icon-close">
 							</p:commandButton>
 						</center>
 					</f:facet>
 				</p:panel>
-
-
 			</h:form>
 		</center>
+		
 		<!-- Dialog de confirmación de guardado de usuario postulante -->
-		<p:dialog id="confirmSaveUsuarioPostulanteDlg" header="Confirmación"
-			hideEffect="explode" widgetVar="confirmSaveUsuarioPostulanteDialog"
-			resizable="false" modal="true" appendTo="@(body)">
-			<h:form>
-				<p:panelGrid columns="1">
-					<h:outputText
-						value="¿Está seguro que desea guardar la información?" />
-					<f:facet name="footer">
-						<p:commandButton value="Sí"
-							actionListener="#{usuarioManagedBean.saveUsuarioPostulante()}"
-							action="/pages/secured/principal/adminHome.xhtml?faces-redirect=true"
-							oncomplete="PF('confirmSaveUsuarioPostulanteDialog').hide()"
-							icon="ui-icon-check" />
-						<p:commandButton value="No"
-							onclick="PF('confirmSaveUsuarioPostulanteDialog').hide()" type="button"
-							icon="ui-icon-close" />
-					</f:facet>
-				</p:panelGrid>
-			</h:form>
-		</p:dialog>
+		<p:confirmDialog message="Estás seguro?"
+			header="Confirmación" severity="info" appendTo="@(body)" widgetVar="confirmDialogUsuarioPostulante">
+			<p:commandButton value="Sí"				
+				actionListener="#{usuarioManagedBean.saveUsuarioPostulante()}"
+				action="/pages/secured/principal/principal.xhtml?faces-redirect=true"
+				oncomplete="PF('confirmDialogUsuarioPostulante').hide()" />
+			<p:commandButton value="No" onclick="PF('confirmDialogUsuarioPostulante').hide();"
+				type="button" />
+		</p:confirmDialog>
 
 		<!-- Fin Dialog de confirmación de guardado de usuario postulante -->
 	</ui:define>

@@ -8,11 +8,28 @@
 	<ui:define name="title">Inicio de Sesión</ui:define>
 	
 	<ui:define name="content">
+		<div align="right">
+			<h:form>
+				<p:commandButton value="Nuevo postulante" ajax="false"					
+					actionListener="#{usuarioManagedBean.reiniciarDatosUsuarioPostulante}"
+					action="/pages/usuarioPostulante.xhtml?faces-redirect=true"
+					type="submit" icon="ui-icon-person">
+				</p:commandButton>
+
+				<p:commandButton value="Nueva organización" ajax="false"
+					actionListener="#{usuarioManagedBean.reiniciarDatosUsuarioOrganizacion}"
+					action="/pages/usuarioOrganizacion.xhtml?faces-redirect=true"
+					type="submit" icon="ui-icon-suitcase">
+				</p:commandButton>
+			</h:form>
+		</div>
 		<center>
+		<div align="center">
+			
 			<p:graphicImage value="/resources/img/logo.png" />
 			<h:form id="formLogin" prependId="false">			
 				
-				<p:panel id="panelLogin" header="Ingreso al sistema" style="width:400px">
+				<p:panel id="panelLogin"  header="Ingreso al sistema" style="width:400px;">
 					<p:focus context="panelLogin"/>  
 					<h:panelGrid columns="2" cellpadding="2">
 
@@ -35,21 +52,14 @@
 								actionListener="#{usuarioManagedBean.login()}"
 								type="submit" icon="ui-icon-check" style="margin:0">
 							</p:commandButton>	
-							  <p:commandButton value="Registrar nuevo postulante" ajax="false" immediate="true"
-								action="/pages/usuarioPostulante.xhtml?faces-redirect=true"
-								type="submit" icon="ui-icon-check">
-							  </p:commandButton>
-							  
-							  <p:commandButton value="Registrar nueva organización" ajax="false" immediate="true"
-								action="/pages/usuarioOrganizacion.xhtml?faces-redirect=true"
-								type="submit" icon="ui-icon-check">
-							  </p:commandButton>													
+							 													
 						  </center>
 							
 						</f:facet>
 					</h:panelGrid>
-				</p:panel>
-			</h:form>
+				</p:panel>				
+			</h:form>		
+		</div>
 		</center>
 	</ui:define>
 </ui:composition>

@@ -120,8 +120,7 @@ public class UsuarioServiceImpl implements UsuarioService, Serializable{
 	
 	@Transactional(readOnly = false)
 	public void addUsuarioOrganizacion(Usuario usuario){
-		getOrganizacionDAO().addOrganizacion(usuario.getReclutador().getOrganizacion());
-		getSucursalDAO().addSucursal(usuario.getReclutador().getOrganizacion().getSucursales().get(0));
+		getOrganizacionDAO().addOrganizacion(usuario.getReclutador().getOrganizacion());		
 		getReclutadorDAO().addReclutador(usuario.getReclutador());
 		getUsuarioDAO().addUsuario(usuario);
 	}

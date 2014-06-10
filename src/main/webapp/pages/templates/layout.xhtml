@@ -6,9 +6,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
 <h:head>
 	<title><ui:insert name="title">VindBrein - e-Recruitment</ui:insert></title>
 </h:head>
+
 <h:body>
 	<p:growl showDetail="true" autoUpdate="true" globalOnly="true" />
 
@@ -33,12 +35,14 @@
 	</p:dialog>
 
 	<p:layout fullPage="true">
-		 <p:layoutUnit position="north" size="80" header="VindBrein - e-Recruitment" resizable="false"
-			closable="false" collapsible="false">       	
-			<ui:include src="../templates/tiles/header.xhtml" />			
-		</p:layoutUnit>
+		<c:if test="#{request.getUserPrincipal() != null}">
+			 <p:layoutUnit position="north" size="75" header="VindBrein - e-Recruitment" resizable="false"
+				closable="false" collapsible="false">       	
+				<ui:include src="../templates/tiles/header.xhtml" />			
+			</p:layoutUnit>
+		</c:if>	
 
-		<p:layoutUnit id="botton" position="south" size="60">
+		<p:layoutUnit id="botton" position="south" size="40">
 			<center>Vindbrein - e-Recruitment / Versión: 0.0.1</center>
 		</p:layoutUnit>
 
