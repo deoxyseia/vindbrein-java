@@ -44,13 +44,31 @@ public class MatchResultDAO implements Serializable{
 
 	public MatchResult getMatchResultById(OfertaLaboral ofertaLaboral, Postulante postulante) {
 		Query query = getSessionFactory().getCurrentSession()
-				.createQuery("from MatchResult where ofertaLaboral.oflaId=? and postulante.postId=?");
+				.createQuery("from MatchResult where ofertaLaboral.oflaId=? and postulante.postId = ?");
 		
 		query.setParameter(0, ofertaLaboral.getOflaId());
 		query.setParameter(1, postulante.getPostId());
 		
 		List<MatchResult> list = query.list();
 		
+		if(list.size()!=0){
+			return (MatchResult)list.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	
+	//obtiene el match donde de donde se hizo la ultima postulación (campo selección)
+	public MatchResult getLastMatchResultByPostulant(Postulante postulante){
+		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery("from MatchResult where postulante.postId = ? order by mareFechaOfertaSeleccionada desc")
+				.setParameter(0, postulante.getPostId())
+				.list();
+		
+		
+		//obtiene el último valor
 		if(list.size()!=0){
 			return (MatchResult)list.get(0);
 		} else {
@@ -64,5 +82,26 @@ public class MatchResultDAO implements Serializable{
 				.createQuery("from MatchResult")
 				.list();
 		return list;
-	}	
+	}
+	
+	public int getNumberRecomendationPostulant(Postulante postulante){
+		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery("from MatchResult where postulante.postId = ?")
+				.setParameter(0, postulante.getPostId())
+				.list();
+		
+		return list.size();
+	}
+	
+	public int getNumberRecomendationOffer(OfertaLaboral ofertaLaboral){
+		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery("from MatchResult where ofertaLaboral.oflaId = ?")
+				.setParameter(0, ofertaLaboral.getOflaId())
+				.list();
+		
+		return list.size();
+	}
+	
 }

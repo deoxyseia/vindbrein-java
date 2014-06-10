@@ -1,9 +1,17 @@
 package vindbrein.domain.model;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the match_result database table.
@@ -16,6 +24,8 @@ public class MatchResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private MatchResultPK id;
 	private Date mareFecha;
+	private Date mareFechaOfertaSeleccionada;
+	private Date mareFechaPostulanteSeleccionado;
 	private byte mareFlagOfertaRecomendada;
 	private byte mareFlagOfertaSeleccionada;
 	private byte mareFlagOfertaVisitada;
@@ -47,6 +57,27 @@ public class MatchResult implements Serializable {
 
 	public void setMareFecha(Date mareFecha) {
 		this.mareFecha = mareFecha;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="mare_fecha_oferta_seleccionada")
+	public Date getMareFechaOfertaSeleccionada() {
+		return this.mareFechaOfertaSeleccionada;
+	}
+
+	public void setMareFechaOfertaSeleccionada(Date mareFechaOfertaSeleccionada) {
+		this.mareFechaOfertaSeleccionada = mareFechaOfertaSeleccionada;
+	}
+
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="mare_fecha_postulante_seleccionado")
+	public Date getMareFechaPostulanteSeleccionado() {
+		return this.mareFechaPostulanteSeleccionado;
+	}
+
+	public void setMareFechaPostulanteSeleccionado(Date mareFechaPostulanteSeleccionado) {
+		this.mareFechaPostulanteSeleccionado = mareFechaPostulanteSeleccionado;
 	}
 
 

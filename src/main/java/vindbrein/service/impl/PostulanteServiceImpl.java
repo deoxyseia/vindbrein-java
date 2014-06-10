@@ -15,8 +15,11 @@ import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.PostulanteIdiomaDAO;
 import vindbrein.dao.ResidenciaDAO;
 import vindbrein.dao.TelefonoDAO;
+import vindbrein.dao.app.CoreDAO;
 import vindbrein.dao.document.PostulantPreferenceDAO;
 import vindbrein.dao.document.PostulantSelfDescriptionDAO;
+import vindbrein.domain.document.PostulantPreference;
+import vindbrein.domain.document.PostulantSelfDescription;
 import vindbrein.domain.model.Postulante;
 import vindbrein.service.PostulanteService;
 
@@ -55,6 +58,9 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	@Autowired	
 	PostulantPreferenceDAO postulantPreferenceDAO;
 	
+	@Autowired	
+	CoreDAO coreDAO;
+	
 	
 	
 	@Transactional(readOnly = false)
@@ -64,7 +70,24 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	
 	@Transactional(readOnly = false)
 	public void updatePostulante(Postulante postulante) {		
-		getPostulanteDAO().updatePostulante(postulante);		
+		getPostulanteDAO().updatePostulante(postulante);
+		
+		//actualizando la atudescripcion
+		PostulantSelfDescription postulantSelfDescription = postulantSelfDescriptionDAO
+				.getPostulantSelfDescriptionById(postulante.getPostIdS());
+		
+		postulantSelfDescription.setValues(coreDAO.getVectorPostulantSelfDescription(postulante));
+		
+		postulantSelfDescriptionDAO.updatePostulantSelfDescription(postulantSelfDescription);
+		
+		//actualizando las preferencias
+		PostulantPreference postulantPreference = postulantPreferenceDAO
+				.getPostulantPreferenceById(postulante.getPostIdP());
+		
+		postulantPreference.setValues(coreDAO.getVectorPostulantPreference(postulante));
+		
+		postulantPreferenceDAO.updatePostulantPreference(postulantPreference);
+		
 	}
 
 	@Transactional(readOnly = false)

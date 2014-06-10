@@ -44,7 +44,7 @@ public class PostulanteDAO {
 	public ArrayList<Postulante> getPostulantes() {
 		ArrayList<Postulante> list = (ArrayList<Postulante>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from Postulante order by postulanteNombre asc")
+				.createQuery("from Postulante order by postNombres asc")
 				.list();
 		return list;
 	}

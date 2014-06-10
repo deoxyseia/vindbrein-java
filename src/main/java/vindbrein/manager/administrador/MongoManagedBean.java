@@ -141,29 +141,29 @@ public class MongoManagedBean implements Serializable{
 		
 		perfiles_profesionales[2] = perfil;
 		
-		ArrayList<Result> results1 = recommenderService.recommenderContentBased(perfil_puesto, perfiles_profesionales, 2);
-		
-		System.out.println("RESULTADOS DE CONTENIDO");
-		for (int i = 0; i < results1.size(); i++) {
-			System.out.println("puesto: "+i);
-			System.out.println(results1.get(i).getScore());
-		}
-		
-		ArrayList<Result> results2 = recommenderService.recommenderCollaborativeBased(perfil_puesto, perfiles_profesionales, 2);
-		
-		System.out.println("RESULTADOS DE COLABORACION");
-		for (int i = 0; i < results2.size(); i++) {
-			System.out.println("puesto: "+i);			
-			System.out.println(results2.get(i).getScore());
-		}
-		
-		ArrayList<Result> results3 = recommenderService.recommenderReciprocityBased(perfil_puesto, perfiles_profesionales, 2);
-		
-		System.out.println("RESULTADOS DE RECIPROCIDAD");
-		for (int i = 0; i < results3.size(); i++) {
-			System.out.println("puesto: "+i);		
-			System.out.println(results3.get(i).getScore());
-		}	
+//		ArrayList<Result> results1 = recommenderService.recommenderContentBased(perfil_puesto, perfiles_profesionales, 2);
+//		
+//		System.out.println("RESULTADOS DE CONTENIDO");
+//		for (int i = 0; i < results1.size(); i++) {
+//			System.out.println("puesto: "+i);
+//			System.out.println(results1.get(i).getScore());
+//		}
+//		
+//		ArrayList<Result> results2 = recommenderService.recommenderCollaborativeBased(perfil_puesto, perfiles_profesionales, 2);
+//		
+//		System.out.println("RESULTADOS DE COLABORACION");
+//		for (int i = 0; i < results2.size(); i++) {
+//			System.out.println("puesto: "+i);			
+//			System.out.println(results2.get(i).getScore());
+//		}
+//		
+//		ArrayList<Result> results3 = recommenderService.recommenderReciprocityBased(perfil_puesto, perfiles_profesionales, 2);
+//		
+//		System.out.println("RESULTADOS DE RECIPROCIDAD");
+//		for (int i = 0; i < results3.size(); i++) {
+//			System.out.println("puesto: "+i);		
+//			System.out.println(results3.get(i).getScore());
+//		}	
 	}
 	
 		

@@ -1,5 +1,6 @@
 package vindbrein.service.app.impl;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 
 import org.bson.types.ObjectId;
@@ -97,10 +98,12 @@ public class CoreServiceImpl implements CoreService {
 			matchResult.getId().setFkOflaId(ofertaLaboral.getOflaId());
 			
 			matchResult.setMareFlagOfertaSeleccionada((byte)1);	
+			matchResult.setMareFechaOfertaSeleccionada(new Date());
 			
 			matchResultDAO.addMatchResult(matchResult);		
 		}else{
 			matchResult.setMareFlagOfertaSeleccionada((byte)1);
+			matchResult.setMareFechaOfertaSeleccionada(new Date());
 			
 			matchResultDAO.updateMatchResult(matchResult);
 		}

@@ -6,14 +6,31 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vindbrein.dao.MatchResultDAO;
+import vindbrein.dao.OfertaLaboralDAO;
+import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.app.CoreDAO;
+import vindbrein.dao.document.OfferHistoricalDAO;
+import vindbrein.dao.document.OfferPreferenceDAO;
+import vindbrein.dao.document.OfferSelfDescriptionDAO;
+import vindbrein.dao.document.PostulantHistoricalDAO;
+import vindbrein.dao.document.PostulantPreferenceDAO;
+import vindbrein.dao.document.PostulantSelfDescriptionDAO;
 import vindbrein.domain.app.Profile;
 import vindbrein.domain.app.Result;
+import vindbrein.domain.document.OfferHistorical;
+import vindbrein.domain.document.OfferPreference;
+import vindbrein.domain.document.OfferSelfDescription;
+import vindbrein.domain.document.PostulantHistorical;
+import vindbrein.domain.document.PostulantPreference;
+import vindbrein.domain.document.PostulantSelfDescription;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Postulante;
 import vindbrein.service.app.RecommenderService;
@@ -26,31 +43,188 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	@Autowired
 	CoreDAO coreDAO;
 	
+	@Autowired
+	PostulantSelfDescriptionDAO postulantSelfDescriptionDAO;
+	
+	@Autowired
+	PostulantPreferenceDAO postulantPreferenceDAO;
+	
+	@Autowired
+	PostulantHistoricalDAO postulantHistoricalDAO;
+	
+	@Autowired
+	OfferSelfDescriptionDAO offerSelfDescriptionDAO;
+	
+	@Autowired
+	OfferPreferenceDAO offerPreferenceDAO;
+	
+	@Autowired
+	OfferHistoricalDAO offerHistoricalDAO;
+	
+	@Autowired
+	OfertaLaboralDAO ofertaLaboralDAO;
+	
+	@Autowired
+	PostulanteDAO postulanteDAO;
+	
+	@Autowired
+	MatchResultDAO matchResultDAO;
+	
+	
 	private static final long serialVersionUID = 1L;
 	
 	
 	public ArrayList<OfertaLaboral> recomendarOfertasLaboralesToPostulante(Postulante postulante, int size, RecommenderType recommenderType){		
 		ArrayList<OfertaLaboral> results = new ArrayList<OfertaLaboral>();
-				
+		
+		//////////////////postulante
+		
+		PostulantPreference postulantPreference = postulantPreferenceDAO.getPostulantPreferenceById(postulante.getPostIdP());
+		PostulantSelfDescription postulantSelfDescription = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(postulante.getPostIdS());
+		
 		Profile profile = new Profile();
 		
 		profile.setId(postulante.getPostId());
-		profile.setRecNumber(size);
+		profile.setRecNumber(matchResultDAO.getNumberRecomendationPostulant(postulante));
+		profile.setVecSelfDescription(convertLinkedHashMapToArray(postulantSelfDescription.getValues()));
+		profile.setVecPreference(convertLinkedHashMapToArray(postulantPreference.getValues()));
+				
+		
+		if(postulante.getPostIdH() == null){
+			OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(1);
+			
+			OfferSelfDescription offerSelfDescription = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ofertaLaboral.getOflaIdS());
+			profile.setVecHistorical(convertLinkedHashMapToArray(offerSelfDescription.getValues()));
+			
+			for (int i = 0; i < profile.getVecHistorical().length; i++) {
+				profile.getVecHistorical()[i] = new BigDecimal(0);
+			}
+		}else{
+			
+			PostulantHistorical postulantHistorical = postulantHistoricalDAO.getPostulantHistoricalById(postulante.getPostIdH());
+			
+			profile.setVecHistorical(convertLinkedHashMapToArray(postulantHistorical.getValues()));
+		}
+		
+		/////////////ofertas laborales
+		
+		ArrayList<OfertaLaboral> ofertas = ofertaLaboralDAO.getOfertasLaborales();
+		
+		Profile[] alternativasOfertasLaborales = new Profile[ofertas.size()];
+		
+		OfferPreference offerPreference;
+		OfferSelfDescription offerSelfDescription;
+		
+		for (int i = 0; i < ofertas.size(); i++) {
+			Profile alternativa = new Profile();		
+			
+			offerPreference = offerPreferenceDAO.getOfferPreferenceById(ofertas.get(i).getOflaIdP());
+			offerSelfDescription = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ofertas.get(i).getOflaIdS());
+			
+			alternativa.setId(ofertas.get(i).getOflaId());
+			alternativa.setRecNumber(matchResultDAO.getNumberRecomendationOffer(ofertas.get(i)));
+			alternativa.setVecPreference(convertLinkedHashMapToArray(offerPreference.getValues()));
+			alternativa.setVecSelfDescription(convertLinkedHashMapToArray(offerSelfDescription.getValues()));		
+			
+			if(ofertas.get(i).getOflaIdH() == null){
+				Postulante ps = postulanteDAO.getPostulanteById(5);
+				
+				PostulantSelfDescription pSD = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(ps.getPostIdS());
+				alternativa.setVecHistorical(convertLinkedHashMapToArray(pSD.getValues()));
+							
+				for (int j = 0; j < alternativa.getVecHistorical().length; j++) {
+					alternativa.getVecHistorical()[j] = new BigDecimal(0);
+				}
+			}else{
+				
+				OfferHistorical offerHistorical = offerHistoricalDAO.getOfferHistoricalById(ofertas.get(i).getOflaIdH());
+				
+				alternativa.setVecHistorical(convertLinkedHashMapToArray(offerHistorical.getValues()));
+			}
+			
+			alternativasOfertasLaborales[i] = alternativa;
+		}
+		
+		////postulantes
+		
+		ArrayList<Postulante> postulantes = postulanteDAO.getPostulantes();
+		
+		Profile[] alternativasPostulantes = new Profile[postulantes.size()];
+		
+		PostulantPreference postulantP;
+		PostulantSelfDescription postulantS;
+		
+		for (int i = 0; i < postulantes.size(); i++) {
+			Profile alternativa = new Profile();		
+			
+			postulantP = postulantPreferenceDAO.getPostulantPreferenceById(postulantes.get(i).getPostIdP());
+			postulantS = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(postulantes.get(i).getPostIdS());
+			
+			alternativa.setId(postulantes.get(i).getPostId());
+			alternativa.setRecNumber(matchResultDAO.getNumberRecomendationPostulant(postulantes.get(i)));
+			alternativa.setVecPreference(convertLinkedHashMapToArray(postulantP.getValues()));
+			alternativa.setVecSelfDescription(convertLinkedHashMapToArray(postulantS.getValues()));		
+			
+			if(postulantes.get(i).getPostIdH() == null){
+				OfertaLaboral ol = ofertaLaboralDAO.getOfertaLaboralById(1);
+				
+				OfferSelfDescription oSD = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ol.getOflaIdS());
+				alternativa.setVecHistorical(convertLinkedHashMapToArray(oSD.getValues()));
+							
+				for (int j = 0; j < alternativa.getVecHistorical().length; j++) {
+					alternativa.getVecHistorical()[j] = new BigDecimal(0);
+				}
+			}else{
+				
+				PostulantHistorical postulantHistorical = postulantHistoricalDAO.getPostulantHistoricalById(postulantes.get(i).getPostIdH());
+				
+				alternativa.setVecHistorical(convertLinkedHashMapToArray(postulantHistorical.getValues()));
+			}
+			
+			alternativasPostulantes[i] = alternativa;
+		}
+		
+				
+		ArrayList<Result> resultados;		
+		
+		
 	
 		switch (recommenderType) {
 		case CONTENT_BASED:
+			resultados = recommenderContentBased(profile, alternativasOfertasLaborales, size);
+						
+			for (int i = 0; i < resultados.size(); i++) {
+				results.add(ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId()));
+				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
+				System.out.println("Score: "+resultados.get(i).getScore());
+			}
 			
 			break;
 		case COLLABORATIVE_BASED:
+			resultados = recommenderCollaborativeBased(profile, alternativasPostulantes, size);
+			
+			for (int i = 0; i < resultados.size(); i++) {
+				Postulante post = postulanteDAO.getPostulanteById(resultados.get(i).getProfile().getId());
+				
+				results.add(matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral());
+				
+				System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
+				System.out.println("Score: "+resultados.get(i).getScore());
+				System.out.println("ID oferta: "+matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral().getOflaId());				
+			}
 			
 			break;
 		case RECIPROCITY_BASED:
+			resultados = recommenderReciprocityBased(profile, alternativasOfertasLaborales, size);
 			
+			for (int i = 0; i < resultados.size(); i++) {
+				results.add(ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId()));
+				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
+				System.out.println("Score: "+resultados.get(i).getScore());
+			}
 			break;
 		case FUSION_BASED:	
-			
-		default:
-			break;
+			System.out.println("En proceso");		
 		}
 		
 		return results;
@@ -115,7 +289,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		System.out.println("MAKING RECOMMENDATION BASED-COLLABORATIVE");
 		
 		for (int i = 0; i < alternatives.length; i++) {
-			similarity = cosineSimilarity(profile.getVecPreference(), alternatives[i].getVecSelfDescription())
+			similarity = cosineSimilarity(profile.getVecPreference(), alternatives[i].getVecPreference())
 					.add(cosineSimilarity(profile.getVecHistorical(), alternatives[i].getVecHistorical()));
 			
 			//similarity es mayor que similarityMin
@@ -156,7 +330,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		return results;
 	}
 	
-	public ArrayList<Profile> generateArray(ArrayList<Profile> set, Profile alternative){
+	private ArrayList<Profile> generateArray(ArrayList<Profile> set, Profile alternative){
 		ArrayList<Profile> result = new ArrayList<Profile>();
 		
 		for (int i = 0; i < set.size(); i++) {
@@ -237,11 +411,26 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 
 		return results;
 		
-	}		
+	}
+	
+	private BigDecimal[] convertLinkedHashMapToArray(LinkedHashMap<String, Integer> map){
+		int size = map.size();
+		
+		BigDecimal[] vector = new BigDecimal[size];
+		
+		int i = 0;
+		
+		for (Entry<String, Integer> value : map.entrySet()) {
+			vector[i] = new BigDecimal(value.getValue());
+			i++;
+		}
+		
+		return vector;
+	}
 	
 	//Intern methods	
 	private BigDecimal cosineSimilarity(BigDecimal[] vecA, BigDecimal[] vecB){
-		BigDecimal valor = scalarProduct(vecA, vecB).divide(vecMagnitude(vecA).multiply(vecMagnitude(vecB)), 5, RoundingMode.HALF_UP);
+		BigDecimal valor = scalarProduct(vecA, vecB).divide(vecMagnitude(vecA).multiply(vecMagnitude(vecB)),5,RoundingMode.HALF_UP);
 				
 		System.out.println("cosineSimilarity");
 		System.out.println(valor);
@@ -296,8 +485,16 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		
 		if(set.size() >0){
 			for (int i = 0; i < set.size(); i++) {
-				pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(set.get(i).getRecNumber()))
-				.multiply(reciprocity(profile, set.get(i))));
+				int number = set.get(i).getRecNumber();
+				
+				if(number == 0){
+					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(0.1), 5, RoundingMode.HALF_UP)
+							.multiply(reciprocity(profile, set.get(i))));
+				}else{
+					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(set.get(i).getRecNumber()))
+							.multiply(reciprocity(profile, set.get(i))));
+				}
+				
 			}
 			
 			result = pivote.divide(new BigDecimal(set.size()));
