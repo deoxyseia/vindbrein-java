@@ -79,6 +79,12 @@
     	<session-timeout>600</session-timeout>
 	</session-config>
 	
+	<!-- theme' primefaces -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>bootstrap</param-value>
+	</context-param>
+	
 	<!-- Optimization -->
 	 	<!-- Project Stage Level -->
 	 <context-param>
