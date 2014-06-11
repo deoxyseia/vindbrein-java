@@ -68,7 +68,7 @@ public class RecomendarOfertaManagedBean implements Serializable{
 			ofertasRecomendadas = recommenderService.recomendarOfertasLaboralesToPostulante(postulante, 2, RecommenderType.RECIPROCITY_BASED);
 			break;
 		case 4:
-			System.out.println("en proceso");
+			ofertasRecomendadas = recommenderService.recomendarOfertasLaboralesToPostulante(postulante, 2, RecommenderType.FUSION_BASED);
 			break;	
 
 		default:

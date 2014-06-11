@@ -194,7 +194,10 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			resultados = recommenderContentBased(profile, alternativasOfertasLaborales, size);
 						
 			for (int i = 0; i < resultados.size(); i++) {
-				results.add(ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId()));
+				OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId());
+				ofertaLaboral.setScore(resultados.get(i).getScore());
+				
+				results.add(ofertaLaboral);
 				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
 				System.out.println("Score: "+resultados.get(i).getScore());
 			}
@@ -206,7 +209,10 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			for (int i = 0; i < resultados.size(); i++) {
 				Postulante post = postulanteDAO.getPostulanteById(resultados.get(i).getProfile().getId());
 				
-				results.add(matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral());
+				OfertaLaboral ofertaLaboral = matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral(); 
+				ofertaLaboral.setScore(resultados.get(i).getScore());
+				
+				results.add(ofertaLaboral);
 				
 				System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
 				System.out.println("Score: "+resultados.get(i).getScore());
@@ -218,16 +224,121 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			resultados = recommenderReciprocityBased(profile, alternativasOfertasLaborales, size);
 			
 			for (int i = 0; i < resultados.size(); i++) {
-				results.add(ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId()));
+				OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId());
+				ofertaLaboral.setScore(resultados.get(i).getScore());
+				
+				results.add(ofertaLaboral);
 				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
 				System.out.println("Score: "+resultados.get(i).getScore());
 			}
 			break;
 		case FUSION_BASED:	
-			System.out.println("En proceso");		
+			System.out.println("INICIANDO RECOMENDACION POR FUSION");
+			
+			ArrayList<OfertaLaboral> ofertasContent = new ArrayList<OfertaLaboral>();
+			ArrayList<OfertaLaboral> ofertasCollavorative = new ArrayList<OfertaLaboral>();
+			ArrayList<OfertaLaboral> ofertasReciprocity = new ArrayList<OfertaLaboral>();
+			ArrayList<OfertaLaboral> ofertasTotal = new ArrayList<OfertaLaboral>();
+			
+			
+			ArrayList<Result> resultadosContent;
+			ArrayList<Result> resultadosCollaborative;
+			ArrayList<Result> resultadosReciprocity;
+			
+			
+			//basado en contenido
+			
+			resultadosContent = recommenderContentBased(profile, alternativasOfertasLaborales, size);
+			
+			for (int i = 0; i < resultadosContent.size(); i++) {
+				OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(resultadosContent.get(i).getProfile().getId());
+				ofertaLaboral.setScore(resultadosContent.get(i).getScore());
+				
+				ofertasContent.add(ofertaLaboral);
+				System.out.println("ID oferta: "+resultadosContent.get(i).getProfile().getId());
+				System.out.println("Score: "+resultadosContent.get(i).getScore());
+			}
+			
+			//basado en colaboracion
+			
+			resultadosCollaborative = recommenderCollaborativeBased(profile, alternativasPostulantes, size);
+			
+			for (int i = 0; i < resultadosCollaborative.size(); i++) {
+				Postulante post = postulanteDAO.getPostulanteById(resultadosCollaborative.get(i).getProfile().getId());
+				
+				OfertaLaboral ofertaLaboral = matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral(); 
+				ofertaLaboral.setScore(resultadosCollaborative.get(i).getScore());
+				
+				ofertasCollavorative.add(ofertaLaboral);
+				
+				System.out.println("ID postulante: "+resultadosCollaborative.get(i).getProfile().getId());
+				System.out.println("Score: "+resultadosCollaborative.get(i).getScore());
+				System.out.println("ID oferta: "+matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral().getOflaId());				
+			}
+			
+			//basado en reciprocidad
+			
+			resultadosReciprocity = recommenderReciprocityBased(profile, alternativasOfertasLaborales, size);
+			
+			for (int i = 0; i < resultadosReciprocity.size(); i++) {
+				OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(resultadosReciprocity.get(i).getProfile().getId());
+				ofertaLaboral.setScore(resultadosReciprocity.get(i).getScore());
+				
+				ofertasReciprocity.add(ofertaLaboral);
+				System.out.println("ID oferta: "+resultadosReciprocity.get(i).getProfile().getId());
+				System.out.println("Score: "+resultadosReciprocity.get(i).getScore());
+			}
+			
+			
+			ofertasTotal.addAll(normalizarScoreOfertas(ofertasContent, new BigDecimal(0), new BigDecimal(1)));
+			ofertasTotal.addAll(normalizarScoreOfertas(ofertasCollavorative, new BigDecimal(0), new BigDecimal(2)));
+			ofertasTotal.addAll(normalizarScoreOfertas(ofertasReciprocity, new BigDecimal(-1), new BigDecimal(1)));		
+			
+			boolean existente;
+			
+			for (int i = 0; i < ofertasTotal.size(); i++) {
+				existente = false;
+				
+				for (int j = 0; j < results.size(); j++) {
+					if(results.get(j).getOflaId() == ofertasTotal.get(i).getOflaId()){
+						results.get(j).setScore(results.get(j).getScore().add(ofertasTotal.get(i).getScore()));
+						existente = true;
+					}					
+				}
+				
+				if (!existente) {
+					results.add(ofertasTotal.get(i));
+				}
+			}
+			
+			Comparator<OfertaLaboral> comparatorOferta = new Comparator<OfertaLaboral>() {
+				//orden descendente
+				public int compare(OfertaLaboral o1, OfertaLaboral o2) {
+					return o1.getScore().compareTo(o2.getScore())*-1;
+				}				
+			};
+			
+			Collections.sort(results, comparatorOferta);
+			
+			int s = results.size() >= size ? size : results.size();
+			
+			System.out.println("sizeeeeee: "+ s);
+			
+			results = new ArrayList<OfertaLaboral>(results.subList(0, s));			
+			
+			break;
 		}
 		
 		return results;
+	}
+	
+	public ArrayList<OfertaLaboral> normalizarScoreOfertas(ArrayList<OfertaLaboral> ofertas, BigDecimal min, BigDecimal max){
+		
+		for (int i = 0; i < ofertas.size(); i++) {
+			ofertas.get(i).setScore((ofertas.get(i).getScore().subtract(min)).divide(max.subtract(min)));
+		}
+		
+		return ofertas;
 	}
 
 	
@@ -252,7 +363,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				results.add(nowResult);
 								
 				Comparator<Result> comparatorInverso = new Comparator<Result>() {
-					//orden inverso
+					//orden inverso, el resultado es descendente
 					public int compare(Result o1, Result o2) {
 						return o1.getScore().compareTo(o2.getScore())*-1;
 					}
@@ -267,9 +378,9 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				similarityMin = results.get(0).getScore();				
 			}			
 		}
-		
+		//order ascendente
 		Comparator<Result> comparator = new Comparator<Result>() {
-			//orden de mayor a menor
+			//orden de menor a mayor
 			public int compare(Result o1, Result o2) {
 				return o1.getScore().compareTo(o2.getScore());
 			}
@@ -319,7 +430,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		}
 		
 		Comparator<Result> comparator = new Comparator<Result>() {
-			//orden de mayor a menor
+			//orden de ascendente
 			public int compare(Result o1, Result o2) {
 				return o1.getScore().compareTo(o2.getScore());
 			}
@@ -398,10 +509,10 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			maxIncrease = new BigDecimal(-1);			
 		}
 		
-		//ordenamiento descendente
+		//ordenamiento ascendente
 		
 		Comparator<Result> comparator = new Comparator<Result>() {
-			//orden de mayor a menor
+			//orden de menor a mayor
 			public int compare(Result o1, Result o2) {
 				return o1.getScore().compareTo(o2.getScore());
 			}
@@ -555,7 +666,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		combs = new ArrayList<ArrayList<Profile>>();
 		
 		for (int i = 0; i < set.size() - k + 1; i++) {
-			ArrayList<Profile> head = (ArrayList<Profile>)set.subList(i, i+1);
+			ArrayList<Profile> head = new ArrayList<Profile>(set.subList(i, i+1));
 			
 			ArrayList<ArrayList<Profile>> tailcombs = k_combinations((ArrayList<Profile>)set.subList(i, set.size()), k-1);
 			

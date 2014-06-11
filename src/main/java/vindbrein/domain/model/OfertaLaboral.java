@@ -1,7 +1,10 @@
 package vindbrein.domain.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -35,6 +38,7 @@ public class OfertaLaboral implements Serializable {
 	private Distrito distrito;
 	private EstadoCivil estadoCivil;
 	private OrganizacionPuesto organizacionPuesto;
+	private BigDecimal score;
 
 	public OfertaLaboral() {
 	}
@@ -366,5 +370,22 @@ public class OfertaLaboral implements Serializable {
 	public void setOrganizacionPuesto(OrganizacionPuesto organizacionPuesto) {
 		this.organizacionPuesto = organizacionPuesto;
 	}
+
+	@Transient
+	public BigDecimal getScore() {
+		return score;
+	}
+
+
+	public void setScore(BigDecimal score) {
+		this.score = score;
+	}
+	
+	@Transient
+	public String getScorePlain(){
+		return score.toPlainString();
+	}
+	
+	
 
 }
