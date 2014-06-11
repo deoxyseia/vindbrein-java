@@ -69,10 +69,31 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	}
 	
 	@Transactional(readOnly = false)
-	public void updatePostulante(Postulante postulante) {		
+	public void updatePostulante(Postulante postulante) {
+		
+		if(postulante.getEstadoCivil().getEsciId() == 0){
+			postulante.setEstadoCivil(null);
+		}
+		
+		if(postulante.getTipoHorario().getTihoId() == 0){
+			postulante.setTipoHorario(null);
+		}
+		
+		if(postulante.getNivelPuesto().getNipuId() == 0){
+			postulante.setNivelPuesto(null);
+		}
+		
+		if(postulante.getDimensionOrganizacion().getDiorId() == 0){
+			postulante.setDimensionOrganizacion(null);
+		}
+		
+		if(postulante.getSector().getSectId() == 0){
+			postulante.setSector(null);
+		}
+		
 		getPostulanteDAO().updatePostulante(postulante);
 		
-		//actualizando la atudescripcion
+		//actualizando la autodescripcion
 		PostulantSelfDescription postulantSelfDescription = postulantSelfDescriptionDAO
 				.getPostulantSelfDescriptionById(postulante.getPostIdS());
 		

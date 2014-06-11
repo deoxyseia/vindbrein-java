@@ -247,7 +247,7 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void savePostulante(){
-		postulanteService.updatePostulante(postulante);
+		postulanteService.updatePostulante(postulante);		
 		
 		recargarPostulante();
 	}

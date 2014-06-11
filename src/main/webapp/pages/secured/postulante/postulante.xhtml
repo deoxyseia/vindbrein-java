@@ -35,8 +35,7 @@
 
 					<h:outputText value="Sexo :" />
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.postSexo}"
-						required="true" requiredMessage="Elija un sexo">
+						value="#{postulanteManagedBean.postulante.postSexo}">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItem itemLabel="Masculino" itemValue="M" />
 						<f:selectItem itemLabel="Femenino" itemValue="F" />
@@ -46,7 +45,7 @@
 					<p:calendar
 						value="#{postulanteManagedBean.postulante.postFechaNacimiento}"
 						showOn="button" />
-
+						
 					<h:outputText value="E-mail :"></h:outputText>
 					<p:inputText
 						value="#{postulanteManagedBean.postulante.usuario.usuaCorreo}"
@@ -55,8 +54,7 @@
 
 					<h:outputText value="Estado civil :" />
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.estadoCivil.esciId}"
-						required="true" requiredMessage="Elija su stado civil">
+						value="#{postulanteManagedBean.postulante.estadoCivil.esciId}">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.estadosCiviles}"
 							var="estadoCivil" itemLabel="#{estadoCivil.esciNombre}"
@@ -73,8 +71,7 @@
 					<h:outputText value="Tipo de horario :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.postulante.tipoHorario.tihoId}"
-						effect="fade" required="true"
-						requiredMessage="Elija el tipo de horario que prefiera">
+						effect="fade" >
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.tiposHorario}"
 							var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
@@ -85,8 +82,7 @@
 					<h:outputText value="Nivel de puesto :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.postulante.nivelPuesto.nipuId}"
-						effect="fade" required="true"
-						requiredMessage="Elija el tipo nivel de puesto">
+						effect="fade" >
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.nivelesPuesto}"
 							var="nivelPuesto" itemLabel="#{nivelPuesto.nipuNombre}"
@@ -97,8 +93,7 @@
 					<h:outputText value="Dimensión de organizacion :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.postulante.dimensionOrganizacion.diorId}"
-						effect="fade" required="true"
-						requiredMessage="Elija la dimensión de la organización">
+						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems
 							value="#{postulanteManagedBean.dimensionesOrganizacion}"
