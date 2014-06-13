@@ -7,6 +7,45 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 	
-	<p:outputLabel>holaaaaaa soy recultador, busco postulante</p:outputLabel>
+	<h:form>
+	<h:panelGrid columns="3">
+		<p:outputLabel value=" Buscar:" for="autoCompleteBuscarPostulante" />
+		<p:autoComplete id="autoCompleteBuscarPostulante" value="#{buscarPostulanteManagedBean.cadenaBusqueda}"
+			completeMethod="#{buscarPostulanteManagedBean.autocompletarBusqueda}"  />
+		<p:commandButton value="Buscar" 
+			actionListener="#{buscarPostulanteManagedBean.realizarBusqueda()}"
+			update=":dataGridPostulantesBuscados"
+			icon="ui-icon-search">
+		</p:commandButton>
+	</h:panelGrid>
+	</h:form>
+
+	<p:dataGrid id="dataGridPostulantesBuscados" var="postulante"
+		value="#{buscarPostulanteManagedBean.postulantesEncontrados}"
+		columns="1" rows="12">
+
+		<p:panel header="#{postulante.postNombres}">
+			<h:panelGrid columns="2">
+				<h:outputText value="Nombres:" />
+				<h:outputText value="#{postulante.postNombres}" />
+				
+				<h:outputText value="Apellido paterno:" />
+				<h:outputText value="#{postulante.postApellidoPaterno}" />
+				
+				<h:outputText value="Apellido materno:" />
+				<h:outputText value="#{postulante.postApellidoMaterno}" />
+			</h:panelGrid>
+
+			<p:commandLink title="Ver Detalle"					
+				action="/pages/secured/reclutador/informacionPostulante.xhtml?faces-redirect=true">
+				<h:outputText styleClass="ui-icon ui-icon-search"
+					style="margin:0 auto;" />
+				<f:setPropertyActionListener value="#{postulante}"
+					target="#{buscarPostulanteManagedBean.selectedPostulante}" />				
+			</p:commandLink>
+		</p:panel>
+		
+
+	</p:dataGrid>
 	
 </ui:composition>

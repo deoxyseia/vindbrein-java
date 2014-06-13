@@ -1,0 +1,312 @@
+<ui:composition template="/pages/templates/layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title"> Información personal </ui:define>
+
+	<ui:define name="content">
+
+		<!--Postulante -->
+
+		<p:messages showDetail="true" autoUpdate="true" closable="true" />
+
+		<h:form id="formPostulante">
+			<p:panel header="Información básica personal">
+
+				<h:panelGrid columns="2">
+					<h:outputText value="Nombres :"></h:outputText>
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.postNombres}"></h:outputText>
+
+					<h:outputText value="Apellido paterno :"></h:outputText>
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.postApellidoPaterno}"></h:outputText>
+					
+					<h:outputText value="Apellido materno :"></h:outputText>
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.postApellidoMaterno}"></h:outputText>
+					
+					<h:outputText value="Sexo :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.postSexo}" />
+					
+					<h:outputText value="Fecha de nacimiento :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.postFechaNacimiento}" />
+											
+					<h:outputText value="E-mail :"></h:outputText>
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.usuario.usuaCorreo}"></h:outputText>
+					
+					<h:outputText value="Estado civil :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.estadoCivil.esciNombre}" />
+					
+				</h:panelGrid>
+			</p:panel>
+
+			<p:panel header="Preferencias">
+
+				<h:panelGrid columns="2">
+
+					<!-- Tipo de horario -->
+					<h:outputText value="Tipo de horario :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.tipoHorario.tihoNombre}" />
+					
+					<!-- Nivel de puesto -->
+					<h:outputText value="Nivel de puesto :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.nivelPuesto.nipuNombre}" />
+					
+					<!-- Dimensión de organización -->
+					<h:outputText value="Dimensión de organizacion :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.dimensionOrganizacion.diorNombre}" />
+					
+					<!-- Sector de organización -->
+					<h:outputText value="Sector de organizacion :" />
+					<h:outputText value="#{buscarPostulanteManagedBean.selectedPostulante.sector.sectId}" />
+					
+				</h:panelGrid>
+
+				<!-- beneficios-->
+
+				<p:dataTable id="dataTablePostulanteBeneficio"
+					var="postulanteBeneficio" rowKey="#{postulanteBeneficio.beneficio.beneId}"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.postulanteBeneficios}"
+					disabledSelection="true"
+					emptyMessage="No tiene registrado beneficios">
+
+					<f:facet name="header">
+                    Lista de Beneficios
+                	</f:facet>
+
+					<p:column headerText="beneficio">
+						<h:outputText value="#{postulanteBeneficio.beneficio.beneNombre}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<!-- fin de beneficios -->
+
+			</p:panel>
+		</h:form>
+		
+		<p:panel header="Información detallada">
+			<h:form id="formPostulanteDetalle">
+
+
+				<!-- Telefonos -->
+
+				<p:dataTable id="dataTableTelefono" var="telefono"
+					rowKey="#{telefono.teleId}" disabledSelection="true"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.telefonos}"					
+					emptyMessage="No tiene registrado telefonos" >
+				
+					<f:facet name="header">
+                    Lista de teléfonos
+                	</f:facet>
+
+					<p:column headerText="Descripción">
+						<h:outputText value="#{telefono.teleDescripcion}" />
+					</p:column>
+					<p:column headerText="Número">
+						<h:outputText value="#{telefono.teleNum}" />
+					</p:column>				
+				</p:dataTable>
+
+				<!-- fin de Telefonos -->
+
+				<!-- Residencia -->
+
+				<p:dataTable id="dataTableResidencia" var="residencia"
+					rowKey="#{residencia.resiId}"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.residencias}"
+					disabledSelection="true"
+					emptyMessage="No tiene registrado residencias">
+
+					<f:facet name="header">
+                    Lista de Residencias
+                	</f:facet>
+
+					<p:column headerText="Dirección">
+						<h:outputText value="#{residencia.resiDireccion}" />
+					</p:column>
+					<p:column headerText="Teléfono">
+						<h:outputText value="#{residencia.resiTelefono}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<!-- fin de Residencia -->
+
+				<!-- fin de postulante Conocimiento -->
+
+				<p:dataTable id="dataTablePostulanteConocimiento"
+					var="postulanteConocimiento" rowKey="#{postulanteConocimiento.conocimiento.conoId}"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.postulanteConocimientos}"					
+					emptyMessage="No tiene registrado conocimientos"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Conocimientos
+                	</f:facet>
+
+					<p:column headerText="Conocimiento">
+						<h:outputText
+							value="#{postulanteConocimiento.conocimiento.conoNombre}" />
+					</p:column>
+
+					<p:column headerText="Nivel de conocimiento">
+						<h:outputText
+							value="#{postulanteConocimiento.nivelConocimiento.nicoNombre}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<!-- fin de postulante conocimiento -->
+
+				<!-- Experiencia laboral -->
+
+				<p:dataTable id="dataTableExperienciaLaboral"
+					var="experienciaLaboral" rowKey="#{experienciaLaboral.exlaId}"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.experienciasLaborales}"					
+					emptyMessage="No tiene registrado experiencias laborales"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Experiencias laborales
+                	</f:facet>
+
+					<p:column headerText="Puesto">
+						<h:outputText
+							value="#{experienciaLaboral.organizacionPuesto.puesto.puesNombre}" />
+					</p:column>
+
+					<p:column headerText="Puesto">
+						<h:outputText
+							value="#{experienciaLaboral.organizacionPuesto.organizacion.orgaRazonSocial}" />
+					</p:column>
+
+					<p:column headerText="Fecha inicio">
+						<h:outputText value="#{experienciaLaboral.exlaFechaInicio}" />
+					</p:column>
+
+					<p:column headerText="Fecha final">
+						<h:outputText value="#{experienciaLaboral.exlaFechaFinal}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<!-- fin de experiencia laboral -->
+
+				<!-- Actividad académica-->
+
+				<p:dataTable id="dataTableActividadAcademica"
+					var="actividadAcademica" rowKey="#{actividadAcademica.acacId}"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.actividadesAcademicas}"					
+					emptyMessage="No tiene registrado actividades académicas"
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Actividades académicas
+                	</f:facet>
+
+					<p:column headerText="Estudio">
+						<h:outputText value="#{actividadAcademica.estudio.estuNombre}" />
+					</p:column>
+
+					<p:column headerText="Centro de estudio">
+						<h:outputText
+							value="#{actividadAcademica.estudio.centroEstudio.ceesNombre}" />
+					</p:column>
+
+					<p:column headerText="Fecha inicial">
+						<h:outputText value="#{actividadAcademica.acacFechaInicio}" />
+					</p:column>
+
+					<p:column headerText="Fecha final">
+						<h:outputText value="#{actividadAcademica.acacFechaFinal}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<!-- fin de actividad academica -->
+
+				<!-- Idioma-->
+
+				<p:dataTable id="dataTablePostulanteIdioma" var="postulanteIdioma"
+					rowKey="#{postulanteIdioma.idioma.idioId}"
+					value="#{buscarPostulanteManagedBean.selectedPostulante.postulanteIdiomas}"					
+					emptyMessage="No tiene registrado idiomas" 
+					disabledSelection="true">
+
+					<f:facet name="header">
+                    Lista de Idiomas
+                	</f:facet>
+
+					<p:column headerText="Idioma">
+						<h:outputText value="#{postulanteIdioma.idioma.idioNombre}" />
+					</p:column>
+
+					<p:column headerText="Nivel de Conocimiento">
+						<h:outputText value="#{postulanteIdioma.nivelIdioma.niidNombre}" />
+					</p:column>
+
+				</p:dataTable>
+
+				<!-- fin de idioma -->
+				
+				<p:panel>
+				<f:facet name="footer">
+					<p:commandButton value="Reclutar" immediate="true"
+						update=":confirmReclutarPostulanteForm"
+						oncomplete="PF('confirmReclutarPostulanteDialog').show()"											
+						icon="ui-icon-check">
+					</p:commandButton>
+					<p:commandButton value="Cancelar"
+					     action="/pages/secured/reclutador/buscarPostulante.xhtml?faces-redirect=true"
+					     immediate="true"
+					     ajax="false"
+					     type="submit"
+						 icon="ui-icon-close" />
+				</f:facet>
+			</p:panel>
+			</h:form>
+
+		</p:panel>
+		<!--FIN POSTULANTE -->
+		
+		<!-- Fin Dialog reclutar -->
+		
+		<p:dialog id="confirmReclutarPostulanteDlg" header="Realizar reclutamiento"
+			hideEffect="explode" widgetVar="confirmReclutarPostulanteDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+
+			<h:form id="confirmReclutarPostulanteForm">
+				<p:panelGrid columns="2">
+					
+					<h:outputText value="Seleccione la oferta laboral a la que lo reclutará :" />
+						<p:selectOneMenu
+							value="#{buscarPostulanteManagedBean.selectedOfertaLaboral}"
+							effect="fade"  converter="omnifaces.SelectItemsConverter">
+							<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+							<f:selectItems value="#{ofertaLaboralManagedBean.ofertasLaborales}"
+								var="ofertaLaboral" itemLabel="#{ofertaLaboral.oflaTitulo}"
+								itemValue="#{ofertaLaboral}" />
+						</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<p:commandButton value="Confirmar reclutamiento"
+							actionListener="#{buscarPostulanteManagedBean.reclutarPostulante()}"
+							oncomplete="PF('confirmReclutarPostulanteDialog').hide()"
+							action="/pages/secured/reclutador/buscarPostulante.xhtml?faces-redirect=true"
+							update=":formPostulante:dataTablePostulanteBeneficio"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="PF('confirmReclutarPostulanteDialog').hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<!-- Fin Dialog reclutar -->
+				
+	</ui:define>
+</ui:composition>
