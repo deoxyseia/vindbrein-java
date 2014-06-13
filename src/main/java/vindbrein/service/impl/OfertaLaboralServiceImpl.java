@@ -235,7 +235,7 @@ public class OfertaLaboralServiceImpl implements OfertaLaboralService, Serializa
 		return ofertas;
 	}
 	
-	public OfertaLaboral getOfertaLaboralCompletaByOfertaLaboral(OfertaLaboral ofertaLaboral){
+	public OfertaLaboral getOfertaLaboralCompleta(OfertaLaboral ofertaLaboral){
 		ofertaLaboral.setOfertaBeneficios(ofertaBeneficioDAO.getOfertaBeneficiosByOfertaLaboral(ofertaLaboral));
 		ofertaLaboral.setOfertaCentroEstudios(ofertaCentroEstudioDAO.getOfertaCentroEstudiosByOfertaLaboral(ofertaLaboral));
 		ofertaLaboral.setOfertaConocimientos(ofertaConocimientoDAO.getOfertaConocimientosByOfertaLaboral(ofertaLaboral));

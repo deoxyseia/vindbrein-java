@@ -9,12 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import vindbrein.dao.MatchResultDAO;
-import vindbrein.dao.OfertaLaboralDAO;
 import vindbrein.dao.PostulanteDAO;
 import vindbrein.dao.app.CoreDAO;
-import vindbrein.dao.document.OfferHistoricalDAO;
 import vindbrein.dao.document.PostulantHistoricalDAO;
-import vindbrein.domain.document.OfferHistorical;
 import vindbrein.domain.document.PostulantHistorical;
 import vindbrein.domain.model.MatchResult;
 import vindbrein.domain.model.MatchResultPK;
@@ -36,13 +33,7 @@ public class CoreServiceImpl implements CoreService {
 	PostulantHistoricalDAO postulantHistoricalDAO;
 	
 	@Autowired	
-	OfferHistoricalDAO offerHistoricalDAO;
-	
-	@Autowired	
 	PostulanteDAO postulanteDAO;
-	
-	@Autowired	
-	OfertaLaboralDAO ofertaLaboralDAO;
 	
 	
 	@Transactional(readOnly = false)
@@ -116,60 +107,6 @@ public class CoreServiceImpl implements CoreService {
 			
 			matchResultDAO.updateMatchResult(matchResult);
 		}
-	}
-	
-	@Transactional(readOnly = false)
-	public void reclutarPostulante(OfertaLaboral ofertaLaboral, Postulante postulante){
-		
-		ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(ofertaLaboral.getOflaId());
-		
-		MatchResult matchResult = matchResultDAO.getMatchResultById(ofertaLaboral, postulante);
-		
-		if(matchResult == null){
-			matchResult = new MatchResult();
-			matchResult.setId(new MatchResultPK());
-			
-			matchResult.setPostulante(postulante);
-			matchResult.setOfertaLaboral(ofertaLaboral);
-			matchResult.getId().setFkPostId(postulante.getPostId());
-			matchResult.getId().setFkOflaId(ofertaLaboral.getOflaId());
-			
-			matchResult.setMareFlagPostulanteVisitado((byte)1);	
-						
-			matchResult.setMareFlagPostulanteSeleccionado((byte)1);	
-			matchResult.setMareFechaPostulanteSeleccionado(new Date());
-			
-			matchResultDAO.addMatchResult(matchResult);		
-		}else{
-			matchResult.setMareFlagPostulanteVisitado((byte)1);	
-			
-			matchResult.setMareFlagPostulanteSeleccionado((byte)1);	
-			matchResult.setMareFechaPostulanteSeleccionado(new Date());
-			
-			matchResultDAO.updateMatchResult(matchResult);
-		}
-		
-		LinkedHashMap<String, Integer> vecHistorical = coreDAO.getVectorPostulantSelfDescription(postulante);
-		
-		if (ofertaLaboral.getOflaIdH() == null) {
-			ObjectId  objectId = new ObjectId();
-			
-			OfferHistorical offerHistorical = new OfferHistorical();
-			offerHistorical.setId(objectId.toString());
-			offerHistorical.setValues(vecHistorical);
-			
-			offerHistoricalDAO.addOfferHistorical(offerHistorical);
-			
-			ofertaLaboral.setOflaIdH(objectId.toString());			
-			ofertaLaboralDAO.updateOfertaLaboral(ofertaLaboral);
-		}else{
-			OfferHistorical offerHistorical = offerHistoricalDAO.getOfferHistoricalById(ofertaLaboral.getOflaIdH());
-			
-			offerHistorical.setValues(vecHistorical);
-			
-			offerHistoricalDAO.updateOfferHistorical(offerHistorical);
-		}
-		
 	}
 	
 }

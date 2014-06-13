@@ -19,7 +19,5 @@ public interface PostulanteService {
 	public Postulante getPostulanteByCorreo(String correo);
 	
 	public Postulante getPostulanteCompletoByPostulante(Postulante postulante);
-	
-	public ArrayList<Postulante> getPostulantesCompletos();
 
 }

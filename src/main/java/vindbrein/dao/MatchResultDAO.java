@@ -63,7 +63,7 @@ public class MatchResultDAO implements Serializable{
 	public MatchResult getLastMatchResultByPostulant(Postulante postulante){
 		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from MatchResult where mareFlagOfertaSeleccionada = 1 and postulante.postId = ? order by mareFechaOfertaSeleccionada desc")
+				.createQuery("from MatchResult where postulante.postId = ? order by mareFechaOfertaSeleccionada desc")
 				.setParameter(0, postulante.getPostId())
 				.list();
 		
@@ -75,23 +75,6 @@ public class MatchResultDAO implements Serializable{
 			return null;
 		}
 	}
-	
-	//obtiene el match donde de donde se hizo la ultima postulación (campo selección)
-		public MatchResult getLastMatchResultByOffer(OfertaLaboral ofertaLaboral){
-			ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
-					.getCurrentSession()
-					.createQuery("from MatchResult where mareFlagPostulanteSeleccionado = 1 and ofertaLaboral.oflaId = ? order by mareFechaPostulanteSeleccionado desc")
-					.setParameter(0, ofertaLaboral.getOflaId())
-					.list();
-			
-			
-			//obtiene el último valor
-			if(list.size()!=0){
-				return (MatchResult)list.get(0);
-			} else {
-				return null;
-			}
-		}
 
 	public ArrayList<MatchResult> getMatchResults() {
 		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
@@ -101,22 +84,20 @@ public class MatchResultDAO implements Serializable{
 		return list;
 	}
 	
-	//se está usando la selección en lugar de la recomendación
 	public int getNumberRecomendationPostulant(Postulante postulante){
 		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from MatchResult where mareFlagPostulanteRecomendado = 1 and mareFlagPostulanteSeleccionado = 1 and postulante.postId = ?")
+				.createQuery("from MatchResult where postulante.postId = ?")
 				.setParameter(0, postulante.getPostId())
 				.list();
 		
 		return list.size();
 	}
 	
-	//se está usando la selección en lugar de la recomendación
 	public int getNumberRecomendationOffer(OfertaLaboral ofertaLaboral){
 		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from MatchResult where mareFlagOfertaRecomendada = 1 and mareFlagOfertaSeleccionada = 1 and ofertaLaboral.oflaId = ?")
+				.createQuery("from MatchResult where ofertaLaboral.oflaId = ?")
 				.setParameter(0, ofertaLaboral.getOflaId())
 				.list();
 		

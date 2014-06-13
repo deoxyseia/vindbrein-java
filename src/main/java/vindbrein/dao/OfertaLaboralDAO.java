@@ -16,8 +16,15 @@ public class OfertaLaboralDAO {
 	
 	@Autowired
 	@Qualifier("sessionFactory")
-	private SessionFactory sessionFactory;	
+	private SessionFactory sessionFactory;
 	
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+	
+	public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 		
 	public void addOfertaLaboral(OfertaLaboral ofertaLaboral) {
 		getSessionFactory().getCurrentSession().save(ofertaLaboral);		
@@ -62,25 +69,4 @@ public class OfertaLaboralDAO {
 		
 		return list;
 	}
-	
-	//por mientras
-	public OfertaLaboral getAlgunaOfertaLaboral() {
-		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from OfertaLaboral").list();
-		
-		if(list.size()!=0){
-			return (OfertaLaboral)list.get(0);
-		} else {
-			return null;
-		}
-	}
-	
-	//getters and setters
-	public SessionFactory getSessionFactory() {
-		return sessionFactory;
-	}
-	
-	public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 }

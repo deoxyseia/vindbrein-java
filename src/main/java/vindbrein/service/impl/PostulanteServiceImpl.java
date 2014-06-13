@@ -143,24 +143,6 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 		return postulante;
 	}
 	
-	public ArrayList<Postulante> getPostulantesCompletos(){
-		
-		ArrayList<Postulante> postulantes = postulanteDAO.getPostulantes();
-		
-		for (int i = 0; i < postulantes.size(); i++) {
-			postulantes.get(i).setActividadesAcademicas(actividadAcademicaDAO.getActividadesAcademicasByPostulante(postulantes.get(i)));
-			postulantes.get(i).setExperienciasLaborales(experienciaLaboralDAO.getExperienciasLaboralesByPostulante(postulantes.get(i)));
-			postulantes.get(i).setPostulanteBeneficios(postulanteBeneficioDAO.getPostulanteBeneficioByPostulante(postulantes.get(i)));
-			postulantes.get(i).setPostulanteConocimientos(postulanteConocimientoDAO.getPostulanteConocimientoByPostulante(postulantes.get(i)));
-			postulantes.get(i).setPostulanteIdiomas(postulanteIdiomaDAO.getPostulanteIdiomasByPostulante(postulantes.get(i)));
-			postulantes.get(i).setResidencias(residenciaDAO.getResidenciasByPostulante(postulantes.get(i)));
-			postulantes.get(i).setTelefonos(telefonoDAO.getTelefonosByPostulante(postulantes.get(i)));
-		}
-		
-		return postulantes;
-		
-	}
-	
 	//getters and setters
 	
 	public PostulanteDAO getPostulanteDAO() {

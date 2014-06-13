@@ -61,18 +61,6 @@ public class PostulanteDAO {
 			return null;
 		}
 	}
-	
-	///por mientras
-	public Postulante getAlgunPostulante() {
-		List list = getSessionFactory().getCurrentSession()
-				.createQuery("from Postulante").list();
-		
-		if(list.size()!=0){
-			return (Postulante)list.get(0);
-		} else {
-			return null;
-		}
-	}
 
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;

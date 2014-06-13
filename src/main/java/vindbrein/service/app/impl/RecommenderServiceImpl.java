@@ -91,7 +91,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				
 		
 		if(postulante.getPostIdH() == null){
-			OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getAlgunaOfertaLaboral();
+			OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getOfertaLaboralById(1);
 			
 			OfferSelfDescription offerSelfDescription = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ofertaLaboral.getOflaIdS());
 			profile.setVecHistorical(convertLinkedHashMapToArray(offerSelfDescription.getValues()));
@@ -127,7 +127,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			alternativa.setVecSelfDescription(convertLinkedHashMapToArray(offerSelfDescription.getValues()));		
 			
 			if(ofertas.get(i).getOflaIdH() == null){
-				Postulante ps = postulanteDAO.getAlgunPostulante();
+				Postulante ps = postulanteDAO.getPostulanteById(5);
 				
 				PostulantSelfDescription pSD = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(ps.getPostIdS());
 				alternativa.setVecHistorical(convertLinkedHashMapToArray(pSD.getValues()));
@@ -166,7 +166,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			alternativa.setVecSelfDescription(convertLinkedHashMapToArray(postulantS.getValues()));		
 			
 			if(postulantes.get(i).getPostIdH() == null){
-				OfertaLaboral ol = ofertaLaboralDAO.getAlgunaOfertaLaboral();
+				OfertaLaboral ol = ofertaLaboralDAO.getOfertaLaboralById(1);
 				
 				OfferSelfDescription oSD = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ol.getOflaIdS());
 				alternativa.setVecHistorical(convertLinkedHashMapToArray(oSD.getValues()));
@@ -332,266 +332,6 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		return results;
 	}
 	
-	public ArrayList<Postulante> recomendarPostulanteToOfertaLboral(OfertaLaboral ofertaLaboral, int size, RecommenderType recommenderType){		
-		ArrayList<Postulante> results = new ArrayList<Postulante>();
-		
-		//////////////////Oferta laboral
-		
-		OfferPreference offerPreference = offerPreferenceDAO.getOfferPreferenceById(ofertaLaboral.getOflaIdP());
-		OfferSelfDescription offerSelfDescription = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ofertaLaboral.getOflaIdS());
-		
-		Profile profile = new Profile();
-		
-		profile.setId(ofertaLaboral.getOflaId());
-		profile.setRecNumber(matchResultDAO.getNumberRecomendationOffer(ofertaLaboral));
-		profile.setVecSelfDescription(convertLinkedHashMapToArray(offerSelfDescription.getValues()));
-		profile.setVecPreference(convertLinkedHashMapToArray(offerPreference.getValues()));
-				
-		
-		if(ofertaLaboral.getOflaIdH() == null){
-			Postulante postulante = postulanteDAO.getAlgunPostulante();
-			
-			PostulantSelfDescription postulantSelfDescription = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(postulante.getPostIdS());
-			profile.setVecHistorical(convertLinkedHashMapToArray(postulantSelfDescription.getValues()));
-			
-			for (int i = 0; i < profile.getVecHistorical().length; i++) {
-				profile.getVecHistorical()[i] = new BigDecimal(0);
-			}
-		}else{
-			
-			OfferHistorical offerHistorical = offerHistoricalDAO.getOfferHistoricalById(ofertaLaboral.getOflaIdH());
-			
-			profile.setVecHistorical(convertLinkedHashMapToArray(offerHistorical.getValues()));
-		}
-		
-	    ////postulantes
-		
-		ArrayList<Postulante> postulantes = postulanteDAO.getPostulantes();
-		
-		Profile[] alternativasPostulantes = new Profile[postulantes.size()];
-		
-		PostulantPreference postulantP;
-		PostulantSelfDescription postulantS;
-		
-		for (int i = 0; i < postulantes.size(); i++) {
-			Profile alternativa = new Profile();		
-			
-			postulantP = postulantPreferenceDAO.getPostulantPreferenceById(postulantes.get(i).getPostIdP());
-			postulantS = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(postulantes.get(i).getPostIdS());
-			
-			alternativa.setId(postulantes.get(i).getPostId());
-			alternativa.setRecNumber(matchResultDAO.getNumberRecomendationPostulant(postulantes.get(i)));
-			alternativa.setVecPreference(convertLinkedHashMapToArray(postulantP.getValues()));
-			alternativa.setVecSelfDescription(convertLinkedHashMapToArray(postulantS.getValues()));		
-			
-			if(postulantes.get(i).getPostIdH() == null){
-				OfertaLaboral ol = ofertaLaboralDAO.getAlgunaOfertaLaboral();
-				
-				OfferSelfDescription oSD = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ol.getOflaIdS());
-				alternativa.setVecHistorical(convertLinkedHashMapToArray(oSD.getValues()));
-							
-				for (int j = 0; j < alternativa.getVecHistorical().length; j++) {
-					alternativa.getVecHistorical()[j] = new BigDecimal(0);
-				}
-			}else{
-				
-				PostulantHistorical postulantHistorical = postulantHistoricalDAO.getPostulantHistoricalById(postulantes.get(i).getPostIdH());
-				
-				alternativa.setVecHistorical(convertLinkedHashMapToArray(postulantHistorical.getValues()));
-			}
-			
-			alternativasPostulantes[i] = alternativa;
-		}
-		
-		/////////////ofertas laborales
-		
-		ArrayList<OfertaLaboral> ofertas = ofertaLaboralDAO.getOfertasLaborales();
-		
-		Profile[] alternativasOfertasLaborales = new Profile[ofertas.size()];
-		
-		OfferPreference offerP;
-		OfferSelfDescription offerS;
-		
-		for (int i = 0; i < ofertas.size(); i++) {
-			Profile alternativa = new Profile();		
-			
-			offerP = offerPreferenceDAO.getOfferPreferenceById(ofertas.get(i).getOflaIdP());
-			offerS = offerSelfDescriptionDAO.getOfferSelfDescriptionById(ofertas.get(i).getOflaIdS());
-			
-			alternativa.setId(ofertas.get(i).getOflaId());
-			alternativa.setRecNumber(matchResultDAO.getNumberRecomendationOffer(ofertas.get(i)));
-			alternativa.setVecPreference(convertLinkedHashMapToArray(offerP.getValues()));
-			alternativa.setVecSelfDescription(convertLinkedHashMapToArray(offerS.getValues()));		
-			
-			if(ofertas.get(i).getOflaIdH() == null){
-				Postulante ps = postulanteDAO.getAlgunPostulante();
-				
-				PostulantSelfDescription pSD = postulantSelfDescriptionDAO.getPostulantSelfDescriptionById(ps.getPostIdS());
-				alternativa.setVecHistorical(convertLinkedHashMapToArray(pSD.getValues()));
-							
-				for (int j = 0; j < alternativa.getVecHistorical().length; j++) {
-					alternativa.getVecHistorical()[j] = new BigDecimal(0);
-				}
-			}else{
-				
-				OfferHistorical offerHistorical = offerHistoricalDAO.getOfferHistoricalById(ofertas.get(i).getOflaIdH());
-				
-				alternativa.setVecHistorical(convertLinkedHashMapToArray(offerHistorical.getValues()));
-			}
-			
-			alternativasOfertasLaborales[i] = alternativa;
-		}
-		
-		
-		
-				
-		ArrayList<Result> resultados;		
-		
-		
-	
-		switch (recommenderType) {
-		case CONTENT_BASED:
-			resultados = recommenderContentBased(profile, alternativasPostulantes, size);
-						
-			for (int i = 0; i < resultados.size(); i++) {
-				Postulante postulante = postulanteDAO.getPostulanteById(resultados.get(i).getProfile().getId());				
-				postulante.setScore(resultados.get(i).getScore());
-				
-				results.add(postulante);
-				System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
-				System.out.println("Score: "+resultados.get(i).getScore());
-			}
-			
-			break;
-		case COLLABORATIVE_BASED:
-			resultados = recommenderCollaborativeBased(profile, alternativasOfertasLaborales, size);
-			
-			for (int i = 0; i < resultados.size(); i++) {
-				OfertaLaboral oferta = ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId());
-				
-				Postulante postulante = matchResultDAO.getLastMatchResultByOffer(oferta).getPostulante(); 
-				postulante.setScore(resultados.get(i).getScore());
-				
-				results.add(postulante);
-				
-				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
-				System.out.println("Score: "+resultados.get(i).getScore());
-				System.out.println("ID postulante: "+matchResultDAO.getLastMatchResultByOffer(oferta).getOfertaLaboral().getOflaId());				
-			}
-			
-			break;
-		case RECIPROCITY_BASED:
-			resultados = recommenderReciprocityBased(profile, alternativasPostulantes, size);
-			
-			for (int i = 0; i < resultados.size(); i++) {
-				Postulante postulante = postulanteDAO.getPostulanteById(resultados.get(i).getProfile().getId());
-				postulante.setScore(resultados.get(i).getScore());
-				
-				results.add(postulante);
-				System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
-				System.out.println("Score: "+resultados.get(i).getScore());
-			}
-			break;
-		case FUSION_BASED:	
-			System.out.println("INICIANDO RECOMENDACION POR FUSION");
-			
-			ArrayList<Postulante> postulantesContent = new ArrayList<Postulante>();
-			ArrayList<Postulante> postulantesCollavorative = new ArrayList<Postulante>();
-			ArrayList<Postulante> postulantesReciprocity = new ArrayList<Postulante>();
-			ArrayList<Postulante> postulantesTotal = new ArrayList<Postulante>();
-			
-			
-			ArrayList<Result> resultadosContent;
-			ArrayList<Result> resultadosCollaborative;
-			ArrayList<Result> resultadosReciprocity;
-			
-			
-			//basado en contenido
-			
-			resultadosContent = recommenderContentBased(profile, alternativasPostulantes, size);
-			
-			for (int i = 0; i < resultadosContent.size(); i++) {
-				Postulante postulante = postulanteDAO.getPostulanteById(resultadosContent.get(i).getProfile().getId());
-				postulante.setScore(resultadosContent.get(i).getScore());
-				
-				postulantesContent.add(postulante);
-				System.out.println("ID postulante: "+resultadosContent.get(i).getProfile().getId());
-				System.out.println("Score: "+resultadosContent.get(i).getScore());
-			}
-			
-			//basado en colaboracion
-			
-			resultadosCollaborative = recommenderCollaborativeBased(profile, alternativasOfertasLaborales, size);
-			
-			for (int i = 0; i < resultadosCollaborative.size(); i++) {
-				OfertaLaboral oferta = ofertaLaboralDAO.getOfertaLaboralById(resultadosCollaborative.get(i).getProfile().getId());
-				
-				Postulante postulante = matchResultDAO.getLastMatchResultByOffer(oferta).getPostulante();
-				postulante.setScore(resultadosCollaborative.get(i).getScore());
-				
-				postulantesCollavorative.add(postulante);
-				
-				System.out.println("ID oferta: "+resultadosCollaborative.get(i).getProfile().getId());
-				System.out.println("Score: "+resultadosCollaborative.get(i).getScore());
-				System.out.println("ID postulante: "+matchResultDAO.getLastMatchResultByPostulant(postulante).getPostulante().getPostId());				
-			}
-			
-			//basado en reciprocidad
-			
-			resultadosReciprocity = recommenderReciprocityBased(profile, alternativasPostulantes, size);
-			
-			for (int i = 0; i < resultadosReciprocity.size(); i++) {
-				Postulante postulante = postulanteDAO.getPostulanteById(resultadosReciprocity.get(i).getProfile().getId());
-				postulante.setScore(resultadosReciprocity.get(i).getScore());
-				
-				postulantesReciprocity.add(postulante);
-				System.out.println("ID postulante: "+resultadosReciprocity.get(i).getProfile().getId());
-				System.out.println("Score: "+resultadosReciprocity.get(i).getScore());
-			}
-			
-			
-			postulantesTotal.addAll(normalizarScorePostulantes(postulantesContent, new BigDecimal(0), new BigDecimal(1)));
-			postulantesTotal.addAll(normalizarScorePostulantes(postulantesCollavorative, new BigDecimal(0), new BigDecimal(2)));
-			postulantesTotal.addAll(normalizarScorePostulantes(postulantesReciprocity, new BigDecimal(-1), new BigDecimal(1)));		
-			
-			boolean existente;
-			
-			for (int i = 0; i < postulantesTotal.size(); i++) {
-				existente = false;
-				
-				for (int j = 0; j < results.size(); j++) {
-					if(results.get(j).getPostId() == postulantesTotal.get(i).getPostId()){
-						results.get(j).setScore(results.get(j).getScore().add(postulantesTotal.get(i).getScore()));
-						existente = true;
-					}					
-				}
-				
-				if (!existente) {
-					results.add(postulantesTotal.get(i));
-				}
-			}
-			
-			Comparator<Postulante> comparatorOferta = new Comparator<Postulante>() {
-				//orden descendente
-				public int compare(Postulante o1, Postulante o2) {
-					return o1.getScore().compareTo(o2.getScore())*-1;
-				}				
-			};
-			
-			Collections.sort(results, comparatorOferta);
-			
-			int s = results.size() >= size ? size : results.size();
-			
-			System.out.println("sizeeeeee: "+ s);
-			
-			results = new ArrayList<Postulante>(results.subList(0, s));			
-			
-			break;
-		}
-		
-		return results;
-	}
-	
 	public ArrayList<OfertaLaboral> normalizarScoreOfertas(ArrayList<OfertaLaboral> ofertas, BigDecimal min, BigDecimal max){
 		
 		for (int i = 0; i < ofertas.size(); i++) {
@@ -599,15 +339,6 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		}
 		
 		return ofertas;
-	}
-	
-	public ArrayList<Postulante> normalizarScorePostulantes(ArrayList<Postulante> postulantes, BigDecimal min, BigDecimal max){
-		
-		for (int i = 0; i < postulantes.size(); i++) {
-			postulantes.get(i).setScore((postulantes.get(i).getScore().subtract(min)).divide(max.subtract(min)));
-		}
-		
-		return postulantes;
 	}
 
 	
@@ -810,21 +541,12 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	
 	//Intern methods	
 	private BigDecimal cosineSimilarity(BigDecimal[] vecA, BigDecimal[] vecB){
-		BigDecimal result;
-		
-		BigDecimal denominador = vecMagnitude(vecA).multiply(vecMagnitude(vecB));
-		
-		if(denominador.compareTo(new BigDecimal(0)) == 0){
-			result = new BigDecimal(0);
-		}else{
-			result = scalarProduct(vecA, vecB).divide(denominador,5, RoundingMode.HALF_UP);
-		}
-		
+		BigDecimal valor = scalarProduct(vecA, vecB).divide(vecMagnitude(vecA).multiply(vecMagnitude(vecB)),5,RoundingMode.HALF_UP);
 				
 		System.out.println("cosineSimilarity");
-		System.out.println(result);
+		System.out.println(valor);
 		
-		return result;
+		return valor;
 	}
 	
 	

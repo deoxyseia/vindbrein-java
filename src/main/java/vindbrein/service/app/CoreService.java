@@ -9,7 +9,5 @@ public interface CoreService {
 	public void visitarOfertaLaboral(OfertaLaboral ofertaLaboral, Postulante postulante);
 	
 	public void postularOfertaLaboral(OfertaLaboral ofertaLaboral, Postulante postulante);
-	
-	public void reclutarPostulante(OfertaLaboral ofertaLaboral, Postulante postulante);
 
 }

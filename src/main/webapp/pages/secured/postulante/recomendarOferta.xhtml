@@ -6,7 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 	
-	<ui:define name="title"> Recomendación de oferta </ui:define>
+	<ui:define name="title"> Información personal </ui:define>
 
 	<ui:define name="content">
 	
@@ -24,13 +24,13 @@
         	
 		<p:commandButton value="Recibir recomendaciones" 
 			actionListener="#{recomendarOfertaManagedBean.recomendarOfertasLaborales()}"
-			update=":dataGridOfertasRecomendadas"
+			update=":dataGridOfertav"
 			icon="ui-icon-search">
 		</p:commandButton>
 	</h:panelGrid>
 	</h:form>
 
-	<p:dataGrid id="dataGridOfertasRecomendadas" var="oferta"
+	<p:dataGrid id="dataGridOfertav" var="oferta"
 		value="#{recomendarOfertaManagedBean.ofertasRecomendadas}"
 		columns="1" rows="12">
 
@@ -45,14 +45,6 @@
 				<h:outputText value="Score" />
 				<h:outputText value="#{oferta.scorePlain}" />
 			</h:panelGrid>
-			
-			<p:commandLink title="Ver Detalle"					
-				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true">
-				<h:outputText styleClass="ui-icon ui-icon-search"
-					style="margin:0 auto;" />
-				<f:setPropertyActionListener value="#{oferta}"
-					target="#{buscarOfertaManagedBean.selectedOfertaLaboral}" />				
-			</p:commandLink>
 
 			
 		</p:panel>

@@ -146,7 +146,7 @@ public class BuscarOfertaManagedBean implements Serializable{
 	}
 
 	public void setSelectedOfertaLaboral(OfertaLaboral selectedOfertaLaboral) {
-		selectedOfertaLaboral = ofertaLaboralService.getOfertaLaboralCompletaByOfertaLaboral(selectedOfertaLaboral);
+		selectedOfertaLaboral = ofertaLaboralService.getOfertaLaboralCompleta(selectedOfertaLaboral);
 			
 		this.selectedOfertaLaboral = selectedOfertaLaboral;
 		
