@@ -23,5 +23,5 @@ public interface OfertaLaboralService {
 	
 	public ArrayList<OfertaLaboral> getOfertasLaboralesCompletas();
 	
-	public OfertaLaboral getOfertaLaboralCompleta(OfertaLaboral ofertaLaboral);
+	public OfertaLaboral getOfertaLaboralCompletaByOfertaLaboral(OfertaLaboral ofertaLaboral);
 }

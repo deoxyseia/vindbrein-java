@@ -1,0 +1,78 @@
+<ui:composition template="/pages/templates/layout.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<ui:define name="title"> Recomendación de postulantes </ui:define>
+
+	<ui:define name="content">
+	
+	<p:messages showDetail="true" autoUpdate="true" closable="true" />
+
+	<h:form>
+	<h:panelGrid columns="3">	
+		<p:selectOneMenu id="idRecomendacionTipo" value="#{recomendarPostulanteManagedBean.tipoRecomendacion}">
+            <f:selectItem itemLabel="Select One" noSelectionOption="true" />
+            <f:selectItem itemLabel="Basado en contenido" itemValue="1" />
+            <f:selectItem itemLabel="Basado en colaboración" itemValue="2" />
+            <f:selectItem itemLabel="Basado en reciprocidad" itemValue="3" />
+            <f:selectItem itemLabel="Fusión" itemValue="4" />
+     	</p:selectOneMenu>
+
+		<p:selectOneMenu
+			value="#{recomendarPostulanteManagedBean.selectedOfertaLaboral}" required="true"
+			requiredMessage="Selecciona una oferta específica"
+			effect="fade" converter="omnifaces.SelectItemsConverter">
+			<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+			<f:selectItems value="#{ofertaLaboralManagedBean.ofertasLaborales}"
+				var="ofertaLaboral" itemLabel="#{ofertaLaboral.oflaTitulo}"
+				itemValue="#{ofertaLaboral}" />
+		</p:selectOneMenu>
+
+		<p:commandButton value="Recibir recomendaciones" 
+			actionListener="#{recomendarPostulanteManagedBean.recomendarPostulantes()}"
+			update=":dataGridPostulantesRecomendados"
+			icon="ui-icon-search">
+		</p:commandButton>
+	</h:panelGrid>
+	</h:form>
+
+	<p:dataGrid id="dataGridPostulantesRecomendados" var="postulante"
+		value="#{recomendarPostulanteManagedBean.postulantesRecomendados}"
+		columns="1" rows="12">
+
+		<p:panel header="#{postulante.postNombres}">
+			<h:panelGrid columns="2">
+				<h:outputText value="Nombres:" />
+				<h:outputText value="#{postulante.postNombres}" />
+				
+				<h:outputText value="Apellido paterno" />
+				<h:outputText value="#{postulante.postApellidoPaterno}" />
+				
+				<h:outputText value="Apellido materno" />
+				<h:outputText value="#{postulante.postApellidoMaterno}" />
+				
+				<h:outputText value="Score" />
+				<h:outputText value="#{postulante.scorePlain}" />
+			</h:panelGrid>
+			
+			<p:commandLink title="Ver Detalle"					
+				action="/pages/secured/reclutador/informacionPostulante.xhtml?faces-redirect=true">
+				<h:outputText styleClass="ui-icon ui-icon-search"
+					style="margin:0 auto;" />
+				<f:setPropertyActionListener value="#{postulante}"
+					target="#{buscarPostulanteManagedBean.selectedPostulante}" />				
+			</p:commandLink>
+
+			
+		</p:panel>
+		
+
+	</p:dataGrid>
+
+
+	</ui:define>
+</ui:composition>

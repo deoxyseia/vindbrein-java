@@ -1,7 +1,10 @@
 package vindbrein.domain.model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +47,7 @@ public class Postulante implements Serializable {
 	private Usuario usuario;
 	private NivelPuesto nivelPuesto;
 	private List<PostulanteBeneficio> postulanteBeneficios;
+	private BigDecimal score;
 
 	public Postulante() {
 	}
@@ -475,4 +479,17 @@ public class Postulante implements Serializable {
 		return postulanteBeneficio;
 	}
 
+	@Transient
+	public BigDecimal getScore() {
+		return score;
+	}
+
+	public void setScore(BigDecimal score) {
+		this.score = score;
+	}
+	
+	@Transient
+	public String getScorePlain(){
+		return score.toPlainString();
+	}
 }
