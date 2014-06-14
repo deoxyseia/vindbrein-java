@@ -19,9 +19,9 @@
 	</h:panelGrid>
 	</h:form>
 
-	<p:dataGrid id="dataGridOfertasBuscadas" var="oferta"
+	<p:dataGrid id="dataGridOfertasBuscadas" var="oferta" emptyMessage="No tiene resultados"
 		value="#{buscarOfertaManagedBean.ofertasEncontradas}"
-		columns="1" rows="12">
+		columns="2" rows="12">
 
 		<p:panel header="#{oferta.oflaTitulo}">
 			<h:panelGrid columns="2">
@@ -29,8 +29,14 @@
 				<h:outputText value="#{oferta.oflaDescripcion}" />
 				
 				<h:outputText value="Salario:" />
-				<h:outputText value="#{oferta.oflaSalario}" />
+				<h:outputText value="#{oferta.oflaSalario}" />				
 			</h:panelGrid>
+			
+			<p:outputLabel value="Conocimientos:" for="conocimientos" />
+			<p:autoComplete id="conocimientos" multiple="true" styleClass="myAutocomplete"
+					value="#{oferta.ofertaConocimientos}" var="ofertaConocimiento" disabled="true"
+					itemLabel="#{ofertaConocimiento.conocimiento.conoNombre}" itemValue="#{ofertaConocimiento}">					
+			</p:autoComplete>			
 
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true">
@@ -39,11 +45,7 @@
 				<f:setPropertyActionListener value="#{oferta}"
 					target="#{buscarOfertaManagedBean.selectedOfertaLaboral}" />				
 			</p:commandLink>
-		</p:panel>
-		
+		</p:panel>		
 
 	</p:dataGrid>
-
-
-
 </ui:composition>

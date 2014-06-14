@@ -22,7 +22,7 @@
 
 	<p:dataGrid id="dataGridPostulantesBuscados" var="postulante"
 		value="#{buscarPostulanteManagedBean.postulantesEncontrados}"
-		columns="1" rows="12">
+		columns="2" rows="12">
 
 		<p:panel header="#{postulante.postNombres}">
 			<h:panelGrid columns="2">
@@ -35,6 +35,12 @@
 				<h:outputText value="Apellido materno:" />
 				<h:outputText value="#{postulante.postApellidoMaterno}" />
 			</h:panelGrid>
+			
+			<p:outputLabel value="Conocimientos:" for="conocimientos" />
+			<p:autoComplete id="conocimientos" multiple="true" styleClass="myAutocomplete"
+					value="#{postulante.postulanteConocimientos}" var="postulanteConocimiento" disabled="true"
+					itemLabel="#{postulanteConocimiento.conocimiento.conoNombre}" itemValue="#{postulanteConocimiento}">					
+			</p:autoComplete>	
 
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/reclutador/informacionPostulante.xhtml?faces-redirect=true">

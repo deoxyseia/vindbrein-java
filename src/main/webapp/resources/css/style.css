@@ -5,3 +5,8 @@
 	padding: 20px;
 	margin: 0 auto;
 }
+
+.myAutocomplete .ui-autocomplete-multiple-container {
+  width: 100%;
+}
+

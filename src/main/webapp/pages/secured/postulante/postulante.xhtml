@@ -13,6 +13,7 @@
 		<!--Postulante -->
 
 		<p:messages showDetail="true" autoUpdate="true" closable="true" />
+		<h:outputScript library="js" name="spanish-calendar.js" />
 
 		<h:form id="formPostulante">
 			<p:panel header="Información básica personal">
@@ -35,7 +36,8 @@
 
 					<h:outputText value="Sexo :" />
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.postSexo}">
+						value="#{postulanteManagedBean.postulante.postSexo}"
+						rendered="true" requiredMessage="Seleccione su sexo">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItem itemLabel="Masculino" itemValue="M" />
 						<f:selectItem itemLabel="Femenino" itemValue="F" />
@@ -44,7 +46,8 @@
 					<h:outputText value="Fecha de nacimiento :" />
 					<p:calendar
 						value="#{postulanteManagedBean.postulante.postFechaNacimiento}"
-						showOn="button" />
+						yearRange="c-90:c-0"
+						showOn="button" locale="es" />
 						
 					<h:outputText value="E-mail :"></h:outputText>
 					<p:inputText
@@ -66,6 +69,10 @@
 			<p:panel header="Preferencias">
 
 				<h:panelGrid columns="2">
+				
+					<h:outputText value="Salario esperado :"></h:outputText>
+					<p:inputText
+						value="#{postulanteManagedBean.postulante.postSalario}" />
 
 					<!-- Tipo de horario -->
 					<h:outputText value="Tipo de horario :" />

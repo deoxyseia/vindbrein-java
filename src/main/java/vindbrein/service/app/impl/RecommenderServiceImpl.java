@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,8 @@ import vindbrein.domain.document.PostulantPreference;
 import vindbrein.domain.document.PostulantSelfDescription;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Postulante;
+import vindbrein.service.OfertaLaboralService;
+import vindbrein.service.PostulanteService;
 import vindbrein.service.app.RecommenderService;
 import vindbrein.util.RecommenderType;
 
@@ -69,6 +72,14 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	
 	@Autowired
 	MatchResultDAO matchResultDAO;
+	
+	@Autowired
+	@Qualifier("ofertaLaboralServiceImpl")
+	OfertaLaboralService ofertaLaboralService;
+	
+	@Autowired
+	@Qualifier("postulanteServiceImpl")
+	PostulanteService postulanteService;
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -329,6 +340,10 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			break;
 		}
 		
+		for (int i = 0; i < results.size(); i++) {
+			results.set(i, ofertaLaboralService.getOfertaLaboralCompletaByOfertaLaboral(results.get(i)));
+		}
+		
 		return results;
 	}
 	
@@ -587,6 +602,10 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			results = new ArrayList<Postulante>(results.subList(0, s));			
 			
 			break;
+		}
+		
+		for (int i = 0; i < results.size(); i++) {
+			results.set(i, postulanteService.getPostulanteCompletoByPostulante(results.get(i)));
 		}
 		
 		return results;

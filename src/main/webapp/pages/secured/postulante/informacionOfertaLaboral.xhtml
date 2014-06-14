@@ -13,6 +13,7 @@
 		<!--Oferta laboral -->
 
 		<p:messages showDetail="true" autoUpdate="true" closable="true" />
+		<h:outputScript library="js" name="spanish-calendar.js" />
 
 		<h:form id="formOfertaLaboral">
 			<p:panel header="#{buscarOfertaManagedBean.selectedOfertaLaboral.oflaTitulo}">
@@ -149,6 +150,7 @@
 			<p:panel>
 				<f:facet name="footer">
 					<p:commandButton value="Postular" ajax="false" immediate="true"
+						styleClass="ui-priority-primary"
 						actionListener="#{buscarOfertaManagedBean.postularOfertaLaboral()}"
 						action="/pages/secured/postulante/buscarOferta.xhtml?faces-redirect=true"
 						type="submit" icon="ui-icon-check">
@@ -156,8 +158,7 @@
 					<p:commandButton value="Cancelar"
 					     action="/pages/secured/postulante/buscarOferta.xhtml?faces-redirect=true"
 					     immediate="true"
-					     ajax="false"
-					     type="submit"
+					     ajax="false"					    
 						 icon="ui-icon-close" />
 				</f:facet>
 			</p:panel>

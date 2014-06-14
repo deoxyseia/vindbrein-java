@@ -59,6 +59,12 @@
 				<h:outputText value="#{postulante.scorePlain}" />
 			</h:panelGrid>
 			
+			<p:outputLabel value="Conocimientos:" for="conocimientos" />
+			<p:autoComplete id="conocimientos" multiple="true" styleClass="myAutocomplete"
+					value="#{postulante.postulanteConocimientos}" var="postulanteConocimiento" disabled="true"
+					itemLabel="#{postulanteConocimiento.conocimiento.conoNombre}" itemValue="#{postulanteConocimiento}">					
+			</p:autoComplete>
+			
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/reclutador/informacionPostulante.xhtml?faces-redirect=true">
 				<h:outputText styleClass="ui-icon ui-icon-search"

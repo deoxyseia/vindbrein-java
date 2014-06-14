@@ -10,11 +10,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 
-import vindbrein.dao.PostulanteDAO;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Postulante;
 import vindbrein.domain.model.PostulanteConocimiento;

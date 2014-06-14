@@ -254,17 +254,17 @@
 				
 				<p:panel>
 				<f:facet name="footer">
-					<p:commandButton value="Reclutar" immediate="true"
+					<p:commandButton value="Seleccionar" immediate="true"
+						styleClass="ui-priority-primary"
 						update=":confirmReclutarPostulanteForm"
 						oncomplete="PF('confirmReclutarPostulanteDialog').show()"											
 						icon="ui-icon-check">
 					</p:commandButton>
 					<p:commandButton value="Cancelar"
-					     action="/pages/secured/reclutador/buscarPostulante.xhtml?faces-redirect=true"
-					     immediate="true"
-					     ajax="false"
-					     type="submit"
-						 icon="ui-icon-close" />
+					     onclick="history.go(-1)"					    
+					     type="button"
+					     ajax="false"					     
+						 icon="ui-icon-close" />									 
 				</f:facet>
 			</p:panel>
 			</h:form>
@@ -292,7 +292,8 @@
 						</p:selectOneMenu>
 
 					<f:facet name="footer">
-						<p:commandButton value="Confirmar reclutamiento"
+						<p:commandButton value="Confirmar reclutamiento" 
+							styleClass="ui-priority-primary"
 							actionListener="#{buscarPostulanteManagedBean.reclutarPostulante()}"
 							oncomplete="PF('confirmReclutarPostulanteDialog').hide()"
 							action="/pages/secured/reclutador/buscarPostulante.xhtml?faces-redirect=true"

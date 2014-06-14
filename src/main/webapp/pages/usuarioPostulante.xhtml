@@ -10,9 +10,12 @@
 	<ui:define name="content">
 		<center>
 			<p:messages autoUpdate="true" closable="true" />
-
+			<h:outputScript library="js" name="spanish-calendar.js" />
+			
 			<h:form id="formUsuarioPostulante">
 				<p:panel header="Registro de Postulante">
+					
+					
 					<h:panelGrid columns="2">
 						<h:outputText value="Nombres :"></h:outputText>
 						<p:inputText
@@ -41,9 +44,10 @@
 						</p:selectOneMenu>
 
 						<h:outputText value="Fecha de nacimiento :" />
-						<p:calendar
+						<p:calendar 
 							value="#{usuarioManagedBean.usuarioPostulante.postulante.postFechaNacimiento}"
-							showOn="button" />
+							yearRange="c-90:c-0"
+							showOn="button" navigator="true" readonlyInput="true" locale="es" />
 					
 						<h:outputText value="E-mail :"></h:outputText>
 						<p:inputText
@@ -95,5 +99,9 @@
 		</p:confirmDialog>
 
 		<!-- Fin Dialog de confirmación de guardado de usuario postulante -->
+		
+		
 	</ui:define>
+	
 </ui:composition>
+
