@@ -1,0 +1,65 @@
+<ui:composition template="/pages/templates/layout.xhtml"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:c="http://java.sun.com/jsp/jstl/core">
+     
+     <ui:define name="title"> Actividades </ui:define>
+
+	<ui:define name="content">
+		<h:form id="formMatchResult">
+			<p:dataTable id="dataTableMatchResult" var="mr" emptyMessage="No hay actividades registradas" 
+				value="#{actividadReclutadorManagedBean.matchResults}" rowKey="#{mr.mareId}"
+				paginator="true" rows="10"
+				disabledSelection="true"
+				paginatorPosition="top"
+				rowsPerPageTemplate="10,15,50">
+				
+				<f:facet name="header">
+                    Actividades
+                </f:facet>	
+                
+                <p:column sortBy="#{mr.postulante.postNombres}">
+					<f:facet name="header">
+						<h:outputText value="Postulante" />
+					</f:facet>
+					<h:outputText value="#{mr.postulante.postNombres}" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Postulante visitado" />
+					</f:facet>			
+
+					<h:outputText rendered="#{mr.postulanteVisitado}" 
+						styleClass="ui-icon ui-icon-check"
+						style="margin:0 auto;" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Postulante seleccionado" />
+					</f:facet>			
+
+					<h:outputText rendered="#{mr.postulanteSeleccionado}" 
+						styleClass="ui-icon ui-icon-check"
+						style="margin:0 auto;" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Postulante recomendado" />
+					</f:facet>			
+
+					<h:outputText rendered="#{mr.postulanteRecomendado}" 
+						styleClass="ui-icon ui-icon-check"
+						style="margin:0 auto;" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>	
+		
+	</ui:define>
+</ui:composition>

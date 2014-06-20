@@ -179,5 +179,32 @@ public class MatchResult implements Serializable {
 			return false;
 		}
 	}
+	
+	@Transient
+	public boolean getPostulanteVisitado(){
+		if(mareFlagPostulanteVisitado == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	@Transient
+	public boolean getPostulanteRecomendado(){
+		if(mareFlagPostulanteRecomendado == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	@Transient
+	public boolean getPostulanteSeleccionado(){
+		if(mareFlagPostulanteSeleccionado == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 }

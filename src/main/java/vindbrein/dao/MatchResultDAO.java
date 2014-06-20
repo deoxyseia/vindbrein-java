@@ -127,7 +127,9 @@ public class MatchResultDAO implements Serializable{
 	public ArrayList<MatchResult> getMatchResultsByPostulant(Postulante postulante){
 		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from MatchResult where postulante.postId = ?")
+				.createQuery(
+						"from MatchResult where postulante.postId = ? and "
+						+ "(mareFlagOfertaVisitada = 1 or mareFlagOfertaSeleccionada = 1 or mareFlagOfertaRecomendada = 1)")
 				.setParameter(0, postulante.getPostId())
 				.list();
 		
@@ -137,7 +139,9 @@ public class MatchResultDAO implements Serializable{
 	public ArrayList<MatchResult> getMatchResultsByOrganization(Organizacion organizacion){
 		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
 				.getCurrentSession()
-				.createQuery("from MatchResult where ofertaLaboral.organizacionPuesto.organizacion.orgaId = ?")
+				.createQuery(
+						"from MatchResult where ofertaLaboral.organizacionPuesto.organizacion.orgaId = ? and"
+						+ "(mareFlagPostulanteVisitado = 1 or mareFlagPostulanteSeleccionado = 1 or mareFlagPostulanteRecomendado = 1)")
 				.setParameter(0, organizacion.getOrgaId())
 				.list();
 		
