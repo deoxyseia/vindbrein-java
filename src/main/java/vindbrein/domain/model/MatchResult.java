@@ -12,6 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  * The persistent class for the match_result database table.
@@ -22,8 +23,7 @@ import javax.persistence.TemporalType;
 @NamedQuery(name="MatchResult.findAll", query="SELECT m FROM MatchResult m")
 public class MatchResult implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private MatchResultPK id;
-	private Date mareFecha;
+	private MatchResultPK id;	
 	private Date mareFechaOfertaSeleccionada;
 	private Date mareFechaPostulanteSeleccionado;
 	private byte mareFlagOfertaRecomendada;
@@ -47,18 +47,7 @@ public class MatchResult implements Serializable {
 	public void setId(MatchResultPK id) {
 		this.id = id;
 	}
-
-
-	@Temporal(TemporalType.DATE)
-	@Column(name="mare_fecha")
-	public Date getMareFecha() {
-		return this.mareFecha;
-	}
-
-	public void setMareFecha(Date mareFecha) {
-		this.mareFecha = mareFecha;
-	}
-	
+		
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="mare_fecha_oferta_seleccionada")
 	public Date getMareFechaOfertaSeleccionada() {
@@ -162,6 +151,33 @@ public class MatchResult implements Serializable {
 
 	public void setPostulante(Postulante postulante) {
 		this.postulante = postulante;
+	}
+	
+	@Transient
+	public boolean getOfertaVisitada(){
+		if(mareFlagOfertaVisitada == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	@Transient
+	public boolean getOfertaRecomendada(){
+		if(mareFlagOfertaRecomendada == 1){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	@Transient
+	public boolean getOfertaSeleccionada(){
+		if(mareFlagOfertaSeleccionada == 1){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

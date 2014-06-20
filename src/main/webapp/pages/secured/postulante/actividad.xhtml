@@ -1,0 +1,65 @@
+<ui:composition template="/pages/templates/layout.xhtml"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:c="http://java.sun.com/jsp/jstl/core">
+     
+     <ui:define name="title"> Actividades </ui:define>
+
+	<ui:define name="content">
+		<h:form id="formMatchResult">
+			<p:dataTable id="dataTableMatchResult" var="mr" emptyMessage="No hay actividades registradas" 
+				value="#{actividadPostulanteManagedBean.matchResults}" rowKey="#{mr.mareId}"
+				paginator="true" rows="10"
+				disabledSelection="true"
+				paginatorPosition="top"
+				rowsPerPageTemplate="10,15,50">
+				
+				<f:facet name="header">
+                    Actividades
+                </f:facet>	
+                
+                <p:column sortBy="#{mr.ofertaLaboral}">
+					<f:facet name="header">
+						<h:outputText value="Oferta Laboral" />
+					</f:facet>
+					<h:outputText value="#{mr.ofertaLaboral.oflaTitulo}" />
+				</p:column>
+				
+				<p:column sortBy="#{mr.mareFlagOfertaVisitada}">
+					<f:facet name="header">
+						<h:outputText value="Oferta visitada" />
+					</f:facet>			
+
+					<h:outputText rendered="#{mr.ofertaVisitada}" 
+						styleClass="ui-icon ui-icon-check"
+						style="margin:0 auto;" />
+				</p:column>
+				
+				<p:column sortBy="#{mr.mareFlagOfertaSeleccionada}">
+					<f:facet name="header">
+						<h:outputText value="Oferta postulada" />
+					</f:facet>			
+
+					<h:outputText rendered="#{mr.ofertaSeleccionada}" 
+						styleClass="ui-icon ui-icon-check"
+						style="margin:0 auto;" />
+				</p:column>
+				
+				<p:column sortBy="#{mr.mareFlagOfertaRecomendada}">
+					<f:facet name="header">
+						<h:outputText value="Oferta recomendada" />
+					</f:facet>			
+
+					<h:outputText rendered="#{mr.ofertaRecomendada}" 
+						styleClass="ui-icon ui-icon-check"
+						style="margin:0 auto;" />
+				</p:column>
+
+			</p:dataTable>
+		</h:form>	
+		
+	</ui:define>
+</ui:composition>

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import vindbrein.domain.model.MatchResult;
 import vindbrein.domain.model.OfertaLaboral;
+import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.Postulante;
 
 @Repository
@@ -76,7 +77,7 @@ public class MatchResultDAO implements Serializable{
 		}
 	}
 	
-	//obtiene el match donde de donde se hizo la ultima postulación (campo selección)
+	//obtiene el match donde de donde se hizo la ultima reclutación (campo selección)
 		public MatchResult getLastMatchResultByOffer(OfertaLaboral ofertaLaboral){
 			ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
 					.getCurrentSession()
@@ -121,6 +122,26 @@ public class MatchResultDAO implements Serializable{
 				.list();
 		
 		return list.size();
+	}
+	
+	public ArrayList<MatchResult> getMatchResultsByPostulant(Postulante postulante){
+		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery("from MatchResult where postulante.postId = ?")
+				.setParameter(0, postulante.getPostId())
+				.list();
+		
+		return list;
+	}
+		
+	public ArrayList<MatchResult> getMatchResultsByOrganization(Organizacion organizacion){
+		ArrayList<MatchResult> list = (ArrayList<MatchResult>) getSessionFactory()
+				.getCurrentSession()
+				.createQuery("from MatchResult where ofertaLaboral.organizacionPuesto.organizacion.orgaId = ?")
+				.setParameter(0, organizacion.getOrgaId())
+				.list();
+		
+		return list;
 	}
 	
 }
