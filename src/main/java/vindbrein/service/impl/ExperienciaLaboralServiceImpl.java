@@ -42,6 +42,13 @@ public class ExperienciaLaboralServiceImpl implements ExperienciaLaboralService,
 			getOrganizacionPuestoDAO().addOrganizacionPuesto(organizacionPuesto);
 			
 			experienciaLaboral.setOrganizacionPuesto(organizacionPuesto);		
+		}else{
+			
+			OrganizacionPuesto organizacionPuesto = getOrganizacionPuestoDAO().getOrganizacionPuestoById(
+					experienciaLaboral.getOrganizacionPuesto().getOrganizacion(),
+					experienciaLaboral.getOrganizacionPuesto().getPuesto());
+			
+			experienciaLaboral.setOrganizacionPuesto(organizacionPuesto);
 		}
 			
 		getExperienciaLaboralDAO().addExperienciaLaboral(experienciaLaboral);		

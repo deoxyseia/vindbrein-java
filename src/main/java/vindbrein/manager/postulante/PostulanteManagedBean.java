@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import vindbrein.domain.model.ActividadAcademica;
 import vindbrein.domain.model.Beneficio;
+import vindbrein.domain.model.CategoriaConocimiento;
 import vindbrein.domain.model.Conocimiento;
 import vindbrein.domain.model.Departamento;
 import vindbrein.domain.model.DimensionOrganizacion;
@@ -39,6 +40,7 @@ import vindbrein.domain.model.Provincia;
 import vindbrein.domain.model.Puesto;
 import vindbrein.domain.model.Residencia;
 import vindbrein.domain.model.Sector;
+import vindbrein.domain.model.SubcategoriaConocimiento;
 import vindbrein.domain.model.Telefono;
 import vindbrein.domain.model.TipoHorario;
 import vindbrein.service.ActividadAcademicaService;
@@ -152,8 +154,7 @@ public class PostulanteManagedBean implements Serializable{
 	@Autowired
 	@Qualifier("mongoServiceImpl")
 	private MongoService mongoService;
-	
-	
+		
 	// datos maestros	
 	private ArrayList<Departamento> departamentos;
 	private ArrayList<Provincia> provincias;
@@ -175,6 +176,17 @@ public class PostulanteManagedBean implements Serializable{
 	private Departamento selectedDepartamento;
 	private Provincia selectedProvincia;
 	private Distrito selectedDistrito;	
+	
+	///pivote
+	private CategoriaConocimiento selectedCategoriaConocimiento;
+	private SubcategoriaConocimiento selectedSubcategoriaConocimiento;
+	
+	private ArrayList<CategoriaConocimiento> categoriasConocimiento;
+	private ArrayList<SubcategoriaConocimiento> subcategoriasConocimiento;
+			
+	///datos de mantenimiento
+	private Conocimiento newConocimiento;
+	private Puesto newPuesto;
 	
 		
 	@PostConstruct
@@ -237,6 +249,13 @@ public class PostulanteManagedBean implements Serializable{
 		sectores = sectorService.getSectores();
 		beneficios = beneficioService.getBeneficios();
 		
+		/////
+		selectedCategoriaConocimiento = new CategoriaConocimiento();
+		selectedSubcategoriaConocimiento = new SubcategoriaConocimiento();
+		
+		categoriasConocimiento = conocimientoService.getCategoriasConocimiento();
+		subcategoriasConocimiento= new ArrayList<SubcategoriaConocimiento>();
+		
 		reiniciarNewTelefono();
 		reiniciarNewResidencia();
 		reiniciarNewPostulanteConocimiento();
@@ -244,6 +263,10 @@ public class PostulanteManagedBean implements Serializable{
 		reiniciarNewActividadAcademica();
 		reiniciarNewPostulanteIdioma();
 		reiniciarNewPostulanteBeneficio();
+	}
+	
+	public void chargeSubcategoriasConocimiento(){
+		subcategoriasConocimiento = conocimientoService.getSubcategoriasConocimientoByCategoriaConocimiento(selectedCategoriaConocimiento);
 	}
 	
 	public void savePostulante(){
@@ -479,6 +502,32 @@ public class PostulanteManagedBean implements Serializable{
 			recargarPostulante();
 		}
 	}
+	
+	///actividades de mantenimiento
+	
+	public void reiniciarConocimiento(){
+		newConocimiento = new Conocimiento();
+		newConocimiento.setConoEstado("B");		
+	}
+	
+	public void saveConocimiento(){
+		newConocimiento.setSubcategoriaConocimiento(selectedSubcategoriaConocimiento);
+		conocimientoService.addConocimiento(newConocimiento);
+		
+		conocimientos = conocimientoService.getConocimientos();
+	}
+	
+	public void reiniciarPuesto(){
+		newPuesto = new Puesto();
+		newPuesto.setPuesEstado("B");
+		newPuesto.setNivelPuesto(new NivelPuesto());
+	}
+	
+	public void savePuesto(){
+		puestoService.addPuesto(newPuesto);
+		
+		puestos = puestoService.getPuestos();
+	}
 
 	public Postulante getPostulante() {
 		return postulante;
@@ -697,5 +746,57 @@ public class PostulanteManagedBean implements Serializable{
 
 	public void setNewPostulanteBeneficio(PostulanteBeneficio newPostulanteBeneficio) {
 		this.newPostulanteBeneficio = newPostulanteBeneficio;
-	}	
+	}
+
+	public Conocimiento getNewConocimiento() {
+		return newConocimiento;
+	}
+
+	public void setNewConocimiento(Conocimiento newConocimiento) {
+		this.newConocimiento = newConocimiento;
+	}
+
+	public CategoriaConocimiento getSelectedCategoriaConocimiento() {
+		return selectedCategoriaConocimiento;
+	}
+
+	public void setSelectedCategoriaConocimiento(
+			CategoriaConocimiento selectedCategoriaConocimiento) {
+		this.selectedCategoriaConocimiento = selectedCategoriaConocimiento;
+	}
+
+	public SubcategoriaConocimiento getSelectedSubcategoriaConocimiento() {
+		return selectedSubcategoriaConocimiento;
+	}
+
+	public void setSelectedSubcategoriaConocimiento(
+			SubcategoriaConocimiento selectedSubcategoriaConocimiento) {
+		this.selectedSubcategoriaConocimiento = selectedSubcategoriaConocimiento;
+	}
+
+	public ArrayList<CategoriaConocimiento> getCategoriasConocimiento() {
+		return categoriasConocimiento;
+	}
+
+	public void setCategoriasConocimiento(
+			ArrayList<CategoriaConocimiento> categoriasConocimiento) {
+		this.categoriasConocimiento = categoriasConocimiento;
+	}
+
+	public ArrayList<SubcategoriaConocimiento> getSubcategoriasConocimiento() {
+		return subcategoriasConocimiento;
+	}
+
+	public void setSubcategoriasConocimiento(
+			ArrayList<SubcategoriaConocimiento> subcategoriasConocimiento) {
+		this.subcategoriasConocimiento = subcategoriasConocimiento;
+	}
+
+	public Puesto getNewPuesto() {
+		return newPuesto;
+	}
+
+	public void setNewPuesto(Puesto newPuesto) {
+		this.newPuesto = newPuesto;
+	}		
 }

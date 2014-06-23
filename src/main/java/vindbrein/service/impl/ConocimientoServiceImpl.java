@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import vindbrein.dao.CategoriaConocimientoDAO;
 import vindbrein.dao.ConocimientoDAO;
 import vindbrein.dao.NivelConocimientoDAO;
 import vindbrein.dao.PostulanteConocimientoDAO;
+import vindbrein.dao.SubcategoriaConocimientoDAO;
+import vindbrein.domain.model.CategoriaConocimiento;
 import vindbrein.domain.model.Conocimiento;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.PostulanteConocimiento;
+import vindbrein.domain.model.SubcategoriaConocimiento;
 import vindbrein.service.ConocimientoService;
 
 @Service
@@ -28,6 +32,12 @@ public class ConocimientoServiceImpl implements ConocimientoService, Serializabl
 	
 	@Autowired	
 	PostulanteConocimientoDAO postulanteConocimientoDAO;
+	
+	@Autowired	
+	CategoriaConocimientoDAO categoriaConocimientoDAO;
+	
+	@Autowired	
+	SubcategoriaConocimientoDAO subcategoriaConocimientoDAO;
 	
 	@Transactional(readOnly = false)
 	public void addConocimiento(Conocimiento conocimiento) {
@@ -99,6 +109,14 @@ public class ConocimientoServiceImpl implements ConocimientoService, Serializabl
 	@Transactional(readOnly = false)
 	public void deleteConocimientoToPostulante(PostulanteConocimiento postulanteConocimiento){
 		getPostulanteConocimientoDAO().deletePostulanteConocimiento(postulanteConocimiento);
+	}
+	
+	public ArrayList<CategoriaConocimiento> getCategoriasConocimiento() {
+		return categoriaConocimientoDAO.getCategoriasConocimiento();
+	}
+
+	public ArrayList<SubcategoriaConocimiento> getSubcategoriasConocimientoByCategoriaConocimiento(CategoriaConocimiento categoriaConocimiento){
+		return subcategoriaConocimientoDAO.getSubcategoriasConocimientoByCategoriaConocimiento(categoriaConocimiento);
 	}
 	
 	//getters and setters

@@ -2,9 +2,11 @@ package vindbrein.service;
 
 import java.util.ArrayList;
 
+import vindbrein.domain.model.CategoriaConocimiento;
 import vindbrein.domain.model.Conocimiento;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.PostulanteConocimiento;
+import vindbrein.domain.model.SubcategoriaConocimiento;
 
 public interface ConocimientoService {
 	
@@ -33,5 +35,8 @@ public interface ConocimientoService {
 	public void updateConocimientoToPostulante(PostulanteConocimiento postulanteConocimiento);
 	
 	public void deleteConocimientoToPostulante(PostulanteConocimiento postulanteConocimiento);
-
-}
+	
+	public ArrayList<CategoriaConocimiento> getCategoriasConocimiento();
+	
+	public ArrayList<SubcategoriaConocimiento> getSubcategoriasConocimientoByCategoriaConocimiento(CategoriaConocimiento categoriaConocimiento);
+}	

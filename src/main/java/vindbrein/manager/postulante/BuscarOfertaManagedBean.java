@@ -64,6 +64,7 @@ public class BuscarOfertaManagedBean implements Serializable{
 	}
 	
 	public List<String> autocompletarBusqueda(String query){
+		boolean tomado= false;
 		List<String> encontrados = new ArrayList<String>();
 		
 		for (int i = 0; i < ofertasLaborales.size(); i++) {
@@ -71,7 +72,17 @@ public class BuscarOfertaManagedBean implements Serializable{
 			
 			for (int j = 0; j < ofertaConocimientos.size(); j++) {
 				if(ofertaConocimientos.get(j).getConocimiento().getConoNombre().toLowerCase().contains(query.toLowerCase())){
-					encontrados.add(ofertaConocimientos.get(j).getConocimiento().getConoNombre());
+					for (int k = 0; k < encontrados.size(); k++) {
+						if(encontrados.get(k).equalsIgnoreCase(ofertaConocimientos.get(j).getConocimiento().getConoNombre())){
+							tomado = true;
+							break;
+						}
+					}
+					
+					if(!tomado){
+						encontrados.add(ofertaConocimientos.get(j).getConocimiento().getConoNombre());
+						tomado = false;
+					}					
 				}
 			}
 		}

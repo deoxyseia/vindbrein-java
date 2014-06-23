@@ -12,9 +12,8 @@
 
 		<!--Postulante -->
 
-		<p:messages showDetail="true" autoUpdate="true" closable="true" />
-		<h:outputScript library="js" name="spanish-calendar.js" />
-
+		<p:messages showDetail="true" closable="true" />
+		
 		<h:form id="formPostulante">
 			<p:panel header="Información básica personal">
 
@@ -47,7 +46,7 @@
 					<p:calendar
 						value="#{postulanteManagedBean.postulante.postFechaNacimiento}"
 						yearRange="c-90:c-0"
-						showOn="button" locale="es" />
+						showOn="button" navigator="true" readonlyInput="true" locale="es" />
 						
 					<h:outputText value="E-mail :"></h:outputText>
 					<p:inputText
@@ -201,10 +200,11 @@
 					<f:facet name="footer">
 						<p:commandButton value="Nuevo"
 							actionListener="#{postulanteManagedBean.reiniciarNewTelefono()}"
-							oncomplete="PF('saveTelefonoDialog').show()" immediate="true"
+							oncomplete="PF('saveTelefonoDialog').show()"
 							update=":newTelefonoForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
+							immediate="true"
 							actionListener="#{postulanteManagedBean.deleteTelefono()}"
 							update=":formPostulanteDetalle:dataTableTelefono"
 							icon="ui-icon-trash">
@@ -246,6 +246,7 @@
 							update=":newResidenciaForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
+						 	immediate="true"
 							actionListener="#{postulanteManagedBean.deleteResidencia()}"
 							update=":formPostulanteDetalle:dataTableResidencia"
 							icon="ui-icon-trash">
@@ -286,6 +287,7 @@
 							icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
+							 immediate="true"
 							actionListener="#{postulanteManagedBean.deletePostulanteConocimiento()}"
 							update=":formPostulanteDetalle:dataTablePostulanteConocimiento"
 							icon="ui-icon-trash">
@@ -333,6 +335,7 @@
 							update=":newExperienciaLaboralForm" icon="ui-icon-check">
 						</p:commandButton>
 						<p:commandButton value="Eliminar"
+							immediate="true"
 							actionListener="#{postulanteManagedBean.deleteExperienciaLaboral()}"
 							update=":formPostulanteDetalle:dataTableExperienciaLaboral"
 							icon="ui-icon-trash">
@@ -435,18 +438,23 @@
 		<p:dialog id="saveTelefonoDlg" header="Nuevo teléfono"
 			hideEffect="explode" widgetVar="saveTelefonoDialog" resizable="false"
 			modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newTelefonoForm">
 				<p:panelGrid columns="2">
 					<h:outputText value="Descripción: " />
 					<p:inputText
-						value="#{postulanteManagedBean.newTelefono.teleDescripcion}" />
+						value="#{postulanteManagedBean.newTelefono.teleDescripcion}" 
+						required="true" requiredMessage="Escriba una descripción"/>
 					<h:outputText value="Número: " />
-					<p:inputText value="#{postulanteManagedBean.newTelefono.teleNum}" />
+					<p:inputText value="#{postulanteManagedBean.newTelefono.teleNum}"
+						required="true" requiredMessage="Escriba un teléfono" />
+						
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.saveTelefono()}"
-							oncomplete="PF('saveTelefonoDialog').hide()"
+							actionListener="#{postulanteManagedBean.saveTelefono()}"							
+							oncomplete="if (!args.validationFailed){PF('saveTelefonoDialog').hide()}"
 							update=":formPostulanteDetalle:dataTableTelefono"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
@@ -462,12 +470,15 @@
 		<p:dialog id="saveResidenciaDlg" header="Nueva residencia"
 			hideEffect="explode" widgetVar="saveResidenciaDialog"
 			resizable="false" modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newResidenciaForm">
 				<p:panelGrid columns="2">
 					<h:outputText value="Dirección " />
 					<p:inputText
-						value="#{postulanteManagedBean.newResidencia.resiDireccion}" />
+						value="#{postulanteManagedBean.newResidencia.resiDireccion}"
+						required="true" requiredMessage="Ingrese una dirección"/>
 
 					<h:outputText value="Teléfono: " />
 					<p:inputText
@@ -512,7 +523,7 @@
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
 							actionListener="#{postulanteManagedBean.saveResidencia()}"
-							oncomplete="if (!args.validationFailed){PF('saveResidenciaDialog').hide()}"
+							oncomplete="if (!args.validationFailed){PF('saveResidenciaDialog').hide()}"							
 							update=":formPostulanteDetalle:dataTableResidencia"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
@@ -528,11 +539,13 @@
 		<p:dialog id="savePostulanteConocimientoDlg" header="Nuevo teléfono"
 			hideEffect="explode" widgetVar="savePostulanteConocimientoDialog"
 			resizable="false" modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newPostulanteConocimientoForm">
-				<p:panelGrid columns="2">
+				<h:panelGrid columns="3">
 					<h:outputText value="Conocimiento :" />
-					<p:selectOneMenu
+					<p:selectOneMenu id="selectedConocimiento"
 						value="#{postulanteManagedBean.newPostulanteConocimiento.conocimiento.conoId}"
 						effect="fade" required="true" requiredMessage="Elija Conocimiento">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
@@ -540,6 +553,14 @@
 							var="conocimiento" itemLabel="#{conocimiento.conoNombre}"
 							itemValue="#{conocimiento.conoId}" />
 					</p:selectOneMenu>
+					<p:commandLink
+						actionListener="#{postulanteManagedBean.reiniciarConocimiento}" 
+						oncomplete="PF('saveConocimientoDialog').show()" immediate="true">
+						<h:outputText styleClass="ui-icon ui-icon-plus"
+							style="margin:0 auto;" />						
+					</p:commandLink>
+				</h:panelGrid>
+				<h:panelGrid columns="2">	
 
 					<h:outputText value="Nivel de Conocimiento :" />
 					<p:selectOneMenu
@@ -556,15 +577,16 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.savePostulanteConocimiento()}"
-							oncomplete="PF('savePostulanteConocimientoDialog').hide()"
+							actionListener="#{postulanteManagedBean.savePostulanteConocimiento()}"							
+							oncomplete="if (!args.validationFailed){PF('savePostulanteConocimientoDialog').hide()}"							
 							update=":formPostulanteDetalle:dataTablePostulanteConocimiento"
-							icon="ui-icon-check" />
+							icon="ui-icon-check" 	/>
+							
 						<p:commandButton value="Cancelar"
 							onclick="PF('savePostulanteConocimientoDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
-				</p:panelGrid>
+				</h:panelGrid>
 			</h:form>
 		</p:dialog>
 		<!-- Fin Dialog nuevo postulante conocimiento -->
@@ -575,30 +597,48 @@
 			header="Nueva experiencia laboral" hideEffect="explode"
 			widgetVar="saveExperienciaLaboralDialog" resizable="false"
 			modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newExperienciaLaboralForm">
-				<p:panelGrid columns="2">
+				<h:panelGrid columns="2">
 					<h:outputText value="Fecha inicial :" />
 					<p:calendar
 						value="#{postulanteManagedBean.newExperienciaLaboral.exlaFechaInicio}"
-						showOn="button" />
+						yearRange="c-90:c-0"
+						showOn="button" navigator="true" readonlyInput="true" locale="es"
+						required="true" requiredMessage="Elija una fecha inicial" />
 
 					<h:outputText value="Fecha final :" />
 					<p:calendar
 						value="#{postulanteManagedBean.newExperienciaLaboral.exlaFechaFinal}"
-						showOn="button" />
-
-					<p:selectOneMenu
+						yearRange="c-90:c-0"
+						showOn="button" navigator="true" readonlyInput="true" locale="es" />
+				</h:panelGrid>	
+				<h:panelGrid columns="3">	
+					
+					<h:outputText value="Puesto :" />
+					<p:selectOneMenu id="selectedPuesto"
 						value="#{postulanteManagedBean.newExperienciaLaboral.organizacionPuesto.puesto.puesId}"
+						required="true" requiredMessage="Elija un puesto"
 						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.puestos}"
 							var="puesto" itemLabel="#{puesto.puesNombre}"
 							itemValue="#{puesto.puesId}" />
 					</p:selectOneMenu>
+					<p:commandLink
+						actionListener="#{postulanteManagedBean.reiniciarPuesto}" 
+						oncomplete="PF('savePuestoDialog').show()" immediate="true">
+						<h:outputText styleClass="ui-icon ui-icon-plus"
+							style="margin:0 auto;" />						
+					</p:commandLink>
+				</h:panelGrid>	
+				<h:panelGrid columns="3">	
 
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newExperienciaLaboral.organizacionPuesto.organizacion.orgaId}"
+						required="true" requiredMessage="Seleccione una organización"
 						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.organizaciones}"
@@ -608,15 +648,15 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.saveExperienciaLaboral()}"
-							oncomplete="PF('saveExperienciaLaboralDialog').hide()"
+							actionListener="#{postulanteManagedBean.saveExperienciaLaboral()}"							
+							oncomplete="if (!args.validationFailed){PF('saveExperienciaLaboralDialog').hide()}"
 							update=":formPostulanteDetalle:dataTableExperienciaLaboral"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
 							onclick="PF('saveExperienciaLaboralDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
-				</p:panelGrid>
+				</h:panelGrid>
 			</h:form>
 		</p:dialog>
 		<!-- Fin Dialog nueva experiencia laboral -->
@@ -628,21 +668,27 @@
 			header="Nueva actividad académica" hideEffect="explode"
 			widgetVar="saveActividadAcademicaDialog" resizable="false"
 			modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newActividadAcademicaForm">
 				<p:panelGrid columns="2">
 					<h:outputText value="Fecha inicial :" />
 					<p:calendar
 						value="#{postulanteManagedBean.newActividadAcademica.acacFechaInicio}"
-						showOn="button" />
+						yearRange="c-90:c-0"
+						showOn="button" navigator="true" readonlyInput="true" locale="es"
+						required="true" requiredMessage="Elija una fecha inicial" />
 
 					<h:outputText value="Fecha final :" />
 					<p:calendar
 						value="#{postulanteManagedBean.newActividadAcademica.acacFechaFinal}"
-						showOn="button" />
+						yearRange="c-90:c-0"
+						showOn="button" navigator="true" readonlyInput="true" locale="es"/>
 
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newActividadAcademica.estudio.estuId}"
+						required="true" requiredMessage="Elije un estudio realizado"
 						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.estudios}"
@@ -652,12 +698,12 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.saveActividadAcademica()}"
-							oncomplete="PF('saveActividadAcademicaDialog').hide()"
+							actionListener="#{postulanteManagedBean.saveActividadAcademica()}"							
+							oncomplete="if (!args.validationFailed){PF('saveActividadAcademicaDialog').hide()}"
 							update=":formPostulanteDetalle:dataTableActividadAcademica"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
-							onclick="saveActividadAcademicaDialog.hide()" type="button"
+							onclick="PF('saveActividadAcademicaDialog').hide()" type="button"
 							icon="ui-icon-close" />
 					</f:facet>
 				</p:panelGrid>
@@ -671,11 +717,14 @@
 		<p:dialog id="savePostulanteIdiomaDlg" header="Nuevo idioma"
 			hideEffect="explode" widgetVar="savePostulanteIdiomaDialog"
 			resizable="false" modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newPostulanteIdiomaForm">
 				<p:panelGrid columns="2">
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newPostulanteIdioma.idioma.idioId}"
+						required="true" requiredMessage="Elija un idioma"
 						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.idiomas}"
@@ -685,6 +734,7 @@
 
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newPostulanteIdioma.nivelIdioma.niidId}"
+						required="true" requiredMessage="Elija el nivel en que maneja el idioma"
 						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.nivelesIdioma}"
@@ -694,8 +744,8 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.savePostulanteIdioma()}"
-							oncomplete="PF('savePostulanteIdiomaDialog').hide()"
+							actionListener="#{postulanteManagedBean.savePostulanteIdioma()}"							
+							oncomplete="if (!args.validationFailed){PF('savePostulanteIdiomaDialog').hide()}"
 							update=":formPostulanteDetalle:dataTablePostulanteIdioma"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
@@ -714,11 +764,14 @@
 		<p:dialog id="savePostulanteBeneficioDlg" header="Nuevo beneficio"
 			hideEffect="explode" widgetVar="savePostulanteBeneficioDialog"
 			resizable="false" modal="true" appendTo="@(body)">
+			
+			<p:messages autoUpdate="true" closable="true" />
 
 			<h:form id="newPostulanteBeneficioForm">
 				<p:panelGrid columns="2">
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.newPostulanteBeneficio.beneficio.beneId}"
+						required="true" requiredMessage="Elija un beneficio"
 						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.beneficios}"
@@ -728,8 +781,8 @@
 
 					<f:facet name="footer">
 						<p:commandButton value="Guardar"
-							actionListener="#{postulanteManagedBean.savePostulanteBeneficio()}"
-							oncomplete="PF('savePostulanteBeneficioDialog').hide()"
+							actionListener="#{postulanteManagedBean.savePostulanteBeneficio()}"							
+							oncomplete="if (!args.validationFailed){PF('savePostulanteBeneficioDialog').hide()}"
 							update=":formPostulante:dataTablePostulanteBeneficio"
 							icon="ui-icon-check" />
 						<p:commandButton value="Cancelar"
@@ -741,6 +794,66 @@
 		</p:dialog>
 
 		<!-- Fin Dialog nuevo postulante beneficio -->
+		
+<!-- ============================= DIALOGS DE SEGUNDO NIVEL ====================== -->
+
+	<p:dialog id="saveConocimientoDlg" header="Nuevo Conocimiento"
+			hideEffect="explode" widgetVar="saveConocimientoDialog"
+			resizable="false" modal="true" appendTo="@(body)">
+			
+			<h:form id="newConocimientoForm">
+				<p:panelGrid columns="2">
+				
+									
+					<h:outputText value="Categoria de conocimiento :" />
+					<p:selectOneMenu
+						value="#{postulanteManagedBean.selectedCategoriaConocimiento.cacoId}"
+						effect="fade" required="true" requiredMessage="Elija una categoría">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{postulanteManagedBean.categoriasConocimiento}"
+							var="categoria" itemLabel="#{categoria.cacoNombre}"
+							itemValue="#{categoria.cacoId}" />
+						<p:ajax event="change"
+							listener="#{postulanteManagedBean.chargeSubcategoriasConocimiento()}"
+							update=":newConocimientoForm:subcategoriasSelectOneMenu" />
+					</p:selectOneMenu>
+
+					<h:outputText value="Subcategoria de Conocimiento :" />
+					<p:selectOneMenu id="subcategoriasSelectOneMenu"
+						value="#{postulanteManagedBean.selectedSubcategoriaConocimiento.sucoId}"
+						effect="fade" required="true" requiredMessage="Elija una subcategoria">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						<f:selectItems value="#{postulanteManagedBean.subcategoriasConocimiento}"
+							var="subcategoria" itemLabel="#{subcategoria.sucoNombre}"
+							itemValue="#{subcategoria.sucoId}" />						
+					</p:selectOneMenu>
+				
+					<h:outputText value="Conocimiento " />
+					<p:inputText 
+						value="#{postulanteManagedBean.newConocimiento.conoNombre}"
+						required="true" requiredMessage="Ingrese el conocimiento"/>
+					
+					<f:facet name="footer">
+						<p:commandButton value="Guardar"
+							actionListener="#{postulanteManagedBean.saveConocimiento()}"							
+							oncomplete="if (!args.validationFailed){PF('saveConocimientoDialog').hide()}"
+							update=":newPostulanteConocimientoForm:selectedConocimiento"
+							icon="ui-icon-check" />
+						<p:commandButton value="Cancelar"
+							onclick="PF('saveConocimientoDialog').hide()" type="button"
+							icon="ui-icon-close" />
+					</f:facet>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>		
+		
+
+	
+		
+		
+		
+
+<!-- ============================= FIN DE DIALOGS DE SEGUNDO NIVEL ====================== -->		
 
 
 	</ui:define>
