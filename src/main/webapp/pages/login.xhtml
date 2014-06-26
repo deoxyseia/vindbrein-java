@@ -25,10 +25,16 @@
 		</div>
 		<center>
 		<div align="center">
+			<h:panelGrid columns="1" style="text-align: center;">
+				<p:graphicImage value="/resources/img/logo.png" />
+				<h:outputText styleClass="apptitle" value="VINDBREIN"></h:outputText>
+			</h:panelGrid>
 			
-			<p:graphicImage value="/resources/img/logo.png" />
-			<h:form id="formLogin" prependId="false">			
-				
+			<h:form id="formLogin" prependId="false">
+			<br></br>	
+			<h:outputText styleClass="appdescription" value="VindBrein es una aplicación que sirve para el reclutamiento de practicantes y egresados así como la búsqueda de prácticas profesionales"></h:outputText>
+			<br></br>			
+			<br></br>		
 				<p:panel id="panelLogin"  header="Ingreso al sistema" style="width:400px;">
 					<p:focus context="panelLogin"/>  
 					<h:panelGrid columns="2" cellpadding="2">

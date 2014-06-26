@@ -47,11 +47,14 @@
 				<h:outputText value="#{oferta.scorePlain}" />
 			</h:panelGrid>
 			
-			<p:outputLabel value="Conocimientos:" for="conocimientos" />
-			<p:autoComplete id="conocimientos" multiple="true" styleClass="myAutocomplete"
-					value="#{oferta.ofertaConocimientos}" var="ofertaConocimiento" disabled="true"
-					itemLabel="#{ofertaConocimiento.conocimiento.conoNombre}" itemValue="#{ofertaConocimiento}">					
-			</p:autoComplete>
+			<p:outputLabel value="Conocimientos:" />		
+			<ul>
+				<ui:repeat value="#{oferta.ofertaConocimientos}" var="ofertaConocimiento">
+					<li >
+						<h:outputText value="#{ofertaConocimiento.conocimiento.conoNombre}" />
+					</li>
+				</ui:repeat>
+			</ul>
 			
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true">

@@ -110,7 +110,7 @@ public class MatchResultDAO implements Serializable{
 				.setParameter(0, postulante.getPostId())
 				.list();
 		
-		return list.size();
+		return list.size()+1;
 	}
 	
 	//se está usando la selección en lugar de la recomendación
@@ -121,7 +121,7 @@ public class MatchResultDAO implements Serializable{
 				.setParameter(0, ofertaLaboral.getOflaId())
 				.list();
 		
-		return list.size();
+		return list.size()+1;
 	}
 	
 	public ArrayList<MatchResult> getMatchResultsByPostulant(Postulante postulante){

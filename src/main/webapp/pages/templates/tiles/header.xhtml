@@ -10,10 +10,16 @@
 <h:body>
 	<ui:composition>
 		<c:if test="#{request.getUserPrincipal() != null}">
+		 
+		 		<p:graphicImage value="/resources/img/logo_min.png" />
+	<h:outputText styleClass="headertext" value="VindBrein - e-Recruitment" ></h:outputText>
+			
 			
 			<h:outputLink style="float:right;"
 				value="${request.contextPath}/j_spring_security_logout">Cerrar sesión
-			</h:outputLink>			
+			</h:outputLink>
+		 
+						
 
 		</c:if>
 		

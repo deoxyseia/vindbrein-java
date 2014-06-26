@@ -639,7 +639,12 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		System.out.println("MAKING RECOMMENDATION BASED-CONTENT");
 		
 		for (int i = 0; i < alternatives.length; i++) {
-			similarity = cosineSimilarity(profile.getVecPreference(), alternatives[i].getVecSelfDescription());
+			try {
+				similarity = cosineSimilarity(profile.getVecPreference(), alternatives[i].getVecSelfDescription());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			//similarity es mayor que similarityMin
 			if(similarity.compareTo(similarityMin) == 1){
@@ -688,8 +693,13 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		System.out.println("MAKING RECOMMENDATION BASED-COLLABORATIVE");
 		
 		for (int i = 0; i < alternatives.length; i++) {
-			similarity = cosineSimilarity(profile.getVecPreference(), alternatives[i].getVecPreference())
-					.add(cosineSimilarity(profile.getVecHistorical(), alternatives[i].getVecHistorical()));
+			try {
+				similarity = cosineSimilarity(profile.getVecPreference(), alternatives[i].getVecPreference())
+						.add(cosineSimilarity(profile.getVecHistorical(), alternatives[i].getVecHistorical()));
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			//similarity es mayor que similarityMin
 			if(similarity.compareTo(similarityMin) == 1){
@@ -812,10 +822,12 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		
 	}
 	
+	
+	
+	//Intern methods	
 	private BigDecimal[] convertLinkedHashMapToArray(LinkedHashMap<String, Integer> map){
-		int size = map.size();
 		
-		BigDecimal[] vector = new BigDecimal[size];
+		BigDecimal[] vector = new BigDecimal[map.size()];
 		
 		int i = 0;
 		
@@ -827,21 +839,23 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		return vector;
 	}
 	
-	//Intern methods	
-	private BigDecimal cosineSimilarity(BigDecimal[] vecA, BigDecimal[] vecB){
+	private BigDecimal cosineSimilarity(BigDecimal[] vecA, BigDecimal[] vecB) throws InterruptedException{
 		BigDecimal result;
 		
-		BigDecimal denominador = vecMagnitude(vecA).multiply(vecMagnitude(vecB));
-		
-		if(denominador.compareTo(new BigDecimal(0)) == 0){
-			result = new BigDecimal(0);
+		if (vecA.length == vecB.length) {
+			BigDecimal denominador = vecMagnitude(vecA).multiply(vecMagnitude(vecB));
+			
+			if(denominador.compareTo(new BigDecimal(0)) == 0){
+				result = new BigDecimal(0);
+			}else{
+				result = scalarProduct(vecA, vecB).divide(denominador,5, RoundingMode.HALF_UP);
+			}		
+					
+			System.out.println("cosineSimilarity: "+result);
+			
 		}else{
-			result = scalarProduct(vecA, vecB).divide(denominador,5, RoundingMode.HALF_UP);
-		}
-		
-				
-		System.out.println("cosineSimilarity");
-		System.out.println(result);
+			throw new InterruptedException("La longitud de los vectores no es la misma");
+		}				
 		
 		return result;
 	}
@@ -849,34 +863,37 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	
 	//validado
 	private BigDecimal scalarProduct(BigDecimal[] vecA, BigDecimal[] vecB){
-		BigDecimal product = new BigDecimal(0);
 		
-		if(vecA.length == vecB.length){
-			for (int i = 0; i < vecA.length; i++) {
-				product = product.add(vecA[i].multiply(vecB[i]));
-			}
-		}else{
-			throw new IllegalArgumentException("La longitud de los parametros no es la misma");
+		BigDecimal result = new BigDecimal(0);
+		
+		
+		for (int i = 0; i < vecA.length; i++) {
+			result = result.add(vecA[i].multiply(vecB[i]));
 		}		
 		
-		System.out.println("scalarProduct");
-		System.out.println(product);
-		return product;		
+		System.out.println("scalarProduct: "+result);
+		
+		return result;		
 	}
 	
 	//validado
-	private BigDecimal vecMagnitude(BigDecimal[] vec){
+	private BigDecimal vecMagnitude(BigDecimal[] vec) throws ArithmeticException{
+		BigDecimal result = new BigDecimal(0);
 		BigDecimal sum = new BigDecimal(0);
 		
 		for (int i = 0; i < vec.length; i++) {
 			sum = sum.add(vec[i].multiply(vec[i]));
-		}		
+		}
 		
-		System.out.println("vecMagnitude");
-		System.out.println(BigDecimal.valueOf(Math.sqrt(sum.doubleValue())));
+		try {
+			result = BigDecimal.valueOf(Math.sqrt(sum.doubleValue()));
+		} catch (Exception e) {
+			throw new ArithmeticException("Error al obtener la raiz cuadrada");
+		}	
 		
-		return BigDecimal.valueOf(Math.sqrt(sum.doubleValue()));
+		System.out.println("vecMagnitude :"+result);		
 		
+		return result;	
 	}
 	
 	private BigDecimal evalFunction(Profile profile, ArrayList<Profile> set){
@@ -891,40 +908,35 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		BigDecimal result = new BigDecimal(0);
 		BigDecimal pivote = new BigDecimal(0);
 		
-		if(set.size() >0){
-			for (int i = 0; i < set.size(); i++) {
-				int number = set.get(i).getRecNumber();
-				
-				if(number == 0){
-					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(0.1), 5, RoundingMode.HALF_UP)
-							.multiply(reciprocity(profile, set.get(i))));
-				}else{
-					pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(set.get(i).getRecNumber()), 5, RoundingMode.HALF_UP)
-							.multiply(reciprocity(profile, set.get(i))));
-				}
-				
+		if(set.size() >= 1){
+			for (int i = 0; i < set.size(); i++) {				
+				pivote = pivote.add((new BigDecimal(1)).divide(new BigDecimal(set.get(i).getRecNumber()), 5, RoundingMode.HALF_UP)
+						.multiply(reciprocity(profile, set.get(i))));				
 			}
 			
 			result = pivote.divide(new BigDecimal(set.size()));
 			pivote = new BigDecimal(0);
 			
-		}
+			// si el conjunto tiene 2 items o más
+			if (set.size() >= 2) {
+				combs = k_combinations(set, 2);
+				
+				for (int i = 0; i < combs.size(); i++) {
+					try {
+						pivote = pivote.subtract(cosineSimilarity(combs.get(i).get(0).getVecSelfDescription(), 
+																	combs.get(i).get(1).getVecSelfDescription()));
+					} catch (InterruptedException e) {					
+						e.printStackTrace();
+					}
+				}
+				
+				pivote = pivote.divide(new BigDecimal(combs.size()));
+				
+				result = result.add(pivote);
+			}			
+		}	
 		
-		if (set.size() >= 2) {
-			combs = k_combinations(set, 2);
-			
-			for (int i = 0; i < combs.size(); i++) {
-				pivote = pivote.subtract(cosineSimilarity(combs.get(i).get(0).getVecSelfDescription(), 
-															combs.get(i).get(1).getVecSelfDescription()));
-			}
-			
-			pivote = pivote.divide(new BigDecimal(combs.size()));
-			
-			result = result.add(pivote);
-		}
-		
-		System.out.println("Resultado de evalFunction");
-		System.out.println(result);
+		System.out.println("Resultado de evalFunction: "+result);
 		
 		return result;
 	}	
@@ -979,8 +991,15 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	}	
 	
 	private BigDecimal reciprocity(Profile profileA, Profile profileB){
-		BigDecimal result = cosineSimilarity(profileA.getVecPreference(), profileB.getVecSelfDescription())
-				.multiply(cosineSimilarity(profileB.getVecPreference(), profileA.getVecSelfDescription()));
+		
+		BigDecimal result = new BigDecimal(0);
+		try {
+			result = cosineSimilarity(profileA.getVecPreference(), profileB.getVecSelfDescription())
+					.multiply(cosineSimilarity(profileB.getVecPreference(), profileA.getVecSelfDescription()));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return result;
 	}	

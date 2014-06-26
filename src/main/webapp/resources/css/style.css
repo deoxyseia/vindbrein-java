@@ -14,5 +14,20 @@
 	font-weight: bold;
 }
 
+.apptitle{
+	font-weight: bold;
+	font-size: xx-large;
+}
+
+.appdescription{
+	font-size: larger;	
+}
+
+.headertext{
+	font-size: 50px;	
+	vertical-align: top;	
+}
+
+
 
 
