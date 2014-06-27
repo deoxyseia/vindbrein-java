@@ -27,8 +27,6 @@ import vindbrein.domain.model.Idioma;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.NivelIdioma;
 import vindbrein.domain.model.NivelPuesto;
-import vindbrein.domain.model.OfertaBeneficio;
-import vindbrein.domain.model.OfertaConocimiento;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Postulante;
@@ -45,23 +43,19 @@ import vindbrein.domain.model.Sector;
 import vindbrein.domain.model.SubcategoriaConocimiento;
 import vindbrein.domain.model.Telefono;
 import vindbrein.domain.model.TipoHorario;
-import vindbrein.service.ActividadAcademicaService;
 import vindbrein.service.BeneficioService;
 import vindbrein.service.ConocimientoService;
 import vindbrein.service.DepartamentoService;
 import vindbrein.service.DistritoService;
 import vindbrein.service.EstadoCivilService;
 import vindbrein.service.EstudioService;
-import vindbrein.service.ExperienciaLaboralService;
 import vindbrein.service.IdiomaService;
-import vindbrein.service.MongoService;
 import vindbrein.service.OrganizacionService;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.ProvinciaService;
 import vindbrein.service.PuestoService;
 import vindbrein.service.ResidenciaService;
 import vindbrein.service.SectorService;
-import vindbrein.service.TelefonoService;
 import vindbrein.service.TipoHorarioService;
 
 @Controller
@@ -249,20 +243,18 @@ public class PostulanteManagedBean implements Serializable{
 		reiniciarNewActividadAcademica();
 		reiniciarNewPostulanteIdioma();
 		reiniciarNewPostulanteBeneficio();
+		
+		//
+		reiniciarConocimiento();
+		reiniciarPuesto();
 	}
 	
 	public void chargeSubcategoriasConocimiento(){
 		subcategoriasConocimiento = conocimientoService.getSubcategoriasConocimientoByCategoriaConocimiento(selectedCategoriaConocimiento);
 	}
 	
-//	public void savePostulante(){
-//		postulanteService.updatePostulante(postulante);		
-//		
-//		recargarPostulante();
-//	}
-	
 	public void savePostulante(){
-		postulanteService.saveOrUpdatePostulante(postulante);
+		postulanteService.updatePostulante(postulante);
 		
 		recargarPostulante();
 	}
@@ -408,6 +400,11 @@ public class PostulanteManagedBean implements Serializable{
 		}
 		
 		if(agregar){
+			newExperienciaLaboral.getOrganizacionPuesto().setOrganizacion(
+					organizacionService
+							.getOrganizacionById(newExperienciaLaboral
+									.getOrganizacionPuesto().getOrganizacion()
+									.getOrgaId()));
 			postulante.addExperienciaLaboral(newExperienciaLaboral);		
 		}
 	}

@@ -87,53 +87,10 @@ public class PostulanteServiceImpl implements PostulanteService, Serializable {
 	@Transactional(readOnly = false)
 	public void addPostulante(Postulante postulante) {
 		getPostulanteDAO().addPostulante(postulante);		
-	}
-	
-	@Transactional(readOnly = false)
-	public void updatePostulante(Postulante postulante) {
-		
-		if(postulante.getEstadoCivil().getEsciId() == 0){
-			postulante.setEstadoCivil(null);
-		}
-		
-		if(postulante.getTipoHorario().getTihoId() == 0){
-			postulante.setTipoHorario(null);
-		}
-		
-		if(postulante.getNivelPuesto().getNipuId() == 0){
-			postulante.setNivelPuesto(null);
-		}
-		
-		if(postulante.getDimensionOrganizacion().getDiorId() == 0){
-			postulante.setDimensionOrganizacion(null);
-		}
-		
-		if(postulante.getSector().getSectId() == 0){
-			postulante.setSector(null);
-		}
-		
-		getPostulanteDAO().updatePostulante(postulante);
-		
-		//actualizando la autodescripcion
-		PostulantSelfDescription postulantSelfDescription = postulantSelfDescriptionDAO
-				.getPostulantSelfDescriptionById(postulante.getPostIdS());
-		
-		postulantSelfDescription.setValues(coreDAO.getVectorPostulantSelfDescription(postulante));
-		
-		postulantSelfDescriptionDAO.updatePostulantSelfDescription(postulantSelfDescription);
-		
-		//actualizando las preferencias
-		PostulantPreference postulantPreference = postulantPreferenceDAO
-				.getPostulantPreferenceById(postulante.getPostIdP());
-		
-		postulantPreference.setValues(coreDAO.getVectorPostulantPreference(postulante));
-		
-		postulantPreferenceDAO.updatePostulantPreference(postulantPreference);
-		
-	}
+	}	
 		
 	@Transactional(readOnly = false)
-	public void saveOrUpdatePostulante(Postulante postulante){
+	public void updatePostulante(Postulante postulante){
 		
 		if(postulante.getEstadoCivil().getEsciId() == 0){
 			postulante.setEstadoCivil(null);

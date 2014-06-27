@@ -10,9 +10,7 @@ public interface PostulanteService {
 
 	public void updatePostulante(Postulante Postulante);
 
-	public void deletePostulante(Postulante Postulante);
-	
-	public void saveOrUpdatePostulante(Postulante postulante);
+	public void deletePostulante(Postulante Postulante);	
 
 	public Postulante getPostulanteById(int id);
 
