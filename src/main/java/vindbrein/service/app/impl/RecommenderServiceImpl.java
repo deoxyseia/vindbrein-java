@@ -32,6 +32,7 @@ import vindbrein.domain.document.OfferSelfDescription;
 import vindbrein.domain.document.PostulantHistorical;
 import vindbrein.domain.document.PostulantPreference;
 import vindbrein.domain.document.PostulantSelfDescription;
+import vindbrein.domain.model.MatchResult;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Postulante;
 import vindbrein.service.OfertaLaboralService;
@@ -220,14 +221,18 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			for (int i = 0; i < resultados.size(); i++) {
 				Postulante post = postulanteDAO.getPostulanteById(resultados.get(i).getProfile().getId());
 				
-				OfertaLaboral ofertaLaboral = matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral(); 
-				ofertaLaboral.setScore(resultados.get(i).getScore());
+				MatchResult matchResult = matchResultDAO.getLastMatchResultByPostulant(post);
 				
-				results.add(ofertaLaboral);
-				
-				System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
-				System.out.println("Score: "+resultados.get(i).getScore());
-				System.out.println("ID oferta: "+matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral().getOflaId());				
+				if(matchResult != null){
+					OfertaLaboral ofertaLaboral = matchResult.getOfertaLaboral();
+					ofertaLaboral.setScore(resultados.get(i).getScore());
+					
+					results.add(ofertaLaboral);
+					
+					System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
+					System.out.println("Score: "+resultados.get(i).getScore());
+					System.out.println("ID oferta: "+matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral().getOflaId());
+				}							
 			}
 			
 			break;
@@ -277,14 +282,18 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			for (int i = 0; i < resultadosCollaborative.size(); i++) {
 				Postulante post = postulanteDAO.getPostulanteById(resultadosCollaborative.get(i).getProfile().getId());
 				
-				OfertaLaboral ofertaLaboral = matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral(); 
-				ofertaLaboral.setScore(resultadosCollaborative.get(i).getScore());
+				MatchResult matchResult = matchResultDAO.getLastMatchResultByPostulant(post);
 				
-				ofertasCollavorative.add(ofertaLaboral);
-				
-				System.out.println("ID postulante: "+resultadosCollaborative.get(i).getProfile().getId());
-				System.out.println("Score: "+resultadosCollaborative.get(i).getScore());
-				System.out.println("ID oferta: "+matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral().getOflaId());				
+				if(matchResult != null){
+					OfertaLaboral ofertaLaboral = matchResult.getOfertaLaboral(); 
+					ofertaLaboral.setScore(resultadosCollaborative.get(i).getScore());
+					
+					ofertasCollavorative.add(ofertaLaboral);
+					
+					System.out.println("ID postulante: "+resultadosCollaborative.get(i).getProfile().getId());
+					System.out.println("Score: "+resultadosCollaborative.get(i).getScore());
+					System.out.println("ID oferta: "+matchResultDAO.getLastMatchResultByPostulant(post).getOfertaLaboral().getOflaId());
+				}							
 			}
 			
 			//basado en reciprocidad
@@ -484,14 +493,18 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			for (int i = 0; i < resultados.size(); i++) {
 				OfertaLaboral oferta = ofertaLaboralDAO.getOfertaLaboralById(resultados.get(i).getProfile().getId());
 				
-				Postulante postulante = matchResultDAO.getLastMatchResultByOffer(oferta).getPostulante(); 
-				postulante.setScore(resultados.get(i).getScore());
+				MatchResult matchResult = matchResultDAO.getLastMatchResultByOffer(oferta);
 				
-				results.add(postulante);
-				
-				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
-				System.out.println("Score: "+resultados.get(i).getScore());
-				System.out.println("ID postulante: "+matchResultDAO.getLastMatchResultByOffer(oferta).getOfertaLaboral().getOflaId());				
+				if(matchResult != null){
+					Postulante postulante = matchResult.getPostulante(); 
+					postulante.setScore(resultados.get(i).getScore());
+					
+					results.add(postulante);
+					
+					System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
+					System.out.println("Score: "+resultados.get(i).getScore());
+					System.out.println("ID postulante: "+matchResultDAO.getLastMatchResultByOffer(oferta).getOfertaLaboral().getOflaId());					
+				}								
 			}
 			
 			break;
@@ -541,14 +554,18 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			for (int i = 0; i < resultadosCollaborative.size(); i++) {
 				OfertaLaboral oferta = ofertaLaboralDAO.getOfertaLaboralById(resultadosCollaborative.get(i).getProfile().getId());
 				
-				Postulante postulante = matchResultDAO.getLastMatchResultByOffer(oferta).getPostulante();
-				postulante.setScore(resultadosCollaborative.get(i).getScore());
+				MatchResult matchResult = matchResultDAO.getLastMatchResultByOffer(oferta);
 				
-				postulantesCollavorative.add(postulante);
-				
-				System.out.println("ID oferta: "+resultadosCollaborative.get(i).getProfile().getId());
-				System.out.println("Score: "+resultadosCollaborative.get(i).getScore());
-				System.out.println("ID postulante: "+matchResultDAO.getLastMatchResultByPostulant(postulante).getPostulante().getPostId());				
+				if(matchResult != null){
+					Postulante postulante = matchResult.getPostulante();
+					postulante.setScore(resultadosCollaborative.get(i).getScore());
+					
+					postulantesCollavorative.add(postulante);
+					
+					System.out.println("ID oferta: "+resultadosCollaborative.get(i).getProfile().getId());
+					System.out.println("Score: "+resultadosCollaborative.get(i).getScore());
+					System.out.println("ID postulante: "+matchResultDAO.getLastMatchResultByPostulant(postulante).getPostulante().getPostId());
+				}							
 			}
 			
 			//basado en reciprocidad

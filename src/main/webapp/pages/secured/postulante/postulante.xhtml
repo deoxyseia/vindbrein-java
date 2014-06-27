@@ -4,7 +4,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions">
 
 	<ui:define name="title"> Información personal </ui:define>
 
@@ -56,11 +58,12 @@
 
 					<h:outputText value="Estado civil :" />
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.postulante.estadoCivil.esciId}">
-						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
+						value="#{postulanteManagedBean.postulante.estadoCivil.esciId}"
+						effect="fade">
+						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />					
 						<f:selectItems value="#{postulanteManagedBean.estadosCiviles}"
-							var="estadoCivil" itemLabel="#{estadoCivil.esciNombre}"
-							itemValue="#{estadoCivil.esciId}" />
+							var="estadoCivil" itemValue="#{estadoCivil.esciId}" itemLabel="#{estadoCivil.esciNombre}" 
+							 />
 					</p:selectOneMenu>
 				</h:panelGrid>
 			</p:panel>
@@ -77,7 +80,7 @@
 					<h:outputText value="Tipo de horario :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.postulante.tipoHorario.tihoId}"
-						effect="fade" >
+						effect="fade">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.tiposHorario}"
 							var="tipoHorario" itemLabel="#{tipoHorario.tihoNombre}"
@@ -99,7 +102,7 @@
 					<h:outputText value="Dimensión de organizacion :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.postulante.dimensionOrganizacion.diorId}"
-						effect="fade">
+						effect="fade" >
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems
 							value="#{postulanteManagedBean.dimensionesOrganizacion}"
@@ -112,7 +115,7 @@
 					<h:outputText value="Sector de organizacion :" />
 					<p:selectOneMenu
 						value="#{postulanteManagedBean.postulante.sector.sectId}"
-						effect="fade">
+						effect="fade" >
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.sectores}"
 							var="sector" itemLabel="#{sector.sectNombre}"
@@ -124,7 +127,7 @@
 				<!-- beneficios-->
 
 				<p:dataTable id="dataTablePostulanteBeneficio"
-					var="postulanteBeneficio" rowKey="#{postulanteBeneficio.id}"
+					var="postulanteBeneficio" rowKey="#{postulanteBeneficio.beneficio.beneId}"
 					value="#{postulanteManagedBean.postulante.postulanteBeneficios}"
 					selection="#{postulanteManagedBean.newPostulanteBeneficio}"
 					emptyMessage="No tiene registrado beneficios"
@@ -145,7 +148,7 @@
 							immediate="true" update=":newPostulanteBeneficioForm"
 							icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar" immediate="true"
+						<p:commandButton value="Eliminar"
 							actionListener="#{postulanteManagedBean.deletePostulanteBeneficio()}"
 							update=":formPostulante:dataTablePostulanteBeneficio"
 							icon="ui-icon-trash">
@@ -178,7 +181,7 @@
 				<!-- Telefonos -->
 
 				<p:dataTable id="dataTableTelefono" var="telefono"
-					rowKey="#{telefono.teleId}"
+					rowKey="#{telefono.teleNum}"
 					value="#{postulanteManagedBean.postulante.telefonos}"
 					selection="#{postulanteManagedBean.newTelefono}"
 					emptyMessage="No tiene registrado telefonos" selectionMode="single">
@@ -203,8 +206,7 @@
 							oncomplete="PF('saveTelefonoDialog').show()"
 							update=":newTelefonoForm" icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar"
-							immediate="true"
+						<p:commandButton value="Eliminar"							
 							actionListener="#{postulanteManagedBean.deleteTelefono()}"
 							update=":formPostulanteDetalle:dataTableTelefono"
 							icon="ui-icon-trash">
@@ -217,7 +219,7 @@
 				<!-- Residencia -->
 
 				<p:dataTable id="dataTableResidencia" var="residencia"
-					rowKey="#{residencia.resiId}"
+					rowKey="#{residencia.resiDireccion}"
 					value="#{postulanteManagedBean.postulante.residencias}"
 					selection="#{postulanteManagedBean.newResidencia}"
 					emptyMessage="No tiene registrado residencias"
@@ -245,8 +247,7 @@
 							oncomplete="PF('saveResidenciaDialog').show()" immediate="true"
 							update=":newResidenciaForm" icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar"
-						 	immediate="true"
+						<p:commandButton value="Eliminar"						 	
 							actionListener="#{postulanteManagedBean.deleteResidencia()}"
 							update=":formPostulanteDetalle:dataTableResidencia"
 							icon="ui-icon-trash">
@@ -259,7 +260,7 @@
 				<!-- fin de postulante Conocimiento -->
 
 				<p:dataTable id="dataTablePostulanteConocimiento"
-					var="postulanteConocimiento" rowKey="#{postulanteConocimiento.id}"
+					var="postulanteConocimiento" rowKey="#{postulanteConocimiento.conocimiento.conoId}"
 					value="#{postulanteManagedBean.postulante.postulanteConocimientos}"
 					selection="#{postulanteManagedBean.newPostulanteConocimiento}"
 					emptyMessage="No tiene registrado conocimientos"
@@ -286,8 +287,7 @@
 							immediate="true" update=":newPostulanteConocimientoForm"
 							icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar"
-							 immediate="true"
+						<p:commandButton value="Eliminar"							
 							actionListener="#{postulanteManagedBean.deletePostulanteConocimiento()}"
 							update=":formPostulanteDetalle:dataTablePostulanteConocimiento"
 							icon="ui-icon-trash">
@@ -334,8 +334,7 @@
 							oncomplete="PF('saveExperienciaLaboralDialog').show()" immediate="true"
 							update=":newExperienciaLaboralForm" icon="ui-icon-check">
 						</p:commandButton>
-						<p:commandButton value="Eliminar"
-							immediate="true"
+						<p:commandButton value="Eliminar"							
 							actionListener="#{postulanteManagedBean.deleteExperienciaLaboral()}"
 							update=":formPostulanteDetalle:dataTableExperienciaLaboral"
 							icon="ui-icon-trash">
@@ -394,7 +393,7 @@
 				<!-- Idioma-->
 
 				<p:dataTable id="dataTablePostulanteIdioma" var="postulanteIdioma"
-					rowKey="#{postulanteIdioma.id}"
+					rowKey="#{postulanteIdioma.idioma.idioId}"
 					value="#{postulanteManagedBean.postulante.postulanteIdiomas}"
 					selection="#{postulanteManagedBean.newPostulanteIdioma}"
 					emptyMessage="No tiene registrado idiomas" selectionMode="single">
@@ -430,8 +429,6 @@
 
 		</p:panel>
 
-
-
 		<!--FIN POSTULANTE -->
 
 		<!-- Dialog nuevo telefono -->
@@ -447,6 +444,7 @@
 					<p:inputText
 						value="#{postulanteManagedBean.newTelefono.teleDescripcion}" 
 						required="true" requiredMessage="Escriba una descripción"/>
+						
 					<h:outputText value="Número: " />
 					<p:inputText value="#{postulanteManagedBean.newTelefono.teleNum}"
 						required="true" requiredMessage="Escriba un teléfono" />
@@ -486,12 +484,13 @@
 
 					<h:outputText value="Departamento :" />
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.selectedDepartamento.depaId}"
-						effect="fade" required="true" requiredMessage="Elija departamento">
+						value="#{postulanteManagedBean.selectedDepartamento}"
+						effect="fade" required="true" requiredMessage="Elija departamento"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.departamentos}"
 							var="departamento" itemLabel="#{departamento.depaNombre}"
-							itemValue="#{departamento.depaId}" />
+							itemValue="#{departamento}" />
 						<p:ajax event="change"
 							listener="#{postulanteManagedBean.chargeProvincias}"
 							update=":newResidenciaForm:provinciaSelectOneMenu :newResidenciaForm:distritoSelectOneMenu " />
@@ -499,12 +498,13 @@
 
 					<h:outputText value="Provincia :" />
 					<p:selectOneMenu id="provinciaSelectOneMenu"
-						value="#{postulanteManagedBean.selectedProvincia.provId}"
-						effect="fade" required="true" requiredMessage="Elija provincia">
+						value="#{postulanteManagedBean.selectedProvincia}"
+						effect="fade" required="true" requiredMessage="Elija provincia"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.provincias}"
 							var="provincia" itemLabel="#{provincia.provNombre}"
-							itemValue="#{provincia.provId}" />
+							itemValue="#{provincia}" />
 						<p:ajax event="change"
 							listener="#{postulanteManagedBean.chargeDistritos}"
 							update=":newResidenciaForm:distritoSelectOneMenu" />
@@ -512,12 +512,13 @@
 
 					<h:outputText value="Distrito :" />
 					<p:selectOneMenu id="distritoSelectOneMenu"
-						value="#{postulanteManagedBean.selectedDistrito.distId}"
-						effect="fade" required="true" requiredMessage="Elija distrito">
+						value="#{postulanteManagedBean.selectedDistrito}"
+						effect="fade" required="true" requiredMessage="Elija distrito"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.distritos}"
 							var="distrito" itemLabel="#{distrito.distNombre}"
-							itemValue="#{distrito.distId}" />
+							itemValue="#{distrito}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -546,12 +547,13 @@
 				<h:panelGrid columns="3">
 					<h:outputText value="Conocimiento :" />
 					<p:selectOneMenu id="selectedConocimiento"
-						value="#{postulanteManagedBean.newPostulanteConocimiento.conocimiento.conoId}"
-						effect="fade" required="true" requiredMessage="Elija Conocimiento">
+						value="#{postulanteManagedBean.newPostulanteConocimiento.conocimiento}"
+						effect="fade" required="true" requiredMessage="Elija Conocimiento"
+						converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.conocimientos}"
 							var="conocimiento" itemLabel="#{conocimiento.conoNombre}"
-							itemValue="#{conocimiento.conoId}" />
+							itemValue="#{conocimiento}" />
 					</p:selectOneMenu>
 					<p:commandLink
 						actionListener="#{postulanteManagedBean.reiniciarConocimiento}" 
@@ -564,15 +566,15 @@
 
 					<h:outputText value="Nivel de Conocimiento :" />
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.newPostulanteConocimiento.nivelConocimiento.nicoId}"
-						effect="fade" required="true"
+						value="#{postulanteManagedBean.newPostulanteConocimiento.nivelConocimiento}"
+						effect="fade" required="true" converter="omnifaces.SelectItemsConverter"
 						requiredMessage="Elija el nivel de conocimiento">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems
 							value="#{postulanteManagedBean.nivelesConocimiento}"
 							var="nivelConocimiento"
 							itemLabel="#{nivelConocimiento.nicoNombre}"
-							itemValue="#{nivelConocimiento.nicoId}" />
+							itemValue="#{nivelConocimiento}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -619,14 +621,15 @@
 					
 					<h:outputText value="Puesto :" />
 					<p:selectOneMenu id="selectedPuesto"
-						value="#{postulanteManagedBean.newExperienciaLaboral.organizacionPuesto.puesto.puesId}"
+						value="#{postulanteManagedBean.newExperienciaLaboral.organizacionPuesto.puesto}"
 						required="true" requiredMessage="Elija un puesto"
-						effect="fade">
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.puestos}"
 							var="puesto" itemLabel="#{puesto.puesNombre}"
-							itemValue="#{puesto.puesId}" />
+							itemValue="#{puesto}" />
 					</p:selectOneMenu>
+					
 					<p:commandLink
 						actionListener="#{postulanteManagedBean.reiniciarPuesto}" 
 						oncomplete="PF('savePuestoDialog').show()" immediate="true">
@@ -687,13 +690,13 @@
 						showOn="button" navigator="true" readonlyInput="true" locale="es"/>
 
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.newActividadAcademica.estudio.estuId}"
+						value="#{postulanteManagedBean.newActividadAcademica.estudio}"
 						required="true" requiredMessage="Elije un estudio realizado"
-						effect="fade">
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.estudios}"
 							var="estudio" itemLabel="#{estudio.estuNombre}"
-							itemValue="#{estudio.estuId}" />
+							itemValue="#{estudio}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -723,23 +726,23 @@
 			<h:form id="newPostulanteIdiomaForm">
 				<p:panelGrid columns="2">
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.newPostulanteIdioma.idioma.idioId}"
+						value="#{postulanteManagedBean.newPostulanteIdioma.idioma}"
 						required="true" requiredMessage="Elija un idioma"
-						effect="fade">
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.idiomas}"
 							var="idioma" itemLabel="#{idioma.idioNombre}"
-							itemValue="#{idioma.idioId}" />
+							itemValue="#{idioma}" />
 					</p:selectOneMenu>
 
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.newPostulanteIdioma.nivelIdioma.niidId}"
+						value="#{postulanteManagedBean.newPostulanteIdioma.nivelIdioma}"
 						required="true" requiredMessage="Elija el nivel en que maneja el idioma"
-						effect="fade">
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.nivelesIdioma}"
 							var="nivelIdioma" itemLabel="#{nivelIdioma.niidNombre}"
-							itemValue="#{nivelIdioma.niidId}" />
+							itemValue="#{nivelIdioma}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">
@@ -770,13 +773,13 @@
 			<h:form id="newPostulanteBeneficioForm">
 				<p:panelGrid columns="2">
 					<p:selectOneMenu
-						value="#{postulanteManagedBean.newPostulanteBeneficio.beneficio.beneId}"
+						value="#{postulanteManagedBean.newPostulanteBeneficio.beneficio}"
 						required="true" requiredMessage="Elija un beneficio"
-						effect="fade">
+						effect="fade" converter="omnifaces.SelectItemsConverter">
 						<f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
 						<f:selectItems value="#{postulanteManagedBean.beneficios}"
 							var="beneficio" itemLabel="#{beneficio.beneNombre}"
-							itemValue="#{beneficio.beneId}" />
+							itemValue="#{beneficio}" />
 					</p:selectOneMenu>
 
 					<f:facet name="footer">

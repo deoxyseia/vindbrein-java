@@ -204,7 +204,7 @@
 		<dependency>
 			<groupId>org.omnifaces</groupId>
 			<artifactId>omnifaces</artifactId>
-			<version>1.7</version>
+			<version>1.8.1</version>
 		</dependency>
 	</dependencies>
 </project>

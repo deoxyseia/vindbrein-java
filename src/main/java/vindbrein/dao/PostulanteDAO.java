@@ -24,6 +24,10 @@ public class PostulanteDAO {
 	public void updatePostulante(Postulante postulante) {
 		getSessionFactory().getCurrentSession().update(postulante);		
 	}
+	
+	public void saveOrOpdatePostulante(Postulante postulante) {
+		getSessionFactory().getCurrentSession().saveOrUpdate(postulante);		
+	}
 
 	public void deletePostulante(Postulante postulante) {
 		getSessionFactory().getCurrentSession().delete(postulante);		

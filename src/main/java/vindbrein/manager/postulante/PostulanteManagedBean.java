@@ -27,6 +27,8 @@ import vindbrein.domain.model.Idioma;
 import vindbrein.domain.model.NivelConocimiento;
 import vindbrein.domain.model.NivelIdioma;
 import vindbrein.domain.model.NivelPuesto;
+import vindbrein.domain.model.OfertaBeneficio;
+import vindbrein.domain.model.OfertaConocimiento;
 import vindbrein.domain.model.Organizacion;
 import vindbrein.domain.model.OrganizacionPuesto;
 import vindbrein.domain.model.Postulante;
@@ -86,11 +88,7 @@ public class PostulanteManagedBean implements Serializable{
 	@Autowired
 	@Qualifier("postulanteServiceImpl")
 	private PostulanteService postulanteService;
-	
-	@Autowired
-	@Qualifier("telefonoServiceImpl")
-	private TelefonoService telefonoService;
-	
+		
 	@Autowired
 	@Qualifier("residenciaServiceImpl")
 	private ResidenciaService residenciaService;
@@ -114,11 +112,7 @@ public class PostulanteManagedBean implements Serializable{
 	@Autowired
 	@Qualifier("puestoServiceImpl")
 	private PuestoService puestoService;
-	
-	@Autowired
-	@Qualifier("experienciaLaboralServiceImpl")
-	private ExperienciaLaboralService experienciaLaboralService;
-	
+		
 	@Autowired
 	@Qualifier("estadoCivilServiceImpl")
 	private EstadoCivilService estadoCivilService;
@@ -130,11 +124,7 @@ public class PostulanteManagedBean implements Serializable{
 	@Autowired
 	@Qualifier("organizacionServiceImpl")
 	private OrganizacionService organizacionService;
-	
-	@Autowired
-	@Qualifier("actividadAcademicaServiceImpl")
-	private ActividadAcademicaService actividadAcademicaService;
-	
+		
 	@Autowired
 	@Qualifier("estudioServiceImpl")
 	private EstudioService estudioService;
@@ -151,10 +141,6 @@ public class PostulanteManagedBean implements Serializable{
 	@Qualifier("sectorServiceImpl")
 	private SectorService sectorService;
 	
-	@Autowired
-	@Qualifier("mongoServiceImpl")
-	private MongoService mongoService;
-		
 	// datos maestros	
 	private ArrayList<Departamento> departamentos;
 	private ArrayList<Provincia> provincias;
@@ -269,8 +255,14 @@ public class PostulanteManagedBean implements Serializable{
 		subcategoriasConocimiento = conocimientoService.getSubcategoriasConocimientoByCategoriaConocimiento(selectedCategoriaConocimiento);
 	}
 	
+//	public void savePostulante(){
+//		postulanteService.updatePostulante(postulante);		
+//		
+//		recargarPostulante();
+//	}
+	
 	public void savePostulante(){
-		postulanteService.updatePostulante(postulante);		
+		postulanteService.saveOrUpdatePostulante(postulante);
 		
 		recargarPostulante();
 	}
@@ -295,31 +287,27 @@ public class PostulanteManagedBean implements Serializable{
 	//telefono
 	public void reiniciarNewTelefono(){
 		newTelefono = new Telefono();
+		newTelefono.setPostulante(postulante);
 	}	
 	
 	public void saveTelefono(){		
-		newTelefono.setPostulante(postulante);
+		logger.info("agregar telefono");
 		
-		if(newTelefono.getTeleId()==0){
-			telefonoService.addTelefono(newTelefono);
-		}else{
-			telefonoService.updateTelefono(newTelefono);
-		}		
-		
-		recargarPostulante();
+		postulante.getTelefonos().add(newTelefono);	
 	}
-	
+		
 	public void deleteTelefono(){		
-		if(newTelefono!= null){
-			telefonoService.deleteTelefono(newTelefono);
-			
-			recargarPostulante();
+		logger.info("quitando telefono");
+		
+		if(newTelefono != null){
+			postulante.getTelefonos().remove(newTelefono);
 		}	
 	}
 	
 	//residencia
 	public void reiniciarNewResidencia(){
 		newResidencia = new Residencia();
+		newResidencia.setPostulante(postulante);
 		newResidencia.setResiActivo((byte)1);
 		
 		selectedDepartamento = new Departamento();
@@ -327,21 +315,16 @@ public class PostulanteManagedBean implements Serializable{
 		selectedDistrito = new Distrito();
 		
 		provincias = null;
-		distritos = null;
-		
+		distritos = null;		
 	}
 	
 	public void saveResidencia(){		
-		newResidencia.setPostulante(postulante);
-		newResidencia.setDistrito(selectedDistrito);
+		logger.info("agregando residencia");
 		
-		if(newResidencia.getResiId()==0){
-			residenciaService.addResidencia(newResidencia);
-		}else{
-			residenciaService.updateResidencia(newResidencia);
+		if(newResidencia != null){
+			newResidencia.setDistrito(selectedDistrito);
+			postulante.getResidencias().add(newResidencia);
 		}		
-		
-		recargarPostulante();
 	}
 	
 	public void loadResidencia(){
@@ -357,10 +340,10 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void deleteResidencia(){	
+		logger.info("removiendo residencia");
+		
 		if(newResidencia != null){
-			residenciaService.deleteResidencia(newResidencia);
-			
-			recargarPostulante();
+			postulante.getResidencias().remove(newResidencia);
 		}		
 	}
 	
@@ -376,21 +359,27 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void savePostulanteConocimiento(){		
-				
-		if(newPostulanteConocimiento.getId().getFkConoId()==0){
-			conocimientoService.addConocimientoToPostulante(newPostulanteConocimiento);
-		}else{
-			conocimientoService.updateConocimientoToPostulante(newPostulanteConocimiento);
-		}		
+		logger.info("agregando conocimiento");
 		
-		recargarPostulante();
+		boolean agregar = true;
+		
+		for (PostulanteConocimiento postulanteConocimiento : postulante.getPostulanteConocimientos()) {
+			if(postulanteConocimiento.getConocimiento().getConoId() == newPostulanteConocimiento.getConocimiento().getConoId()){
+				agregar = false;
+				break;
+			}
+		}
+		
+		if(agregar){
+			postulante.addPostulanteConocimiento(newPostulanteConocimiento);		
+		}
 	}
 	
 	public void deletePostulanteConocimiento(){	
+		logger.info("removiendo conocimiento");
+		
 		if(newPostulanteConocimiento != null){
-			conocimientoService.deleteConocimientoToPostulante(newPostulanteConocimiento);
-			
-			recargarPostulante();
+			postulante.removePostulanteConocimiento(newPostulanteConocimiento);
 		}		
 	}
 	
@@ -406,20 +395,28 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void saveExperienciaLaboral(){		
-		if(newExperienciaLaboral.getExlaId()==0){
-			experienciaLaboralService.addExperienciaLaboral(newExperienciaLaboral);
-		}else{
-			experienciaLaboralService.updateExperienciaLaboral(newExperienciaLaboral);			
+		logger.info("agregando experiencia laboral");
+		
+		boolean agregar = true;
+		
+		for (ExperienciaLaboral experienciaLaboral : postulante.getExperienciasLaborales()) {
+			if(experienciaLaboral.getOrganizacionPuesto().getOrganizacion().getOrgaId() == newExperienciaLaboral.getOrganizacionPuesto().getOrganizacion().getOrgaId()
+				&& experienciaLaboral.getOrganizacionPuesto().getPuesto().getPuesId() == newExperienciaLaboral.getOrganizacionPuesto().getPuesto().getPuesId()){
+				agregar = false;
+				break;
+			}
 		}
 		
-		recargarPostulante();
+		if(agregar){
+			postulante.addExperienciaLaboral(newExperienciaLaboral);		
+		}
 	}
 	
 	public void deleteExperienciaLaboral(){
+		logger.info("removiendo experiencia laboral");
+		
 		if(newExperienciaLaboral != null){
-			experienciaLaboralService.deleteExperienciaLaboral(newExperienciaLaboral);
-			
-			recargarPostulante();
+			postulante.removeExperienciaLaboral(newExperienciaLaboral);
 		}
 	}
 	
@@ -431,20 +428,27 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void saveActividadAcademica(){		
-		if(newActividadAcademica.getAcacId()==0){
-			actividadAcademicaService.addActividadAcademica(newActividadAcademica);
-		}else{
-			actividadAcademicaService.updateActividadAcademica(newActividadAcademica);		
+		logger.info("agregando actividad academica");
+		
+		boolean agregar = true;
+		
+		for (ActividadAcademica actividadAcademica: postulante.getActividadesAcademicas()) {
+			if(actividadAcademica.getEstudio().getEstuId() == newActividadAcademica.getEstudio().getEstuId()){
+				agregar = false;
+				break;
+			}
 		}
 		
-		recargarPostulante();
+		if(agregar){
+			postulante.addActividadAcademica(newActividadAcademica);	
+		}
 	}
 	
 	public void deleteActividadAcademica(){
+		logger.info("removiendo actividad academica");
+		
 		if(newActividadAcademica != null){
-			actividadAcademicaService.deleteActividadAcademica(newActividadAcademica);
-			
-			recargarPostulante();
+			postulante.getActividadesAcademicas().remove(newActividadAcademica);
 		}
 	}
 	
@@ -459,20 +463,27 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void savePostulanteIdioma(){		
-		if(newPostulanteIdioma.getId().getFkIdioId()==0){
-			idiomaService.addIdiomaToPostulante(newPostulanteIdioma);
-		}else{
-			idiomaService.updateIdiomaToPostulante(newPostulanteIdioma);		
+		logger.info("agregando idioma");
+		
+		boolean agregar = true;
+		
+		for (PostulanteIdioma postulanteIdioma: postulante.getPostulanteIdiomas()) {
+			if(postulanteIdioma.getIdioma().getIdioId() == newPostulanteIdioma.getIdioma().getIdioId()){
+				agregar = false;
+				break;
+			}
 		}
 		
-		recargarPostulante();
+		if(agregar){
+			postulante.addPostulanteIdioma(newPostulanteIdioma);
+		}
 	}
 	
 	public void deletePostulanteIdioma(){
+		logger.info("removiendo idioma");
+		
 		if(newPostulanteIdioma != null){
-			idiomaService.deleteIdiomaToPostulante(newPostulanteIdioma);
-			
-			recargarPostulante();
+			postulante.removePostulanteIdioma(newPostulanteIdioma);
 		}
 	}
 	
@@ -486,20 +497,27 @@ public class PostulanteManagedBean implements Serializable{
 	}
 	
 	public void savePostulanteBeneficio(){		
-		if(newPostulanteBeneficio.getId().getFkBeneId() == 0){
-			beneficioService.addBeneficioToPostulante(newPostulanteBeneficio);
-		}else{
-			beneficioService.updateBeneficioToPostulante(newPostulanteBeneficio);		
+		logger.info("agregando beneficio");
+		
+		boolean agregar = true;
+		
+		for (PostulanteBeneficio postulanteBeneficio: postulante.getPostulanteBeneficios()) {
+			if(postulanteBeneficio.getBeneficio().getBeneId() == newPostulanteBeneficio.getBeneficio().getBeneId()){
+				agregar = false;
+				break;
+			}
 		}
 		
-		recargarPostulante();
+		if(agregar){
+			postulante.addPostulanteBeneficio(newPostulanteBeneficio);
+		}
 	}
 	
 	public void deletePostulanteBeneficio(){
+		logger.info("removiendo beneficio");
+		
 		if(newPostulanteBeneficio != null){
-			beneficioService.deleteBeneficioToPostulante(newPostulanteBeneficio);
-			
-			recargarPostulante();
+			postulante.getPostulanteBeneficios().remove(newPostulanteBeneficio);
 		}
 	}
 	
