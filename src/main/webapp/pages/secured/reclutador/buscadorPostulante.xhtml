@@ -11,7 +11,8 @@
 	<h:panelGrid columns="3">
 		<p:outputLabel value=" Buscar:" for="autoCompleteBuscarPostulante" />
 		<p:autoComplete id="autoCompleteBuscarPostulante" value="#{buscarPostulanteManagedBean.cadenaBusqueda}"
-			completeMethod="#{buscarPostulanteManagedBean.autocompletarBusqueda}"  />
+			completeMethod="#{buscarPostulanteManagedBean.autocompletarBusqueda}"
+			forceSelection="true"  />
 		<p:commandButton value="Buscar" 
 			actionListener="#{buscarPostulanteManagedBean.realizarBusqueda()}"
 			update=":dataGridPostulantesBuscados"

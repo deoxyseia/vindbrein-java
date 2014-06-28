@@ -57,6 +57,7 @@ import vindbrein.service.PuestoService;
 import vindbrein.service.ResidenciaService;
 import vindbrein.service.SectorService;
 import vindbrein.service.TipoHorarioService;
+import vindbrein.util.Util;
 
 @Controller
 @Scope("session")
@@ -257,6 +258,10 @@ public class PostulanteManagedBean implements Serializable{
 		postulanteService.updatePostulante(postulante);
 		
 		recargarPostulante();
+		
+		iniciarDatosMaestros();
+		
+		Util.lanzarMensaje("INFO", "GLOBAL", "Se ha actualizado el perfil");
 	}
 	
 	public void cancelSavePostulante(){

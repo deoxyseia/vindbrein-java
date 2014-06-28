@@ -16,6 +16,7 @@ import vindbrein.domain.model.Postulante;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.app.RecommenderService;
 import vindbrein.util.RecommenderType;
+import vindbrein.util.Util;
 
 @Controller
 @Scope("session")
@@ -70,6 +71,8 @@ public class RecomendarPostulanteManagedBean implements Serializable{
 			System.out.println("que pasó default!!!");
 			break;
 		}
+		
+		Util.lanzarMensaje("INFO", "GLOBAL", "Se ha realizado exitosamente la recomendación");
 	}
 	
 	//getters and setters	

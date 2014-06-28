@@ -20,6 +20,7 @@ import vindbrein.domain.model.Postulante;
 import vindbrein.service.OfertaLaboralService;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.app.CoreService;
+import vindbrein.util.Util;
 
 @Controller
 @Scope("session")
@@ -109,7 +110,9 @@ public class BuscarOfertaManagedBean implements Serializable{
 					}
 				}
 			}
-		}		
+		}
+		
+		Util.lanzarMensaje("INFO",  "GLOBAL", "Se ha realizado la búsqueda");
 	}
 	
 	public void visitarOfertaLaboral(){

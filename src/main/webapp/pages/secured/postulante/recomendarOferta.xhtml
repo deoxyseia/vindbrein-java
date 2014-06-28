@@ -9,8 +9,6 @@
 	<ui:define name="title"> Recomendación de oferta </ui:define>
 
 	<ui:define name="content">
-	
-	<p:messages showDetail="true" autoUpdate="true" closable="true" />
 
 	<h:form>
 	<h:panelGrid columns="3">	
@@ -56,13 +54,15 @@
 				</ui:repeat>
 			</ul>
 			
+			<center>
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true">
-				<h:outputText styleClass="ui-icon ui-icon-search"
-					style="margin:0 auto;" />
+				<p:graphicImage value="/resources/img/lupa.png">
+				</p:graphicImage>
 				<f:setPropertyActionListener value="#{oferta}"
 					target="#{buscarOfertaManagedBean.selectedOfertaLaboral}" />				
 			</p:commandLink>
+			</center>
 
 			
 		</p:panel>

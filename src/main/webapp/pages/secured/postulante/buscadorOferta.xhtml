@@ -10,7 +10,8 @@
 	<h:panelGrid columns="3">
 		<p:outputLabel value=" Buscar:" for="autoCompleteBuscarOferta" />
 		<p:autoComplete id="autoCompleteBuscarOferta" value="#{buscarOfertaManagedBean.cadenaBusqueda}"
-			completeMethod="#{buscarOfertaManagedBean.autocompletarBusqueda}"  />
+			completeMethod="#{buscarOfertaManagedBean.autocompletarBusqueda}" 
+			forceSelection="true" />
 		<p:commandButton value="Buscar" 
 			actionListener="#{buscarOfertaManagedBean.realizarBusqueda()}"
 			update=":dataGridOfertasBuscadas"
@@ -43,13 +44,14 @@
 				</ui:repeat>
 			</ul>			
 
-			<p:commandLink title="Ver Detalle"					
-				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true">
-				<h:outputText styleClass="ui-icon ui-icon-search"
-					style="margin:0 auto;" />
+			<center><p:commandLink title="Ver Detalle"					
+				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true" >
+				<p:graphicImage value="/resources/img/lupa.png">
+				</p:graphicImage>
 				<f:setPropertyActionListener value="#{oferta}"
 					target="#{buscarOfertaManagedBean.selectedOfertaLaboral}" />				
 			</p:commandLink>
+			</center>
 		</p:panel>		
 
 	</p:dataGrid>

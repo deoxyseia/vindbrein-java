@@ -13,27 +13,23 @@
 		<p:menu style="width:93%">
 
 			<c:if test="#{request.getUserPrincipal() != null}">
-				<p:submenu label="Inicio">
-					<p:menuitem value="Principal"
-						action="/pages/secured/principal/principal.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />
-				</p:submenu>
+				<p:menuitem value="Buscar" 
+					action="/pages/secured/principal/principal.xhtml?faces-redirect=true"
+					icon="ui-icon-search" />
 			</c:if>
 
 			<c:if test="#{request.isUserInRole('ROLE_ESTUDIANTE')}">
-				<p:submenu label="Información personal">
-					<p:menuitem value="Perfil"
-						action="/pages/secured/postulante/postulante.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />
-						
-					<p:menuitem value="Recomendaciones"
-						action="/pages/secured/postulante/recomendarOferta.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />
-						
-					<p:menuitem value="Actividades"
-						action="/pages/secured/postulante/actividad.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />		
-				</p:submenu>
+				<p:menuitem value="Perfil"
+					action="/pages/secured/postulante/postulante.xhtml?faces-redirect=true"
+					icon="ui-icon-home" />
+
+				<p:menuitem value="Recomendaciones"
+					action="/pages/secured/postulante/recomendarOferta.xhtml?faces-redirect=true"
+					icon="ui-icon-star" />
+
+				<p:menuitem value="Actividades"
+					action="/pages/secured/postulante/actividad.xhtml?faces-redirect=true"
+					icon="ui-icon-clipboard" />
 			</c:if>
 
 			<c:if test="#{request.isUserInRole('ROLE_ADMIN')}">
@@ -45,19 +41,23 @@
 			</c:if>
 
 			<c:if test="#{request.isUserInRole('ROLE_RECLUTADOR')}">
-				<p:submenu label="Organizacion">
-					<p:menuitem value="Oferta laboral"
-						action="/pages/secured/reclutador/ofertaLaboral.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />
-						
-					<p:menuitem value="Recomendaciones"
-						action="/pages/secured/reclutador/recomendarPostulante.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />
-						
-					<p:menuitem value="Actividades"
-						action="/pages/secured/reclutador/actividad.xhtml?faces-redirect=true"
-						icon="ui-icon-home" />					
-				</p:submenu>
+				<p:menuitem value="Ofertas registradas"
+					action="/pages/secured/reclutador/ofertaLaboral.xhtml?faces-redirect=true"
+					icon="ui-icon-copy" />
+
+				<p:menuitem value="Recomendaciones"
+					action="/pages/secured/reclutador/recomendarPostulante.xhtml?faces-redirect=true"
+					icon="ui-icon-star" />
+
+				<p:menuitem value="Actividades"
+					action="/pages/secured/reclutador/actividad.xhtml?faces-redirect=true"
+					icon="ui-icon-clipboard" />
+			</c:if>
+			
+			<c:if test="#{request.getUserPrincipal() != null}">
+				<p:menuitem value="Sobre Vindbrein" 
+					action="/pages/secured/principal/informacion.xhtml?faces-redirect=true"
+					icon="ui-icon-triangle-1-e" />
 			</c:if>
 
 		</p:menu>

@@ -101,7 +101,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		profile.setVecSelfDescription(convertLinkedHashMapToArray(postulantSelfDescription.getValues()));
 		profile.setVecPreference(convertLinkedHashMapToArray(postulantPreference.getValues()));
 				
-		
+		//busco perfil histórico o lo cambio o creo uno de 0s
 		if(postulante.getPostIdH() == null){
 			OfertaLaboral ofertaLaboral = ofertaLaboralDAO.getAlgunaOfertaLaboral();
 			

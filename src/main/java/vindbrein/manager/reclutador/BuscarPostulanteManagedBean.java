@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import vindbrein.domain.model.OfertaConocimiento;
 import vindbrein.domain.model.OfertaLaboral;
 import vindbrein.domain.model.Postulante;
 import vindbrein.domain.model.PostulanteConocimiento;
 import vindbrein.service.PostulanteService;
 import vindbrein.service.app.CoreService;
+import vindbrein.util.Util;
 
 @Controller
 @Scope("session")
@@ -53,9 +55,9 @@ public class BuscarPostulanteManagedBean implements Serializable{
 		
 		postulantesEncontrados = postulantes;
 	}
-
 	
 	public List<String> autocompletarBusqueda(String query){
+		boolean tomado= false;
 		List<String> encontrados = new ArrayList<String>();
 		
 		for (int i = 0; i < postulantes.size(); i++) {
@@ -63,7 +65,17 @@ public class BuscarPostulanteManagedBean implements Serializable{
 			
 			for (int j = 0; j < postulanteConocimientos.size(); j++) {
 				if(postulanteConocimientos.get(j).getConocimiento().getConoNombre().toLowerCase().contains(query.toLowerCase())){
-					encontrados.add(postulanteConocimientos.get(j).getConocimiento().getConoNombre());
+					for (int k = 0; k < encontrados.size(); k++) {
+						if(encontrados.get(k).equalsIgnoreCase(postulanteConocimientos.get(j).getConocimiento().getConoNombre())){
+							tomado = true;
+							break;
+						}
+					}
+					
+					if(!tomado){
+						encontrados.add(postulanteConocimientos.get(j).getConocimiento().getConoNombre());
+						tomado = false;
+					}					
 				}
 			}
 		}
@@ -90,7 +102,9 @@ public class BuscarPostulanteManagedBean implements Serializable{
 					}
 				}
 			}
-		}		
+		}	
+		
+		Util.lanzarMensaje("INFO", "GLOBAL", "Se ha realizado exitosamente la búsqueda");
 	}
 	
 	public void reclutarPostulante(){
