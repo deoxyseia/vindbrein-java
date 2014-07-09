@@ -1,5 +1,6 @@
 package vindbrein.service.app;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import vindbrein.domain.model.OfertaLaboral;
@@ -12,5 +13,7 @@ public interface RecommenderService {
 	public ArrayList<OfertaLaboral> recomendarOfertasLaboralesToPostulante(Postulante postulante, int size, RecommenderType recommenderType);
 	
 	public ArrayList<Postulante> recomendarPostulanteToOfertaLboral(OfertaLaboral ofertaLaboral, int size, RecommenderType recommenderType);
+	
+	public ArrayList<Postulante> normalizarScorePostulantes(ArrayList<Postulante> postulantes, BigDecimal min, BigDecimal max);
 	
 }

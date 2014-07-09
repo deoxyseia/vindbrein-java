@@ -1,6 +1,7 @@
 package vindbrein.manager.reclutador;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
@@ -58,10 +59,10 @@ public class RecomendarPostulanteManagedBean implements Serializable{
 			postulantesRecomendados = recommenderService.recomendarPostulanteToOfertaLboral(selectedOfertaLaboral, 2, RecommenderType.CONTENT_BASED);
 			break;
 		case 2:
-			postulantesRecomendados = recommenderService.recomendarPostulanteToOfertaLboral(selectedOfertaLaboral, 2, RecommenderType.COLLABORATIVE_BASED);
+			postulantesRecomendados = recommenderService.recomendarPostulanteToOfertaLboral(selectedOfertaLaboral, 2, RecommenderType.COLLABORATIVE_BASED);			
 			break;
 		case 3:
-			postulantesRecomendados = recommenderService.recomendarPostulanteToOfertaLboral(selectedOfertaLaboral, 2, RecommenderType.RECIPROCITY_BASED);
+			postulantesRecomendados = recommenderService.recomendarPostulanteToOfertaLboral(selectedOfertaLaboral, 2, RecommenderType.RECIPROCITY_BASED);			
 			break;
 		case 4:
 			postulantesRecomendados = recommenderService.recomendarPostulanteToOfertaLboral(selectedOfertaLaboral, 2, RecommenderType.FUSION_BASED);

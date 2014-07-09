@@ -39,6 +39,7 @@ public class OfertaLaboral implements Serializable {
 	private EstadoCivil estadoCivil;
 	private OrganizacionPuesto organizacionPuesto;
 	private BigDecimal score;
+	private BigDecimal scoreNormalizado;
 
 	public OfertaLaboral() {
 	}
@@ -384,6 +385,25 @@ public class OfertaLaboral implements Serializable {
 	@Transient
 	public String getScorePlain(){
 		return score.toPlainString();
+	}
+	
+	@Transient
+	public BigDecimal getScoreNormalizado() {
+		return scoreNormalizado;
+	}
+
+	public void setScoreNormalizado(BigDecimal scoreNormalizado) {
+		this.scoreNormalizado = scoreNormalizado;
+	}
+	
+
+	@Transient
+	public BigDecimal getPorcentaje(){
+		BigDecimal porcentaje = score.multiply(new BigDecimal(100));
+		porcentaje = porcentaje.setScale(2, BigDecimal.ROUND_HALF_UP);
+		
+		return porcentaje;
+		
 	}
 	
 	

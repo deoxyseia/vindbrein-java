@@ -13,7 +13,7 @@
 	<h:form>
 	<h:panelGrid columns="3">	
 		<p:selectOneMenu id="idRecomendacionTipo" value="#{recomendarPostulanteManagedBean.tipoRecomendacion}">
-            <f:selectItem itemLabel="Select One" noSelectionOption="true" />
+            <f:selectItem itemLabel="Elige uno" noSelectionOption="true" />
             <f:selectItem itemLabel="Basado en contenido" itemValue="1" />
             <f:selectItem itemLabel="Basado en colaboración" itemValue="2" />
             <f:selectItem itemLabel="Basado en reciprocidad" itemValue="3" />
@@ -39,40 +39,53 @@
 	</h:form>
 
 	<p:dataGrid id="dataGridPostulantesRecomendados" var="postulante"
+	    emptyMessage="No hay resultados, recomendamos mejorar la información de la oferta laboral a fin de tomarlos en cuenta en la recomendaciones"
 		value="#{recomendarPostulanteManagedBean.postulantesRecomendados}"
 		columns="1" rows="12">
 
 		<p:panel header="#{postulante.postNombres}">
 			<h:panelGrid columns="2">
-				<h:outputText value="Nombres:" />
+				<h:outputText value="Nombres: " />
 				<h:outputText value="#{postulante.postNombres}" />
 				
-				<h:outputText value="Apellido paterno" />
+				<h:outputText value="Apellido paterno: " />
 				<h:outputText value="#{postulante.postApellidoPaterno}" />
 				
-				<h:outputText value="Apellido materno" />
+				<h:outputText value="Apellido materno: " />
 				<h:outputText value="#{postulante.postApellidoMaterno}" />
 				
+				<h:outputText value="Certeza: " />
+				<h:outputText value="#{postulante.porcentaje} %"  />
+			</h:panelGrid>	
+				
+				<p:outputLabel value="Conocimientos: " />
+				<ul>
+					<ui:repeat value="#{postulante.postulanteConocimientos}" var="postulanteConocimiento">
+						<li >
+							<h:outputText value="#{postulanteConocimiento.conocimiento.conoNombre}" />
+						</li>
+					</ui:repeat>
+				</ul>
+				
+				
+				<p:separator></p:separator>
+			<h:panelGrid columns="2">	
+				
 				<h:outputText value="Score" />
-				<h:outputText value="#{postulante.scorePlain}" />
-			</h:panelGrid>
-			
-			<p:outputLabel value="Conocimientos:" />
-			<ul>
-				<ui:repeat value="#{postulante.postulanteConocimientos}" var="postulanteConocimiento">
-					<li >
-						<h:outputText value="#{postulanteConocimiento.conocimiento.conoNombre}" />
-					</li>
-				</ui:repeat>
-			</ul>
-			
+				<h:outputText value="#{postulante.scorePlain} " /> 
+				
+				<h:outputText value="Score normalizado" />
+				<h:outputText value="#{postulante.scoreNormalizado} (entre 0 y 1)" />
+			</h:panelGrid>			
+			<center>
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/reclutador/informacionPostulante.xhtml?faces-redirect=true">
-				<h:outputText styleClass="ui-icon ui-icon-search"
-					style="margin:0 auto;" />
+				<p:graphicImage value="/resources/img/lupa.png">
+				</p:graphicImage>
 				<f:setPropertyActionListener value="#{postulante}"
-					target="#{buscarPostulanteManagedBean.selectedPostulante}" />				
+					target="#{buscarPostulanteManagedBean.selectedPostulante}" />						
 			</p:commandLink>
+			</center>
 
 			
 		</p:panel>

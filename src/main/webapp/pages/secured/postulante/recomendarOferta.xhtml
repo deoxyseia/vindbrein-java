@@ -29,7 +29,8 @@
 	</h:panelGrid>
 	</h:form>
 
-	<p:dataGrid id="dataGridOfertasRecomendadas" var="oferta" emptyMessage="No hay resultados"
+	<p:dataGrid id="dataGridOfertasRecomendadas" var="oferta" 
+		emptyMessage="No hay resultados, recomendamos mejorar la información de su perfil a fin de tomarlos en cuenta en la recomendaciones"
 		value="#{recomendarOfertaManagedBean.ofertasRecomendadas}"
 		columns="1" rows="12">
 
@@ -41,9 +42,9 @@
 				<h:outputText value="Salario:" />
 				<h:outputText value="#{oferta.oflaSalario}" />
 				
-				<h:outputText value="Score" />
-				<h:outputText value="#{oferta.scorePlain}" />
-			</h:panelGrid>
+				<h:outputText value="Certeza" />
+				<h:outputText value="#{oferta.porcentaje} %"  /> 
+			</h:panelGrid>	
 			
 			<p:outputLabel value="Conocimientos:" />		
 			<ul>
@@ -54,6 +55,17 @@
 				</ui:repeat>
 			</ul>
 			
+			<p:separator></p:separator>
+			
+			<h:panelGrid columns="2">
+				
+				<h:outputText value="Score" />
+				<h:outputText value="#{oferta.scorePlain}" />
+				
+				<h:outputText value="Score normalizado" />
+				<h:outputText value="#{oferta.scoreNormalizado} (entre 0 y 1)" />
+				
+			</h:panelGrid>				
 			<center>
 			<p:commandLink title="Ver Detalle"					
 				action="/pages/secured/postulante/informacionOfertaLaboral.xhtml?faces-redirect=true">

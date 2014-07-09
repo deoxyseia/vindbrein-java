@@ -214,6 +214,8 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				System.out.println("Score: "+resultados.get(i).getScore());
 			}
 			
+			results = normalizarScoreOfertas(results, new BigDecimal(0), new BigDecimal(1));
+			
 			break;
 		case COLLABORATIVE_BASED:
 			resultados = recommenderCollaborativeBased(profile, alternativasPostulantes, size);
@@ -235,6 +237,8 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				}							
 			}
 			
+			results = normalizarScoreOfertas(results, new BigDecimal(0), new BigDecimal(2));
+			
 			break;
 		case RECIPROCITY_BASED:
 			resultados = recommenderReciprocityBased(profile, alternativasOfertasLaborales, size);
@@ -247,6 +251,9 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				System.out.println("ID oferta: "+resultados.get(i).getProfile().getId());
 				System.out.println("Score: "+resultados.get(i).getScore());
 			}
+			
+			results = normalizarScoreOfertas(results, new BigDecimal(-1), new BigDecimal(1));
+			
 			break;
 		case FUSION_BASED:	
 			System.out.println("INICIANDO RECOMENDACION POR FUSION");
@@ -321,7 +328,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				
 				for (int j = 0; j < results.size(); j++) {
 					if(results.get(j).getOflaId() == ofertasTotal.get(i).getOflaId()){
-						results.get(j).setScore(results.get(j).getScore().add(ofertasTotal.get(i).getScore()));
+						results.get(j).setScore(results.get(j).getScoreNormalizado().add(ofertasTotal.get(i).getScore()));
 						existente = true;
 					}					
 				}
@@ -330,6 +337,8 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 					results.add(ofertasTotal.get(i));
 				}
 			}
+			
+			results = normalizarScoreOfertas(results, new BigDecimal(0), new BigDecimal(3));
 			
 			Comparator<OfertaLaboral> comparatorOferta = new Comparator<OfertaLaboral>() {
 				//orden descendente
@@ -486,6 +495,8 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				System.out.println("Score: "+resultados.get(i).getScore());
 			}
 			
+			results = normalizarScorePostulantes(results, new BigDecimal(0), new BigDecimal(1));
+			
 			break;
 		case COLLABORATIVE_BASED:
 			resultados = recommenderCollaborativeBased(profile, alternativasOfertasLaborales, size);
@@ -507,6 +518,8 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				}								
 			}
 			
+			results = normalizarScorePostulantes(results, new BigDecimal(0), new BigDecimal(2));
+			
 			break;
 		case RECIPROCITY_BASED:
 			resultados = recommenderReciprocityBased(profile, alternativasPostulantes, size);
@@ -519,6 +532,9 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				System.out.println("ID postulante: "+resultados.get(i).getProfile().getId());
 				System.out.println("Score: "+resultados.get(i).getScore());
 			}
+			
+			results = normalizarScorePostulantes(results, new BigDecimal(-1), new BigDecimal(1));
+			
 			break;
 		case FUSION_BASED:	
 			System.out.println("INICIANDO RECOMENDACION POR FUSION");
@@ -593,7 +609,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 				
 				for (int j = 0; j < results.size(); j++) {
 					if(results.get(j).getPostId() == postulantesTotal.get(i).getPostId()){
-						results.get(j).setScore(results.get(j).getScore().add(postulantesTotal.get(i).getScore()));
+						results.get(j).setScore(results.get(j).getScoreNormalizado().add(postulantesTotal.get(i).getScore()));
 						existente = true;
 					}					
 				}
@@ -602,6 +618,8 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 					results.add(postulantesTotal.get(i));
 				}
 			}
+			
+			results = normalizarScorePostulantes(results, new BigDecimal(0), new BigDecimal(3));
 			
 			Comparator<Postulante> comparatorOferta = new Comparator<Postulante>() {
 				//orden descendente
@@ -631,7 +649,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	public ArrayList<OfertaLaboral> normalizarScoreOfertas(ArrayList<OfertaLaboral> ofertas, BigDecimal min, BigDecimal max){
 		
 		for (int i = 0; i < ofertas.size(); i++) {
-			ofertas.get(i).setScore((ofertas.get(i).getScore().subtract(min)).divide(max.subtract(min)));
+			ofertas.get(i).setScoreNormalizado((ofertas.get(i).getScore().subtract(min)).divide(max.subtract(min), 5, BigDecimal.ROUND_HALF_UP));
 		}
 		
 		return ofertas;
@@ -640,7 +658,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 	public ArrayList<Postulante> normalizarScorePostulantes(ArrayList<Postulante> postulantes, BigDecimal min, BigDecimal max){
 		
 		for (int i = 0; i < postulantes.size(); i++) {
-			postulantes.get(i).setScore((postulantes.get(i).getScore().subtract(min)).divide(max.subtract(min)));
+			postulantes.get(i).setScoreNormalizado((postulantes.get(i).getScore().subtract(min)).divide(max.subtract(min), 5, BigDecimal.ROUND_HALF_UP));
 		}
 		
 		return postulantes;
@@ -689,14 +707,14 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 			}			
 		}
 		//order ascendente
-		Comparator<Result> comparator = new Comparator<Result>() {
+		Comparator<Result> comparatorInverso = new Comparator<Result>() {
 			//orden de menor a mayor
 			public int compare(Result o1, Result o2) {
-				return o1.getScore().compareTo(o2.getScore());
+				return o1.getScore().compareTo(o2.getScore())*-1;
 			}
 		};
 		
-		Collections.sort(results, comparator);
+		Collections.sort(results, comparatorInverso);
 
 		return results;
 	}
@@ -747,7 +765,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		Comparator<Result> comparator = new Comparator<Result>() {
 			//orden de ascendente
 			public int compare(Result o1, Result o2) {
-				return o1.getScore().compareTo(o2.getScore());
+				return o1.getScore().compareTo(o2.getScore())*-1;
 			}
 		};
 		
@@ -829,7 +847,7 @@ public class RecommenderServiceImpl implements RecommenderService, Serializable 
 		Comparator<Result> comparator = new Comparator<Result>() {
 			//orden de menor a mayor
 			public int compare(Result o1, Result o2) {
-				return o1.getScore().compareTo(o2.getScore());
+				return o1.getScore().compareTo(o2.getScore())*-1;
 			}
 		};
 		

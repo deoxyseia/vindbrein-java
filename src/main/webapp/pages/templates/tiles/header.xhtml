@@ -10,16 +10,21 @@
 <h:body>
 	<ui:composition>
 		<c:if test="#{request.getUserPrincipal() != null}">
-		 
-		 		<p:graphicImage value="/resources/img/logo_min.png" />
-	<h:outputText styleClass="headertext" value="VindBrein - Plataforma online de reclutamiento y búsqueda de trabajo" ></h:outputText>
-			
-			
+
+			<p:commandLink
+				action="/pages/secured/principal/principal.xhtml?faces-redirect=true">
+				<p:graphicImage value="/resources/img/logo_min.png" />
+			</p:commandLink>
+
+			<h:outputText styleClass="headertext"
+				value="VindBrein - Plataforma online de reclutamiento y búsqueda de trabajo"></h:outputText>
+
+
 			<h:outputLink style="float:right;"
 				value="${request.contextPath}/j_spring_security_logout">Cerrar sesión
 			</h:outputLink>
-		 
-						
+
+
 
 		</c:if>
 		

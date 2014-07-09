@@ -48,6 +48,7 @@ public class Postulante implements Serializable {
 	private NivelPuesto nivelPuesto;
 	private List<PostulanteBeneficio> postulanteBeneficios;
 	private BigDecimal score;
+	private BigDecimal scoreNormalizado;
 
 	public Postulante() {
 	}
@@ -491,5 +492,23 @@ public class Postulante implements Serializable {
 	@Transient
 	public String getScorePlain(){
 		return score.toPlainString();
+	}
+	
+	@Transient
+	public BigDecimal getScoreNormalizado() {
+		return scoreNormalizado;
+	}
+
+	public void setScoreNormalizado(BigDecimal scoreNormalizado) {
+		this.scoreNormalizado = scoreNormalizado;
+	}
+	
+	@Transient
+	public BigDecimal getPorcentaje(){
+		BigDecimal porcentaje = scoreNormalizado.multiply(new BigDecimal(100));
+		porcentaje = porcentaje.setScale(2, BigDecimal.ROUND_HALF_UP);
+		
+		return porcentaje;
+		
 	}
 }

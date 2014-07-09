@@ -22,6 +22,7 @@
 	</h:form>
 
 	<p:dataGrid id="dataGridPostulantesBuscados" var="postulante"
+		emptyMessage="No tiene resultados, recomendamos afinar el texto de la búsqueda"
 		value="#{buscarPostulanteManagedBean.postulantesEncontrados}"
 		columns="2" rows="12">
 
